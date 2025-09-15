@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -20,7 +21,7 @@ export function MainHeader() {
       <Link href="/" className="flex items-center gap-2 font-semibold">
         <Logo className="h-8 w-auto" />
       </Link>
-      <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6 mx-auto">
+      <nav className="hidden flex-1 flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:justify-center md:gap-5 md:text-sm lg:gap-6">
         <Link
             href="/"
             className={cn(
@@ -40,7 +41,7 @@ export function MainHeader() {
             Health Assistant
           </Link>
       </nav>
-      <div className="flex items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
+      <div className="flex items-center gap-4 md:gap-2 lg:gap-4">
         <Button variant="ghost" size="icon" className="rounded-full" asChild>
            <Link href="/login">
             <UserCircle className="h-6 w-6" />
