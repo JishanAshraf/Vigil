@@ -35,23 +35,18 @@ const prompt = ai.definePrompt({
   name: 'healthSymptomCheckerPrompt',
   input: {schema: HealthSymptomCheckerInputSchema},
   output: {schema: HealthSymptomCheckerOutputSchema},
-  prompt: `You are an AI assistant that provides information on possible conditions, home remedies, and over-the-counter medicine suggestions based on the user's symptoms. You are not a medical professional, and this information is for educational purposes only and is not a substitute for professional medical advice. Always seek the advice of your physician or other qualified health provider with any questions you may have.
+  prompt: `You are an AI assistant that provides information on possible conditions, home remedies, and over-the-counter medicine suggestions based on the user's symptoms. You are not a medical professional.
+
+Analyze the user's symptoms and provide a response in JSON format.
 
 Symptoms: {{{symptoms}}}
 
-Based on your input, here's some information:
-
-⚠️ Disclaimer: I am an AI assistant and not a medical professional. This information is for educational purposes only and is not a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider with any questions you may have.
-
-Possible Conditions: {{possibleConditions}}
-
-General Care Advice / Home Remedies: {{generalCareAdvice}}
-
-Over-The-Counter (OTC) Suggestions: {{otcSuggestions}}
-
-{{#if emergencyResponse}}
-  **Please stop using this app and seek immediate emergency medical attention. Call [Local Emergency Number, e.g., 911] or go to the nearest emergency room immediately.**
-{{/if}}`,
+Your response must include:
+- A disclaimer that this is not a substitute for professional medical advice.
+- A list of possible conditions.
+- General care advice and home remedies.
+- Over-the-counter (OTC) medication suggestions.
+- If the symptoms sound critical, an emergency response message.`,
 });
 
 const healthSymptomCheckerFlow = ai.defineFlow(
