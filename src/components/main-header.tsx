@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { ShieldCheck, Stethoscope, UserCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
+import { Logo } from '@/components/logo';
 
 const navItems = [
   { href: '/', label: 'Watch', icon: ShieldCheck },
@@ -17,8 +18,7 @@ export function MainHeader() {
   return (
     <header className="sticky top-0 z-40 flex h-16 items-center gap-4 border-b bg-background/80 px-4 backdrop-blur-sm md:px-6">
       <Link href="/" className="flex items-center gap-2 font-semibold">
-        <ShieldCheck className="h-6 w-6 text-primary" />
-        <span className="font-headline font-bold text-xl">Townish</span>
+        <Logo className="h-8 w-auto" />
       </Link>
       <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6 mx-auto">
         <Link
