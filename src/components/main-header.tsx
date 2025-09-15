@@ -46,8 +46,8 @@ export function MainHeader() {
                   key={`mobile-${item.href}`}
                   href={item.href}
                   className={cn(
-                    'flex flex-col items-center justify-center gap-1 rounded-lg p-2 transition-colors',
-                    pathname === item.href ? 'bg-primary/10 text-primary font-semibold' : 'text-muted-foreground'
+                    'flex flex-col items-center justify-center gap-1 rounded-lg p-2 transition-all duration-200 transform hover:scale-105',
+                    pathname === item.href ? 'bg-primary/10 text-primary font-semibold' : 'text-muted-foreground hover:bg-primary/5'
                   )}
                 >
                   <item.icon className="h-6 w-6" />
