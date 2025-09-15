@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Logo } from '@/components/logo';
 import { useEffect, useState } from 'react';
+import { ThemeToggle } from './theme-toggle';
 
 const navItems = [
   { href: '/', label: 'Watch', icon: ShieldCheck },
@@ -21,7 +22,6 @@ export function MainHeader() {
   useEffect(() => {
     setIsMounted(true);
   }, []);
-
 
   return (
     <header className="sticky top-0 z-40 flex h-16 items-center gap-4 border-b bg-background/80 px-4 backdrop-blur-sm md:px-6">
@@ -53,9 +53,10 @@ export function MainHeader() {
                 </Link>
             </div>
           </nav>
-          <div className="flex items-center gap-4 md:gap-2 lg:gap-4">
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
             <Button variant="ghost" size="icon" className="rounded-full" asChild>
-              <Link href="/login">
+              <Link href="/profile">
                 <UserCircle className="h-6 w-6" />
                 <span className="sr-only">Toggle user menu</span>
               </Link>
