@@ -4,7 +4,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { MainHeader } from '@/components/main-header';
 
 export const metadata: Metadata = {
-  title: 'CommunityHub',
+  title: 'Townish',
   description: 'Your community safety and health assistant.',
 };
 
