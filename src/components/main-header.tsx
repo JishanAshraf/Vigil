@@ -65,23 +65,25 @@ export function MainHeader() {
       )}
       
       {/* Mobile Nav */}
-      <nav className="fixed bottom-0 left-0 right-0 md:hidden bg-background/95 backdrop-blur-sm border-t p-2 z-50">
-          <div className="grid grid-cols-2 gap-2">
-            {isMounted && navItems.map((item) => (
-              <Link
-                key={`mobile-${item.href}`}
-                href={item.href}
-                className={cn(
-                  'flex flex-col items-center justify-center gap-1 rounded-lg p-2 transition-colors',
-                  pathname === item.href ? 'bg-primary/10 text-primary font-semibold' : 'text-muted-foreground'
-                )}
-              >
-                <item.icon className="h-6 w-6" />
-                <span className="text-xs">{item.label}</span>
-              </Link>
-            ))}
-          </div>
-      </nav>
+      {isMounted && (
+        <nav className="fixed bottom-0 left-0 right-0 md:hidden bg-background/95 backdrop-blur-sm border-t p-2 z-50">
+            <div className="grid grid-cols-2 gap-2">
+              {navItems.map((item) => (
+                <Link
+                  key={`mobile-${item.href}`}
+                  href={item.href}
+                  className={cn(
+                    'flex flex-col items-center justify-center gap-1 rounded-lg p-2 transition-colors',
+                    pathname === item.href ? 'bg-primary/10 text-primary font-semibold' : 'text-muted-foreground'
+                  )}
+                >
+                  <item.icon className="h-6 w-6" />
+                  <span className="text-xs">{item.label}</span>
+                </Link>
+              ))}
+            </div>
+        </nav>
+      )}
     </header>
   );
 }
