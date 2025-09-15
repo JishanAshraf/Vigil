@@ -21,25 +21,27 @@ export function MainHeader() {
       <Link href="/" className="flex items-center gap-2 font-semibold">
         <Logo className="h-8 w-auto" />
       </Link>
-      <nav className="hidden flex-1 flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:justify-center md:gap-5 md:text-sm lg:gap-6">
-        <Link
-            href="/"
-            className={cn(
-              'transition-colors hover:text-foreground',
-              pathname === '/' ? 'text-foreground' : 'text-muted-foreground'
-            )}
-          >
-            Neighbourhood Watch
-          </Link>
+      <nav className="hidden flex-1 md:flex md:items-center md:justify-center">
+        <div className="flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
           <Link
-            href="/health"
-            className={cn(
-              'transition-colors hover:text-foreground',
-              pathname.startsWith('/health') ? 'text-foreground' : 'text-muted-foreground'
-            )}
-          >
-            Health Assistant
-          </Link>
+              href="/"
+              className={cn(
+                'transition-colors hover:text-foreground',
+                pathname === '/' ? 'text-foreground' : 'text-muted-foreground'
+              )}
+            >
+              Neighbourhood Watch
+            </Link>
+            <Link
+              href="/health"
+              className={cn(
+                'transition-colors hover:text-foreground',
+                pathname.startsWith('/health') ? 'text-foreground' : 'text-muted-foreground'
+              )}
+            >
+              Health Assistant
+            </Link>
+        </div>
       </nav>
       <div className="flex items-center gap-4 md:gap-2 lg:gap-4">
         <Button variant="ghost" size="icon" className="rounded-full" asChild>
