@@ -1,3 +1,34 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "pothole-1",
+      "description": "A large pothole on the main road.",
+      "imageUrl": "https://picsum.photos/seed/pothole1/600/400",
+      "imageHint": "pothole road"
+    },
+    {
+      "id": "graffiti-1",
+      "description": "Graffiti on the park wall.",
+      "imageUrl": "https://picsum.photos/seed/graffiti1/600/400",
+      "imageHint": "graffiti wall"
+    },
+    {
+      "id": "lost-pet-1",
+      "description": "Lost golden retriever named Buddy.",
+      "imageUrl": "https://picsum.photos/seed/lostpet1/600/400",
+      "imageHint": "dog golden retriever"
+    },
+    {
+      "id": "dumping-1",
+      "description": "Illegal dumping of furniture in the alley.",
+      "imageUrl": "https://picsum.photos/seed/dumping1/600/400",
+      "imageHint": "trash alley"
+    },
+    {
+      "id": "suspicious-activity-1",
+      "description": "A suspicious van has been parked for 3 days.",
+      "imageUrl": "https://picsum.photos/seed/van1/600/400",
+      "imageHint": "van street"
+    }
+  ]
 }
