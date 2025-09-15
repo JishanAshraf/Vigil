@@ -3,6 +3,7 @@ import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { MainHeader } from '@/components/main-header';
 import { ThemeProvider } from '@/components/theme-provider';
+import { PageTransition } from '@/components/page-transition';
 
 export const metadata: Metadata = {
   title: 'Townish',
@@ -31,7 +32,7 @@ export default function RootLayout({
           <div className="flex min-h-screen w-full flex-col">
             <MainHeader />
             <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8 pb-24">
-              {children}
+              <PageTransition>{children}</PageTransition>
             </main>
           </div>
           <Toaster />
