@@ -55,7 +55,7 @@ export function MainHeader() {
           </nav>
           <div className="flex items-center gap-2">
             <ThemeToggle />
-            <Button variant="ghost" size="icon" className="rounded-full hover:bg-sky-200/50 dark:hover:bg-sky-200/50" asChild>
+            <Button variant="ghost" size="icon" className="rounded-full hover:bg-[#87C5F2]/50" asChild>
               <Link href="/profile">
                 <UserCircle className="h-6 w-6" />
                 <span className="sr-only">Toggle user menu</span>
