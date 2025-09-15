@@ -40,7 +40,7 @@ export function MainHeader() {
             Health Assistant
           </Link>
       </nav>
-      <div className="flex items-center gap-4 md:gap-2 lg:gap-4">
+      <div className="flex items-center gap-4 ml-auto md:gap-2 lg:gap-4">
         <Button variant="ghost" size="icon" className="rounded-full" asChild>
            <Link href="/login">
             <UserCircle className="h-6 w-6" />
