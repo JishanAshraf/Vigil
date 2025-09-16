@@ -4,6 +4,13 @@ export type User = {
   avatarUrl?: string;
 };
 
+export type Comment = {
+  id: string;
+  user: User;
+  timestamp: string;
+  text: string;
+};
+
 export type Alert = {
   id: string;
   user: User;
@@ -14,4 +21,5 @@ export type Alert = {
   description: string;
   location: string;
   status: 'Reported' | 'Authorities Notified' | 'Resolved';
+  comments: Comment[];
 };
