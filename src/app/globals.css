@@ -67,3 +67,20 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer components {
+  .glossy-button {
+    @apply relative overflow-hidden;
+  }
+
+  .glossy-button::after {
+    content: '';
+    @apply absolute top-0 -left-[150%] w-[150%] h-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-500 ease-in-out;
+    transform: skewX(-25deg);
+  }
+
+  .glossy-button:hover::after {
+    @apply -left-[-50%] scale-150;
+    transform: skewX(-25deg) translateX(100%);
+  }
+}
