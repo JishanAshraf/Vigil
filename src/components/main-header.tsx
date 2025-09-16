@@ -47,7 +47,7 @@ export function MainHeader() {
                   href={item.href}
                   className={cn(
                     'group glossy-button flex flex-col items-center justify-center gap-1 rounded-lg p-2 transition-all duration-300',
-                    pathname === item.href ? 'bg-primary/10 text-primary font-semibold' : 'text-muted-foreground hover:bg-primary/20 hover:text-primary'
+                    pathname === item.href ? 'bg-primary/10 text-primary font-semibold' : 'text-muted-foreground hover:bg-primary/10 hover:text-primary'
                   )}
                 >
                   <item.icon className="h-6 w-6" />
