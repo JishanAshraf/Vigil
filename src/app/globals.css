@@ -80,8 +80,8 @@
     transform: skewX(-25deg);
   }
 
-  .glossy-button:active::after {
-    @apply -left-[-50%] scale-150;
+  .glossy-button:hover::after {
+    @apply -left-[-50%];
     transform: skewX(-25deg) translateX(100%);
   }
 }
