@@ -5,7 +5,6 @@ import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { MainHeader } from '@/components/main-header';
 import { ThemeProvider } from '@/components/theme-provider';
-import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 
 export default function RootLayout({
@@ -34,17 +33,7 @@ export default function RootLayout({
           <div className="flex min-h-screen w-full flex-col">
             <MainHeader />
             <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8 pb-24">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={pathname}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  {children}
-                </motion.div>
-              </AnimatePresence>
+              {children}
             </main>
           </div>
           <Toaster />
