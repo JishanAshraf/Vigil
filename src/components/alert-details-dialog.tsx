@@ -91,7 +91,11 @@ export function AlertDetailsDialog({ alert }: AlertDetailsDialogProps) {
             {alert.comments.length > 0 ? (
               <div className="space-y-4">
                 {alert.comments.map(comment => (
-                  <CommentCard key={comment.id} comment={comment} />
+                  <CommentCard 
+                    key={comment.id} 
+                    comment={comment}
+                    isPostAuthor={comment.user.id === alert.user.id}
+                  />
                 ))}
               </div>
             ) : (
