@@ -23,7 +23,7 @@ export function AlertCard({ alert }: AlertCardProps) {
   const status = statusConfig[alert.status] || { icon: HelpCircle, className: 'bg-gray-500/20 text-gray-400 border-gray-500/30', label: 'Unknown' };
 
   return (
-    <Card className="flex flex-col overflow-hidden shadow-lg hover:shadow-primary/20 transition-shadow duration-300 bg-card">
+    <Card className="flex flex-col overflow-hidden shadow-lg hover:shadow-primary/20 transition-all duration-300 bg-card hover:-translate-y-1 hover:scale-[1.02]">
       <CardHeader className="flex-row items-start gap-4 space-y-0 p-4">
         <Avatar>
           <AvatarImage src={!alert.isAnonymous ? alert.user.avatarUrl : ''} />
