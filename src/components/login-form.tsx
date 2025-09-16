@@ -3,7 +3,6 @@
 
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -47,23 +46,19 @@ export function LoginForm() {
   );
 
   return (
-    <Card>
       <Tabs defaultValue="email" onValueChange={() => setIsOtpSent(false)}>
-        <CardHeader className="p-4">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="email">Email</TabsTrigger>
-            <TabsTrigger value="phone">Phone</TabsTrigger>
-          </TabsList>
-        </CardHeader>
-        <CardContent className="p-4 pt-0">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="email">Email</TabsTrigger>
+          <TabsTrigger value="phone">Phone</TabsTrigger>
+        </TabsList>
+        <div className="pt-4">
           <TabsContent value="email">
             <LoginFormContent isEmail />
           </TabsContent>
           <TabsContent value="phone">
             <LoginFormContent />
           </TabsContent>
-        </CardContent>
+        </div>
       </Tabs>
-    </Card>
   );
 }
