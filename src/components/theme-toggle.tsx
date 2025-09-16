@@ -21,10 +21,8 @@ export function ThemeToggle() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button 
-          variant="ghost" 
-          size="icon" 
           className={cn(
-            'glossy-button rounded-lg text-muted-foreground transition-all duration-300 hover:bg-primary/10 hover:text-primary'
+            'glossy-button relative h-10 w-10 rounded-lg bg-transparent text-muted-foreground transition-all duration-300 hover:bg-primary/10 hover:text-primary focus-visible:ring-0 focus-visible:ring-offset-0'
           )}
         >
           <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
