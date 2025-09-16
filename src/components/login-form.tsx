@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from 'react';
@@ -34,11 +35,11 @@ export function LoginForm() {
         </div>
       )}
       {!isOtpSent ? (
-        <Button type="submit" className="w-full" onClick={handleSendOtp}>
+        <Button type="submit" className="w-full glossy-button" onClick={handleSendOtp}>
           Send OTP
         </Button>
       ) : (
-         <Button asChild type="submit" className="w-full">
+         <Button asChild type="submit" className="w-full glossy-button">
           <Link href="/">Login / Sign Up</Link>
         </Button>
       )}

@@ -1,3 +1,4 @@
+
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -145,7 +146,7 @@ export function ReportIssueForm() {
                 <FormControl>
                   <Input placeholder="e.g., Near Main St & 5th Ave" {...field} />
                 </FormControl>
-                <Button type="button" variant="outline" onClick={() => form.setValue('location', 'Current Location (detected)')}>
+                <Button type="button" variant="outline" onClick={() => form.setValue('location', 'Current Location (detected)')} className="glossy-button">
                   <MapPin className="h-4 w-4" />
                   <span className="sr-only">Detect Location</span>
                 </Button>
@@ -205,7 +206,7 @@ export function ReportIssueForm() {
           />
         </div>
 
-        <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
+        <Button type="submit" className="w-full glossy-button" disabled={form.formState.isSubmitting}>
             {form.formState.isSubmitting ? 'Submitting...' : 'Submit Report'}
         </Button>
       </form>

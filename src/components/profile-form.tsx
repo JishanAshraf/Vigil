@@ -1,3 +1,4 @@
+
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -55,7 +56,7 @@ export function ProfileForm() {
                 <AvatarImage src="https://i.pravatar.cc/150?u=a042581f4e29026707d" />
                 <AvatarFallback><User className="h-10 w-10" /></AvatarFallback>
             </Avatar>
-            <Button type="button" variant="outline">Change Photo</Button>
+            <Button type="button" variant="outline" className="glossy-button">Change Photo</Button>
         </div>
 
         <FormField
@@ -115,7 +116,7 @@ export function ProfileForm() {
           )}
         />
 
-        <Button type="submit">Update Profile</Button>
+        <Button type="submit" className="glossy-button">Update Profile</Button>
       </form>
     </Form>
   );

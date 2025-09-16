@@ -1,3 +1,4 @@
+
 import Image from 'next/image';
 import { AlertCircle, Bell, CheckCircle, HelpCircle, Tag, Clock, MapPin, VenetianMask } from 'lucide-react';
 
@@ -82,7 +83,7 @@ export function AlertCard({ alert }: AlertCardProps) {
           {status.label}
         </Badge>
         {alert.status === 'Reported' && (
-          <Button size="sm" variant="outline">
+          <Button size="sm" variant="outline" className="glossy-button">
             <Tag className="mr-2 h-4 w-4" />
             Tag Authorities
           </Button>

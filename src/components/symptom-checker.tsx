@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -71,7 +72,7 @@ export function SymptomChecker() {
                         className="resize-none pr-20 min-h-[80px]"
                         {...field}
                       />
-                      <Button type="submit" size="icon" className="absolute top-1/2 right-3 -translate-y-1/2" disabled={isLoading}>
+                      <Button type="submit" size="icon" className="absolute top-1/2 right-3 -translate-y-1/2 glossy-button" disabled={isLoading}>
                         {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
                         <span className="sr-only">Get Analysis</span>
                       </Button>
