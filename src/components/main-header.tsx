@@ -6,7 +6,6 @@ import { usePathname } from 'next/navigation';
 import { ShieldCheck, Stethoscope, UserCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Logo } from '@/components/logo';
-import { useEffect, useState } from 'react';
 import { ThemeToggle } from './theme-toggle';
 
 const navItems = [
@@ -17,11 +16,6 @@ const navItems = [
 
 export function MainHeader() {
   const pathname = usePathname();
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
 
   return (
     <>
@@ -30,33 +24,29 @@ export function MainHeader() {
           <Logo className="h-8 w-auto" />
         </Link>
 
-        {isMounted && (
-          <div className="flex items-center gap-2">
-            <ThemeToggle />
-          </div>
-        )}
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
+        </div>
       </header>
 
       {/* Footer Nav */}
-      {isMounted && (
-        <nav className="fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur-sm border-t p-1 z-50">
-            <div className="grid grid-cols-3 gap-2 max-w-md mx-auto">
-              {navItems.map((item) => (
-                <Link
-                  key={`mobile-${item.href}`}
-                  href={item.href}
-                  className={cn(
-                    'group glossy-button flex flex-col items-center justify-center gap-1 rounded-lg p-1.5 transition-all duration-300',
-                    pathname === item.href ? 'bg-primary/10 text-primary font-semibold' : 'text-muted-foreground hover:bg-primary/10 hover:text-primary'
-                  )}
-                >
-                  <item.icon className="h-5 w-5" />
-                  <span className="text-xs">{item.label}</span>
-                </Link>
-              ))}
-            </div>
-        </nav>
-      )}
+      <nav className="fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur-sm border-t p-1 z-50">
+          <div className="grid grid-cols-3 gap-2 max-w-md mx-auto">
+            {navItems.map((item) => (
+              <Link
+                key={`mobile-${item.href}`}
+                href={item.href}
+                className={cn(
+                  'group glossy-button flex flex-col items-center justify-center gap-1 rounded-lg p-1.5 transition-all duration-300',
+                  pathname === item.href ? 'bg-primary/10 text-primary font-semibold' : 'text-muted-foreground hover:bg-primary/10 hover:text-primary'
+                )}
+              >
+                <item.icon className="h-5 w-5" />
+                <span className="text-xs">{item.label}</span>
+              </Link>
+            ))}
+          </div>
+      </nav>
     </>
   );
 }
