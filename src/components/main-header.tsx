@@ -7,6 +7,7 @@ import { ShieldCheck, Stethoscope, UserCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Logo } from '@/components/logo';
 import { ThemeToggle } from './theme-toggle';
+import { useEffect, useState } from 'react';
 
 const navItems = [
   { href: '/', label: 'Watch', icon: ShieldCheck },
@@ -16,6 +17,11 @@ const navItems = [
 
 export function MainHeader() {
   const pathname = usePathname();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   return (
     <>
@@ -23,16 +29,16 @@ export function MainHeader() {
         <Link href="/" className="flex items-center gap-2 font-semibold mr-auto text-primary">
           <Logo className="h-8 w-auto" />
         </Link>
-
+        
         <div className="flex items-center gap-2">
-          <ThemeToggle />
+            {isClient && <ThemeToggle />}
         </div>
       </header>
 
       {/* Footer Nav */}
       <nav className="fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur-sm border-t p-1 z-50">
           <div className="grid grid-cols-3 gap-2 max-w-md mx-auto">
-            {navItems.map((item) => (
+            {isClient && navItems.map((item) => (
               <Link
                 key={`mobile-${item.href}`}
                 href={item.href}
