@@ -54,7 +54,7 @@ export function LoginForm() {
                 Forgot Password?
             </Link>
         </div>
-        <Button asChild type="submit" className="w-full bg-gray-900 hover:bg-gray-800 text-white font-bold text-base">
+        <Button asChild type="submit" className="w-full font-bold text-base glossy-button">
           <Link href="/">Login</Link>
         </Button>
         <div className="text-center text-sm">
