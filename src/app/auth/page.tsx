@@ -1,36 +1,44 @@
 
+'use client';
+
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Logo } from "@/components/logo";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 
 export default function AuthPage() {
+  const { theme } = useTheme();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-[calc(100vh-200px)] py-12">
-      <Card className="w-full max-w-sm">
-        <CardHeader className="text-center">
-          <Logo className="w-auto h-12 mx-auto mb-4 text-primary" />
-          <CardTitle className="text-2xl font-bold">
-            Welcome to Townish
-          </CardTitle>
-          <CardDescription>
-            Your community safety and health assistant.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="grid gap-4">
-          <Button asChild className="w-full glossy-button" size="lg">
-            <Link href="/login">
-              Sign In <ArrowRight className="ml-2" />
-            </Link>
+    <div className="flex flex-col h-[calc(100vh-200px)]">
+      <div className="flex-1 flex items-center justify-center">
+        <Logo className="w-auto h-24 text-primary" />
+      </div>
+
+      <div className="p-8 space-y-4">
+        <Button asChild className="w-full glossy-button" size="lg">
+          <Link href="/login">
+            Login
+          </Link>
+        </Button>
+        <Button asChild variant="outline" className="w-full glossy-button" size="lg">
+          <Link href="/login">
+            Register
+          </Link>
+        </Button>
+        <div className="text-center">
+          <Button asChild variant="link" className="text-primary/80">
+            <Link href="/">Continue as a guest</Link>
           </Button>
-          <Button asChild variant="outline" className="w-full glossy-button" size="lg">
-            <Link href="/login">
-                Sign Up
-            </Link>
-          </Button>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 }
