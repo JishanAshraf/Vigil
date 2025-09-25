@@ -6,6 +6,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { MainHeader } from '@/components/main-header';
 import { ThemeProvider } from '@/components/theme-provider';
 import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export default function RootLayout({
   children,
@@ -13,6 +14,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const pathname = usePathname();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  const showHeader = isClient && !['/login', '/auth'].includes(pathname);
 
   return (
     <html lang="en" suppressHydrationWarning>
@@ -31,8 +39,8 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <div className="flex min-h-screen w-full flex-col">
-            <MainHeader />
-            <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8 pb-24">
+            {showHeader && <MainHeader />}
+            <main className={`flex flex-1 flex-col ${showHeader ? 'gap-4 p-4 md:gap-8 md:p-8 pb-24' : ''}`}>
               {children}
             </main>
           </div>

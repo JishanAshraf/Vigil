@@ -5,26 +5,62 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from 'next/link';
+import { Mail, Lock, X } from "lucide-react";
+import { Checkbox } from "./ui/checkbox";
 
 export function LoginForm() {
   return (
-    <div className="space-y-4">
-      <div className="grid gap-2">
-        <Label htmlFor="emailOrPhone">Email or Phone Number</Label>
-        <Input 
-          id="emailOrPhone" 
-          type="text" 
-          placeholder="m@example.com or +1 234..." 
-          required 
-        />
+    <div className="relative w-full max-w-sm p-8 space-y-6 glass-card text-foreground">
+        <Link href="/">
+            <Button variant="ghost" size="icon" className="absolute top-4 right-4 h-8 w-8 rounded-full bg-black/20 hover:bg-black/40 text-white">
+                <X className="h-4 w-4" />
+            </Button>
+        </Link>
+      <div className="text-center">
+        <h1 className="text-3xl font-bold">Login</h1>
       </div>
-      <div className="grid gap-2">
-        <Label htmlFor="password">Password</Label>
-        <Input id="password" type="password" required />
+      <div className="space-y-4">
+        <div className="grid gap-2">
+            <Label htmlFor="email">Email</Label>
+            <div className="relative">
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                <Input 
+                id="email" 
+                type="email" 
+                placeholder="m@example.com" 
+                required 
+                className="pl-10 bg-background/70 border-white/30"
+                />
+            </div>
+        </div>
+        <div className="grid gap-2">
+            <Label htmlFor="password">Password</Label>
+            <div className="relative">
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                <Input 
+                id="password" 
+                type="password" 
+                required 
+                className="pl-10 bg-background/70 border-white/30"
+                />
+            </div>
+        </div>
+        <div className="flex items-center justify-between text-sm">
+            <div className="flex items-center gap-2">
+                <Checkbox id="remember-me" className="border-white/50 data-[state=checked]:bg-primary data-[state=checked]:border-primary" />
+                <Label htmlFor="remember-me">Remember me</Label>
+            </div>
+            <Link href="#" className="underline hover:text-primary">
+                Forgot Password?
+            </Link>
+        </div>
+        <Button asChild type="submit" className="w-full bg-gray-900 hover:bg-gray-800 text-white font-bold text-base">
+          <Link href="/">Login</Link>
+        </Button>
+        <div className="text-center text-sm">
+            Don't have an account? <Link href="#" className="underline font-semibold hover:text-primary">Register</Link>
+        </div>
       </div>
-      <Button asChild type="submit" className="w-full glossy-button">
-        <Link href="/">Login / Sign Up</Link>
-      </Button>
     </div>
   );
 }

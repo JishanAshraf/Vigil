@@ -70,6 +70,10 @@
 }
 
 @layer components {
+  .glass-card {
+    @apply bg-card/60 backdrop-blur-lg border border-white/20 shadow-lg rounded-2xl;
+  }
+
   .glossy-button {
     @apply relative overflow-hidden rounded-lg transition-all duration-300;
     -webkit-backdrop-filter: blur(10px);
