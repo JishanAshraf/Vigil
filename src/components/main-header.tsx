@@ -53,9 +53,9 @@ export function MainHeader() {
             )) : (
               // Placeholder to prevent layout shift
               <>
-                <div className="h-[58px]"></div>
-                <div className="h-[58px]"></div>
-                <div className="h-[58px]"></div>
+                <div className="h-[58px] rounded-lg bg-muted/20"></div>
+                <div className="h-[58px] rounded-lg bg-muted/20"></div>
+                <div className="h-[58px] rounded-lg bg-muted/20"></div>
               </>
             )}
           </div>
