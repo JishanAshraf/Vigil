@@ -25,7 +25,7 @@ export function MainHeader() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 flex h-16 items-center gap-4 border-b bg-background/80 px-4 backdrop-blur-sm md:px-6">
+      <header className="sticky top-0 z-40 flex h-14 items-center gap-4 border-b bg-background/80 px-4 backdrop-blur-sm md:px-6">
         <Link href="/" className="flex items-center gap-2 font-semibold mr-auto text-primary">
           <Logo className="h-8 w-auto" />
         </Link>
@@ -39,18 +39,18 @@ export function MainHeader() {
 
       {/* Footer Nav */}
       {isMounted && (
-        <nav className="fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur-sm border-t p-2 z-50">
+        <nav className="fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur-sm border-t p-1 z-50">
             <div className="grid grid-cols-3 gap-2 max-w-md mx-auto">
               {navItems.map((item) => (
                 <Link
                   key={`mobile-${item.href}`}
                   href={item.href}
                   className={cn(
-                    'group glossy-button flex flex-col items-center justify-center gap-1 rounded-lg p-2 transition-all duration-300',
+                    'group glossy-button flex flex-col items-center justify-center gap-1 rounded-lg p-1.5 transition-all duration-300',
                     pathname === item.href ? 'bg-primary/10 text-primary font-semibold' : 'text-muted-foreground hover:bg-primary/10 hover:text-primary'
                   )}
                 >
-                  <item.icon className="h-6 w-6" />
+                  <item.icon className="h-5 w-5" />
                   <span className="text-xs">{item.label}</span>
                 </Link>
               ))}
