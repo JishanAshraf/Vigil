@@ -31,7 +31,7 @@ export function MainHeader() {
         </Link>
         
         <div className="flex items-center gap-2">
-          {isClient && <ThemeToggle />}
+          {isClient ? <ThemeToggle /> : <div className="h-10 w-10" />}
         </div>
       </header>
 
@@ -50,7 +50,14 @@ export function MainHeader() {
                 <item.icon className="h-4 w-4" />
                 <span className="text-xs">{item.label}</span>
               </Link>
-            )) : <div className="col-span-3 h-[58px]"></div>}
+            )) : (
+              // Placeholder to prevent layout shift
+              <>
+                <div className="h-[46px]"></div>
+                <div className="h-[46px]"></div>
+                <div className="h-[46px]"></div>
+              </>
+            )}
           </div>
       </nav>
     </>
