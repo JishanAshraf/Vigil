@@ -1,21 +1,15 @@
 
 import { LoginForm } from '@/components/login-form';
-import Image from 'next/image';
+import { Logo } from '@/components/logo';
 
 export default function LoginPage() {
   return (
-    <div className="relative min-h-screen w-full">
-      <Image
-        src="https://picsum.photos/seed/mountains/1920/1080"
-        alt="Background"
-        fill
-        className="object-cover"
-        data-ai-hint="mountain landscape"
-      />
-      <div className="absolute inset-0 bg-primary/20" />
-      <div className="relative z-10 flex min-h-screen items-center justify-center">
-          <LoginForm />
-      </div>
+    <div className="flex flex-col h-full items-center justify-center p-4">
+        <div className="flex-1 flex items-center justify-center">
+            <Logo className="w-auto h-24 text-primary" />
+        </div>
+        <LoginForm />
+        <div className="flex-1" />
     </div>
   );
 }

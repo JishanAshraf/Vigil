@@ -21,6 +21,7 @@ export default function RootLayout({
   }, []);
 
   const showHeader = isClient && !['/login', '/auth'].includes(pathname);
+  const isAuthPage = ['/login', '/auth'].includes(pathname);
 
   return (
     <html lang="en" suppressHydrationWarning>
@@ -40,7 +41,7 @@ export default function RootLayout({
         >
           <div className="flex min-h-screen w-full flex-col">
             {showHeader && <MainHeader />}
-            <main className={`flex flex-1 flex-col ${showHeader ? 'gap-4 p-4 md:gap-8 md:p-8 pb-24' : ''}`}>
+            <main className={`flex flex-1 flex-col ${isAuthPage ? 'p-4' : 'gap-4 p-4 md:gap-8 md:p-8 pb-24'}`}>
               {children}
             </main>
           </div>
