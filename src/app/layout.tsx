@@ -8,11 +8,11 @@ import { ThemeProvider } from '@/components/theme-provider';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Inter } from 'next/font/google';
-import { Quicksand } from 'next/font/google';
+import { Nunito } from 'next/font/google';
 import { cn } from '@/lib/utils';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
-const quiska = Quicksand({ subsets: ['latin'], variable: '--font-headline' });
+const headlineFont = Nunito({ subsets: ['latin'], variable: '--font-headline', weight: '700' });
 
 export default function RootLayout({
   children,
@@ -35,7 +35,7 @@ export default function RootLayout({
         <title>Vigil</title>
         <meta name="description" content="Your community safety and health assistant." />
       </head>
-      <body className={cn("font-sans antialiased", inter.variable, quiska.variable)}>
+      <body className={cn("font-sans antialiased", inter.variable, headlineFont.variable)}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
