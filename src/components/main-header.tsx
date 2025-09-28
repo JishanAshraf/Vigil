@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ShieldCheck, Stethoscope, UserCircle, Menu, Flag, LifeBuoy, LogOut } from 'lucide-react';
+import { ShieldCheck, Stethoscope, UserCircle, Menu, Flag, LifeBuoy, LogOut, Bell, Search, Newspaper } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Logo } from '@/components/logo';
 import { ThemeToggle } from './theme-toggle';
@@ -12,6 +12,13 @@ import { Button } from './ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from './ui/sheet';
 
 const navItems = [
+  { href: '/', label: 'Watch', icon: Newspaper },
+  { href: '/search', label: 'Search', icon: Search },
+  { href: '/notifications', label: 'Notifications', icon: Bell },
+  { href: '/profile', label: 'Profile', icon: UserCircle },
+];
+
+const desktopNavItems = [
   { href: '/', label: 'Watch', icon: ShieldCheck },
   { href: '/health', label: 'Health', icon: Stethoscope },
   { href: '/profile', label: 'Profile', icon: UserCircle },
@@ -76,27 +83,70 @@ export function MainHeader() {
         </div>
       </header>
 
-      {/* Footer Nav for larger screens */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur-sm border-t p-2 z-50 md:hidden">
-          <div className="grid grid-cols-3 gap-2 max-w-md mx-auto">
-            {isClient ? navItems.map((item) => (
-              <Link
-                key={`mobile-${item.href}`}
-                href={item.href}
-                className={cn(
-                  'group glossy-button flex flex-col items-center justify-center gap-1 rounded-lg p-2 transition-all duration-300',
-                  pathname === item.href ? 'bg-primary/10 text-primary font-semibold' : 'text-muted-foreground hover:bg-primary/10 hover:text-primary'
-                )}
-              >
-                <item.icon className="h-5 w-5" />
-                <span className="text-sm">{item.label}</span>
-              </Link>
-            )) : (
+      {/* Bottom Nav for mobile */}
+      <nav className="fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur-sm border-t p-2 z-50 md:hidden h-[84px] flex items-center">
+          <div className="grid grid-cols-5 gap-1 max-w-md mx-auto w-full items-center">
+            {isClient ? (
+              <>
+                <Link
+                  href={navItems[0].href}
+                  className={cn(
+                    'group glossy-button flex flex-col items-center justify-center gap-1 rounded-lg p-2 transition-all duration-300 h-[70px]',
+                    pathname === navItems[0].href ? 'text-primary' : 'text-muted-foreground hover:text-primary'
+                  )}
+                >
+                  <navItems[0].icon className="h-6 w-6" />
+                  <span className="text-xs">{navItems[0].label}</span>
+                </Link>
+                <Link
+                  href={navItems[1].href}
+                  className={cn(
+                    'group glossy-button flex flex-col items-center justify-center gap-1 rounded-lg p-2 transition-all duration-300 h-[70px]',
+                    pathname === navItems[1].href ? 'text-primary' : 'text-muted-foreground hover:text-primary'
+                  )}
+                >
+                  <navItems[1].icon className="h-6 w-6" />
+                  <span className="text-xs">{navItems[1].label}</span>
+                </Link>
+                
+                <div className="flex justify-center">
+                  <Button asChild size="lg" className="h-16 w-16 rounded-full glossy-button bg-primary text-primary-foreground shadow-lg -translate-y-4">
+                    <Link href="/report-issue">
+                      <Flag className="h-7 w-7" />
+                      <span className="sr-only">Report Issue</span>
+                    </Link>
+                  </Button>
+                </div>
+
+                <Link
+                  href={navItems[2].href}
+                  className={cn(
+                    'group glossy-button flex flex-col items-center justify-center gap-1 rounded-lg p-2 transition-all duration-300 h-[70px]',
+                    pathname === navItems[2].href ? 'text-primary' : 'text-muted-foreground hover:text-primary'
+                  )}
+                >
+                  <navItems[2].icon className="h-6 w-6" />
+                  <span className="text-xs">{navItems[2].label}</span>
+                </Link>
+                <Link
+                  href={navItems[3].href}
+                  className={cn(
+                    'group glossy-button flex flex-col items-center justify-center gap-1 rounded-lg p-2 transition-all duration-300 h-[70px]',
+                    pathname === navItems[3].href ? 'text-primary' : 'text-muted-foreground hover:text-primary'
+                  )}
+                >
+                  <navItems[3].icon className="h-6 w-6" />
+                  <span className="text-xs">{navItems[3].label}</span>
+                </Link>
+              </>
+            ) : (
               // Placeholder to prevent layout shift
               <>
-                <div className="h-[58px] rounded-lg bg-muted/20"></div>
-                <div className="h-[58px] rounded-lg bg-muted/20"></div>
-                <div className="h-[58px] rounded-lg bg-muted/20"></div>
+                <div className="h-[70px] rounded-lg bg-muted/20"></div>
+                <div className="h-[70px] rounded-lg bg-muted/20"></div>
+                <div className="h-[70px] rounded-lg bg-muted/20"></div>
+                <div className="h-[70px] rounded-lg bg-muted/20"></div>
+                <div className="h-[70px] rounded-lg bg-muted/20"></div>
               </>
             )}
           </div>
@@ -105,7 +155,7 @@ export function MainHeader() {
       {/* Sidebar Nav for larger screens */}
       <aside className="hidden md:flex fixed top-16 left-0 z-40 h-[calc(100vh-4rem)] w-60 flex-col border-r bg-background/95 p-4 backdrop-blur-sm">
         <nav className="flex flex-col gap-2">
-            {navItems.map((item) => (
+            {desktopNavItems.map((item) => (
                 <Link
                     key={`desktop-${item.href}`}
                     href={item.href}
