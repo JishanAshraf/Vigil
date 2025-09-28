@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ShieldCheck, Stethoscope, UserCircle, Menu, Flag, LifeBuoy, LogOut } from 'lucide-react';
+import { ShieldCheck, Stethoscope, UserCircle, Menu, Flag, LifeBuoy, LogOut, Search, Bell } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Logo } from '@/components/logo';
 import { ThemeToggle } from './theme-toggle';
@@ -16,6 +16,7 @@ const desktopNavItems = [
   { href: '/health', label: 'Health', icon: Stethoscope },
   { href: '/profile', label: 'Profile', icon: UserCircle },
 ];
+
 
 export function MainHeader() {
   const pathname = usePathname();
@@ -37,7 +38,7 @@ export function MainHeader() {
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="flex flex-col p-0">
-            <SheetTitle className="sr-only">Sidebar Menu</SheetTitle>
+             <SheetTitle className="sr-only">Sidebar Menu</SheetTitle>
             <div className="p-6">
               <nav className="mt-8 flex flex-col gap-2">
                 <Link
