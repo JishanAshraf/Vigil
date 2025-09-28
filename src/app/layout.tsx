@@ -8,9 +8,11 @@ import { ThemeProvider } from '@/components/theme-provider';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Inter } from 'next/font/google';
+import { Quicksand } from 'next/font/google';
 import { cn } from '@/lib/utils';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
+const quiska = Quicksand({ subsets: ['latin'], variable: '--font-headline' });
 
 export default function RootLayout({
   children,
@@ -33,7 +35,7 @@ export default function RootLayout({
         <title>Vigil</title>
         <meta name="description" content="Your community safety and health assistant." />
       </head>
-      <body className={cn("font-sans antialiased", inter.variable)}>
+      <body className={cn("font-sans antialiased", inter.variable, quiska.variable)}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
