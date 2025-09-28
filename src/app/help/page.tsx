@@ -17,8 +17,8 @@ const faqs = [
         answer: "Yes, you can. When you fill out the report form, there is an option to 'Post Anonymously'. If you select this, your name and avatar will be hidden from the public post."
     },
     {
-        question: "How does the Health Assistant work?",
-        answer: "The Health Assistant is an AI-powered tool to help you understand your symptoms. Simply describe how you're feeling, and the assistant will provide information on possible conditions, general care advice, and over-the-counter medication suggestions. Please note, this is not a substitute for professional medical advice."
+        question: "How does Vital work?",
+        answer: "Vital is an AI-powered tool to help you understand your symptoms. Simply describe how you're feeling, and the assistant will provide information on possible conditions, general care advice, and over-the-counter medication suggestions. Please note, this is not a substitute for professional medical advice."
     },
     {
         question: "How do I update my profile information?",
