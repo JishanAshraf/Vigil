@@ -89,7 +89,7 @@ export function MainHeader() {
       </header>
 
       {/* Bottom Nav for mobile */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur-sm border-t p-2 z-50 md:hidden h-[84px] flex items-center">
+      <nav className="fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur-sm border-t p-2 z-50 md:hidden h-[72px] flex items-center">
           <div className="grid grid-cols-5 gap-1 max-w-md mx-auto w-full items-center">
             {isClient ? (
               mobileNavItems.map((item) => {
