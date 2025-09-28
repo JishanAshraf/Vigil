@@ -43,27 +43,29 @@ export function MainHeader() {
               <span className="sr-only">Open sidebar</span>
             </Button>
           </SheetTrigger>
-          <SheetContent side="left" className="flex flex-col">
+          <SheetContent side="left" className="flex flex-col p-0">
             <SheetTitle className="sr-only">Sidebar Menu</SheetTitle>
-            <nav className="mt-8 flex flex-col gap-2">
-              <Link
-                href="/report-issue"
-                onClick={() => setIsSheetOpen(false)}
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-              >
-                <Flag className="h-5 w-5" />
-                Report an Issue
-              </Link>
-              <Link
-                href="/help"
-                onClick={() => setIsSheetOpen(false)}
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-              >
-                <LifeBuoy className="h-5 w-5" />
-                Help & Support
-              </Link>
-            </nav>
-            <div className="mt-auto">
+            <div className="p-6">
+              <nav className="mt-8 flex flex-col gap-2">
+                <Link
+                  href="/report-issue"
+                  onClick={() => setIsSheetOpen(false)}
+                  className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                >
+                  <Flag className="h-5 w-5" />
+                  Report an Issue
+                </Link>
+                <Link
+                  href="/help"
+                  onClick={() => setIsSheetOpen(false)}
+                  className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                >
+                  <LifeBuoy className="h-5 w-5" />
+                  Help & Support
+                </Link>
+              </nav>
+            </div>
+            <div className="mt-auto p-6">
                 <Button variant="destructive" className="w-full glossy-button" onClick={() => setIsSheetOpen(false)}>
                     <LogOut className="mr-2 h-5 w-5" />
                     Log out
@@ -72,7 +74,7 @@ export function MainHeader() {
           </SheetContent>
         </Sheet>
         
-        <div className="flex-1 flex justify-center">
+        <div className="flex-1 flex justify-center md:absolute md:left-1/2 md:-translate-x-1/2">
             <Link href="/" className="flex items-center gap-2 font-semibold text-primary">
                 <Logo className="h-8 w-auto" />
             </Link>
@@ -153,7 +155,7 @@ export function MainHeader() {
       </nav>
 
       {/* Sidebar Nav for larger screens */}
-      <aside className="hidden md:flex fixed top-16 left-0 z-40 h-[calc(100vh-4rem)] w-60 flex-col border-r bg-background/95 p-4 backdrop-blur-sm">
+      <aside className="hidden md:flex fixed top-16 left-0 z-30 h-[calc(100vh-4rem)] w-60 flex-col border-r bg-background/95 p-4 backdrop-blur-sm">
         <nav className="flex flex-col gap-2">
             {desktopNavItems.map((item) => (
                 <Link
