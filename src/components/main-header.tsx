@@ -3,13 +3,13 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ShieldCheck, Stethoscope, UserCircle, Menu, Flag, LifeBuoy } from 'lucide-react';
+import { ShieldCheck, Stethoscope, UserCircle, Menu, Flag, LifeBuoy, LogOut } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Logo } from '@/components/logo';
 import { ThemeToggle } from './theme-toggle';
 import { useEffect, useState } from 'react';
 import { Button } from './ui/button';
-import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from './ui/sheet';
+import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
 
 const navItems = [
   { href: '/', label: 'Watch', icon: ShieldCheck },
@@ -36,11 +36,8 @@ export function MainHeader() {
               <span className="sr-only">Open sidebar</span>
             </Button>
           </SheetTrigger>
-          <SheetContent side="left">
-            <SheetHeader>
-              <SheetTitle>Menu</SheetTitle>
-            </SheetHeader>
-            <div className="mt-4 flex flex-col gap-2">
+          <SheetContent side="left" className="flex flex-col">
+            <nav className="mt-8 flex flex-col gap-2">
               <Link
                 href="/report-issue"
                 onClick={() => setIsSheetOpen(false)}
@@ -57,6 +54,12 @@ export function MainHeader() {
                 <LifeBuoy className="h-5 w-5" />
                 Help & Support
               </Link>
+            </nav>
+            <div className="mt-auto">
+                <Button variant="destructive" className="w-full glossy-button" onClick={() => setIsSheetOpen(false)}>
+                    <LogOut className="mr-2 h-5 w-5" />
+                    Log out
+                </Button>
             </div>
           </SheetContent>
         </Sheet>
@@ -130,6 +133,10 @@ export function MainHeader() {
                 <LifeBuoy className="h-5 w-5" />
                 Help & Support
             </Link>
+            <Button variant="destructive" className="glossy-button justify-start mt-4">
+                <LogOut className="mr-2 h-5 w-5" />
+                Log out
+            </Button>
         </div>
       </aside>
     </>
