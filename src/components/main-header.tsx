@@ -9,7 +9,7 @@ import { Logo } from '@/components/logo';
 import { ThemeToggle } from './theme-toggle';
 import { useEffect, useState } from 'react';
 import { Button } from './ui/button';
-import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
+import { Sheet, SheetContent, SheetTrigger, SheetTitle } from './ui/sheet';
 
 const navItems = [
   { href: '/', label: 'Watch', icon: ShieldCheck },
@@ -37,6 +37,7 @@ export function MainHeader() {
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="flex flex-col">
+            <SheetTitle className="sr-only">Sidebar Menu</SheetTitle>
             <nav className="mt-8 flex flex-col gap-2">
               <Link
                 href="/report-issue"
