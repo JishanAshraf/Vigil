@@ -38,9 +38,7 @@ export function MainHeader() {
           </SheetTrigger>
           <SheetContent side="left">
             <SheetHeader>
-              <SheetTitle>
-                <Logo className="h-8 w-auto text-primary" />
-              </SheetTitle>
+              <SheetTitle>Menu</SheetTitle>
             </SheetHeader>
             <div className="mt-4 flex flex-col gap-2">
               <Link
