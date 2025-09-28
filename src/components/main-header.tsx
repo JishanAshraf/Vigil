@@ -77,7 +77,7 @@ export function MainHeader() {
               </nav>
             </div>
             <div className="mt-auto p-6">
-                <Button variant="destructive" className="w-full glossy-button" onClick={() => setIsSheetOpen(false)}>
+                <Button variant="ghost" className="w-full glossy-button text-destructive hover:text-destructive justify-start" onClick={() => setIsSheetOpen(false)}>
                     <LogOut className="mr-2 h-5 w-5" />
                     Log out
                 </Button>
@@ -161,7 +161,7 @@ export function MainHeader() {
                 <LifeBuoy className="h-5 w-5" />
                 Help & Support
             </Link>
-            <Button variant="destructive" className="glossy-button justify-start mt-4">
+            <Button variant="ghost" className="glossy-button justify-start mt-4 text-destructive hover:text-destructive">
                 <LogOut className="mr-2 h-5 w-5" />
                 Log out
             </Button>
