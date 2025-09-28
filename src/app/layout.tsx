@@ -8,11 +8,11 @@ import { ThemeProvider } from '@/components/theme-provider';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Inter } from 'next/font/google';
-import { Gugi } from 'next/font/google';
+import { Playfair_Display } from 'next/font/google';
 import { cn } from '@/lib/utils';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
-const headlineFont = Gugi({ subsets: ['latin'], variable: '--font-headline', weight: '400' });
+const headlineFont = Playfair_Display({ subsets: ['latin'], variable: '--font-headline', weight: '400' });
 
 export default function RootLayout({
   children,
