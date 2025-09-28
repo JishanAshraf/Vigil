@@ -54,7 +54,7 @@ export default function HelpPage() {
                 <div className="mt-4 flex flex-col gap-4">
                     <div className="flex items-center gap-3">
                         <Mail className="h-5 w-5 text-primary" />
-                        <a href="mailto:support@townish.app" className="hover:underline">support@townish.app</a>
+                        <a href="mailto:support@vigil.app" className="hover:underline">support@vigil.app</a>
                     </div>
                      <div className="flex items-center gap-3">
                         <Phone className="h-5 w-5 text-primary" />
