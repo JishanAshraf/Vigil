@@ -4,7 +4,7 @@ import { Logo } from '@/components/logo';
 
 export default function LoginPage() {
   return (
-    <div className="flex flex-col h-full items-center justify-between p-4">
+    <div className="flex flex-col h-full items-center justify-between p-8">
         <div className="flex-1 flex items-center justify-center">
             <Logo className="w-auto h-24 text-primary" />
         </div>

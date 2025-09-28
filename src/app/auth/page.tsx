@@ -4,20 +4,10 @@
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/logo";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
-import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
 
 export default function AuthPage() {
-  const { theme } = useTheme();
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
   return (
-    <div className="flex flex-col h-full items-center justify-between text-center p-4">
+    <div className="flex flex-col h-full items-center justify-between text-center p-8">
       <div className="flex-1 flex items-center justify-center">
         <Logo className="w-auto h-24 text-primary" />
       </div>

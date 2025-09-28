@@ -7,7 +7,7 @@ export function CreateAlertFab() {
   return (
     <Button
       asChild
-      className="glossy-button fixed bottom-24 right-4 z-40 h-16 w-16 rounded-full shadow-lg md:bottom-8 md:right-8"
+      className="glossy-button fixed bottom-24 right-4 z-40 h-16 w-16 rounded-full shadow-lg md:hidden"
     >
       <Link href="/report-issue">
         <Plus className="h-8 w-8" />
