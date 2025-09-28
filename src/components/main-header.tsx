@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ShieldCheck, Stethoscope, UserCircle, Menu, Flag, LifeBuoy, LogOut, Search, Bell } from 'lucide-react';
+import { ShieldCheck, Stethoscope, UserCircle, Menu, Flag, LifeBuoy, LogOut, Search, Bell, Home } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Logo } from '@/components/logo';
 import { ThemeToggle } from './theme-toggle';
@@ -15,7 +15,16 @@ const desktopNavItems = [
   { href: '/', label: 'Watch', icon: ShieldCheck },
   { href: '/health', label: 'Health', icon: Stethoscope },
   { href: '/profile', label: 'Profile', icon: UserCircle },
+  { href: '/search', label: 'Search', icon: Search },
 ];
+
+const mobileNavItems = [
+    { href: '/', label: 'Watch', icon: Home },
+    { href: '/search', label: 'Search', icon: Search },
+    { href: '/report-issue', label: 'Report', icon: Flag, isCentral: true },
+    { href: '/notifications', label: 'Updates', icon: Bell },
+    { href: '/profile', label: 'Profile', icon: UserCircle },
+]
 
 
 export function MainHeader() {
@@ -32,7 +41,7 @@ export function MainHeader() {
       <header className="sticky top-0 z-40 flex h-16 items-center justify-between gap-4 border-b bg-background/80 px-4 backdrop-blur-sm md:px-6">
         <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
           <SheetTrigger asChild>
-            <Button variant="ghost" size="icon" className="md:hidden">
+             <Button variant="ghost" size="icon" className="md:hidden">
               <Menu className="h-6 w-6" />
               <span className="sr-only">Open sidebar</span>
             </Button>
@@ -78,6 +87,39 @@ export function MainHeader() {
           {isClient ? <ThemeToggle /> : <div className="h-10 w-10" />}
         </div>
       </header>
+
+      {/* Bottom Nav for mobile */}
+      <nav className="fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur-sm border-t p-2 z-50 md:hidden h-[84px] flex items-center">
+          <div className="grid grid-cols-5 gap-1 max-w-md mx-auto w-full items-center">
+            {isClient ? (
+              mobileNavItems.map((item) => {
+                if (item.isCentral) {
+                  return (
+                    <div key={item.href} className="flex justify-center -mt-8">
+                       <Button asChild size="icon" className="glossy-button bg-primary hover:bg-primary/90 rounded-full h-16 w-16 shadow-lg border-4 border-background">
+                        <Link href={item.href}>
+                            <item.icon className="h-7 w-7 text-primary-foreground" />
+                        </Link>
+                      </Button>
+                    </div>
+                  )
+                }
+                return (
+                  <Link key={item.href} href={item.href} className={cn(
+                      'flex flex-col items-center justify-center gap-1 transition-colors duration-200',
+                      pathname === item.href ? 'text-primary' : 'text-muted-foreground hover:text-primary'
+                  )}>
+                      <item.icon className="h-6 w-6" />
+                      <span className="text-xs font-medium">{item.label}</span>
+                  </Link>
+                )
+              })
+            ) : (
+              // Skeleton loaders for server-side rendering
+              [...Array(5)].map((_, i) => <div key={i} className="h-12 w-12 bg-muted rounded-md" />)
+            )}
+          </div>
+      </nav>
 
       {/* Sidebar Nav for larger screens */}
       <aside className="hidden md:flex fixed top-16 left-0 z-30 h-[calc(100vh-4rem)] w-60 flex-col border-r bg-background/95 p-4 backdrop-blur-sm">
