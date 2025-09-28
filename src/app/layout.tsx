@@ -38,7 +38,7 @@ export default function RootLayout({
           attribute="class"
           defaultTheme="system"
           enableSystem
-          disableTransitionOnChange
+          disableTransitionOnChange={false}
         >
           <div className="flex min-h-screen w-full flex-col">
             {showHeader && <MainHeader />}
