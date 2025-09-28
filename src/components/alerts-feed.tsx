@@ -1,12 +1,25 @@
+
+'use client';
+
+import { useEffect, useState } from 'react';
+import { Alert } from '@/lib/types';
+import { AlertsGrid } from './alerts-grid';
 import { mockAlerts } from '@/lib/mock-data';
-import { AlertCard } from './alert-card';
 
 export function AlertsFeed() {
-  return (
-    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 pb-24 md:pb-8">
-      {mockAlerts.map((alert) => (
-        <AlertCard key={alert.id} alert={alert} />
-      ))}
-    </div>
-  );
+  const [alerts, setAlerts] = useState<Alert[]>([]);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    // This ensures the component only renders on the client, preventing hydration mismatch
+    setIsClient(true);
+    setAlerts(mockAlerts);
+  }, []);
+
+  if (!isClient) {
+    // You can render a skeleton loader here if you want
+    return null;
+  }
+
+  return <AlertsGrid alerts={alerts} />;
 }
