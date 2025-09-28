@@ -23,7 +23,7 @@ const mobileNavItems = [
     { href: '/search', label: 'Search', icon: Search },
     { href: '/report-issue', label: 'Report', icon: Flag, isCentral: true },
     { href: '/notifications', label: 'Updates', icon: Bell },
-    { href: '/profile', label: 'Profile', icon: UserCircle },
+    { href: '/health', label: 'Health', icon: Stethoscope },
 ]
 
 
@@ -50,6 +50,14 @@ export function MainHeader() {
              <SheetTitle className="sr-only">Sidebar Menu</SheetTitle>
             <div className="p-6">
               <nav className="mt-8 flex flex-col gap-2">
+                 <Link
+                  href="/profile"
+                  onClick={() => setIsSheetOpen(false)}
+                  className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                >
+                  <UserCircle className="h-5 w-5" />
+                  Profile
+                </Link>
                 <Link
                   href="/report-issue"
                   onClick={() => setIsSheetOpen(false)}
