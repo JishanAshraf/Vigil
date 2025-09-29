@@ -7,7 +7,7 @@ import { ShieldCheck, Stethoscope, UserCircle, Menu, Flag, LifeBuoy, LogOut, Sea
 import { cn } from '@/lib/utils';
 import { Logo } from '@/components/logo';
 import { ThemeToggle } from './theme-toggle';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Button } from './ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from './ui/sheet';
 
@@ -29,12 +29,7 @@ const mobileNavItems = [
 
 export function MainHeader() {
   const pathname = usePathname();
-  const [isClient, setIsClient] = useState(false);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
 
   return (
     <>
@@ -77,10 +72,12 @@ export function MainHeader() {
               </nav>
             </div>
             <div className="mt-auto p-6">
-                <Button variant="ghost" className="w-full glossy-button text-destructive hover:text-destructive justify-start" onClick={() => setIsSheetOpen(false)}>
-                    <LogOut className="mr-2 h-5 w-5" />
-                    Log out
-                </Button>
+              <Button asChild variant="ghost" className="w-full glossy-button text-destructive hover:text-destructive justify-start">
+                  <Link href="/login">
+                      <LogOut className="mr-2 h-5 w-5" />
+                      Log out
+                  </Link>
+              </Button>
             </div>
           </SheetContent>
         </Sheet>
@@ -92,15 +89,14 @@ export function MainHeader() {
         </div>
         
         <div className="flex items-center gap-2">
-          {isClient ? <ThemeToggle /> : <div className="h-10 w-10" />}
+          <ThemeToggle />
         </div>
       </header>
 
       {/* Bottom Nav for mobile */}
       <nav className="fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur-sm border-t p-2 z-50 md:hidden h-[72px] flex items-center">
           <div className="grid grid-cols-5 gap-1 max-w-md mx-auto w-full items-center">
-            {isClient ? (
-              mobileNavItems.map((item) => {
+            {mobileNavItems.map((item) => {
                 if (item.isCentral) {
                   return (
                     <div key={item.href} className="flex justify-center -mt-8">
@@ -121,11 +117,7 @@ export function MainHeader() {
                       <span className="text-xs font-medium">{item.label}</span>
                   </Link>
                 )
-              })
-            ) : (
-              // Skeleton loaders for server-side rendering
-              [...Array(5)].map((_, i) => <div key={i} className="h-12 w-12 bg-muted rounded-md" />)
-            )}
+              })}
           </div>
       </nav>
 
@@ -161,9 +153,11 @@ export function MainHeader() {
                 <LifeBuoy className="h-5 w-5" />
                 Help & Support
             </Link>
-            <Button variant="ghost" className="glossy-button justify-start mt-4 text-destructive hover:text-destructive">
-                <LogOut className="mr-2 h-5 w-5" />
-                Log out
+            <Button asChild variant="ghost" className="glossy-button justify-start mt-4 text-destructive hover:text-destructive">
+                <Link href="/login">
+                    <LogOut className="mr-2 h-5 w-5" />
+                    Log out
+                </Link>
             </Button>
         </div>
       </aside>
