@@ -6,12 +6,13 @@ export default function AuthPage() {
   return (
     <div className="flex flex-col h-screen bg-background">
       <div
-        className="flex-grow bg-auth-background bg-cover bg-center"
+        className="flex-grow bg-cover bg-center"
+        style={{ backgroundImage: "url('/auth-background.png')" }}
         data-ai-hint="community people"
       >
-        {/* This div will contain the background image */}
+        {/* This div contains the background image */}
       </div>
-      <div className="p-8 grid gap-4 border-t">
+      <div className="p-8 grid gap-4 border-t bg-background">
           <Button asChild className="w-full font-bold text-base glossy-button">
             <Link href="/login">Login</Link>
           </Button>
