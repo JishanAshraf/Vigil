@@ -10,8 +10,9 @@ export default function AuthPage() {
         <Image
           src="/auth-background.png" 
           alt="Community background"
-          fill
-          className="object-cover"
+          width={1200}
+          height={800}
+          className="object-cover w-full h-full"
           data-ai-hint="community people"
         />
       </div>
