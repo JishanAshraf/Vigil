@@ -26,8 +26,8 @@ export default function RootLayout({
     setIsClient(true);
   }, []);
 
-  const showHeader = isClient && !['/login', '/auth'].includes(pathname);
-  const isAuthPage = ['/login', '/auth'].includes(pathname);
+  const showHeader = isClient && !['/login'].includes(pathname);
+  const isAuthPage = ['/login'].includes(pathname);
 
   return (
     <html lang="en" suppressHydrationWarning>
