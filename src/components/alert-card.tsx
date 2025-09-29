@@ -8,7 +8,6 @@ import type { Alert } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
@@ -60,10 +59,10 @@ export function AlertCard({ alert }: AlertCardProps) {
                             <Image
                                 src={image.url}
                                 alt={alert.description.substring(0, 50)}
-                                fill
-                                className="object-cover"
+                                width={600}
+                                height={400}
+                                className="object-cover w-full h-auto"
                                 data-ai-hint={image.hint}
-                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                             />
                         </div>
                     </CarouselItem>
