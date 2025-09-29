@@ -10,6 +10,9 @@ export default {
   ],
   theme: {
     extend: {
+      backgroundImage: {
+        'auth-background': "url('/auth-background.png')",
+      },
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
         headline: ["var(--font-headline)", ...fontFamily.sans],

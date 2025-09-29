@@ -6,8 +6,7 @@ export default function AuthPage() {
   return (
     <div className="flex flex-col h-screen bg-background">
       <div
-        className="flex-grow bg-cover bg-center"
-        style={{ backgroundImage: "url('/auth-background.png')" }}
+        className="flex-grow bg-auth-background bg-cover bg-center"
         data-ai-hint="community people"
       >
         {/* This div will contain the background image */}
