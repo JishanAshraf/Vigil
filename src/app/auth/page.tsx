@@ -10,12 +10,13 @@ export default function AuthPage() {
     <div className="flex flex-col h-full items-center justify-between text-center p-8">
       <div className="flex-1 flex flex-col items-center justify-center gap-4">
         <Image 
-            src="/vigil-auth-hero.png" 
+            src="https://picsum.photos/seed/authhero/400/400"
             alt="Vigil App Illustration"
             width={400}
             height={400}
             className="max-w-[300px] w-full h-auto"
             priority
+            data-ai-hint="community watch illustration"
         />
         <p className="text-lg text-muted-foreground -mt-8 font-headline">See it, post it, resolve it. Together.</p>
       </div>
