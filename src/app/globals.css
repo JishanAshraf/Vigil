@@ -90,4 +90,19 @@
     transform: translateY(1px);
     background-image: linear-gradient(to top, rgba(0,0,0,0.05), rgba(0,0,0,0.05));
   }
+
+  .slide-in-button {
+    @apply relative z-0 overflow-hidden;
+  }
+  .slide-in-button span {
+     @apply relative z-10;
+  }
+  .slide-in-button::before {
+    content: '';
+    @apply absolute -z-10 top-0 left-0 w-full h-full bg-primary/80 transition-transform duration-300 ease-in-out;
+    transform: translateX(-100%);
+  }
+  .slide-in-button:hover::before {
+    transform: translateX(0);
+  }
 }

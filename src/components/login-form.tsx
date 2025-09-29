@@ -92,8 +92,8 @@ export function LoginForm() {
               Forgot Password?
             </Link>
           </div>
-          <Button asChild type="submit" className="w-full font-bold text-base glossy-button">
-            <Link href="/">Login</Link>
+          <Button asChild type="submit" className="w-full font-bold text-base slide-in-button">
+            <Link href="/"><span>Login</span></Link>
           </Button>
           <div className="text-center text-sm text-muted-foreground">
             Don't have an account?{' '}
