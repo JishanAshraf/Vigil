@@ -6,13 +6,13 @@ export default function AuthPage() {
   return (
     <div className="flex flex-col h-screen bg-background">
       {/* Image container */}
-      <div className="flex-1 flex items-center justify-center p-8">
+      <div className="flex-1 flex items-center justify-center p-4 md:p-8">
         <div className="relative w-full h-full">
           <Image
             src="/Vigil-login-page.png"
             alt="Vigil app screenshot"
             fill
-            className="object-cover"
+            className="object-contain"
             priority
             data-ai-hint="app screenshot"
           />
@@ -20,7 +20,7 @@ export default function AuthPage() {
       </div>
       
       {/* Buttons */}
-      <div className="p-8 grid gap-4">
+      <div className="p-8 grid gap-4 max-w-md mx-auto w-full">
         <Button asChild className="w-full font-bold text-base">
           <Link href="/login">Login</Link>
         </Button>
