@@ -7,9 +7,9 @@ export default function AuthPage() {
     <div className="flex flex-col h-screen bg-background">
       <div className="relative h-2/3">
         <Image
-          src="/auth-background.png" 
-          alt="Community people keeping watch in the neighborhood"
-          className="object-cover" 
+          src="/auth-background.png"
+          alt="Community members collaborating"
+          className="object-cover"
           fill
           data-ai-hint="community people"
         />
