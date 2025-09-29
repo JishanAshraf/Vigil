@@ -20,7 +20,7 @@ export function LoginForm() {
         <CardTitle className="text-3xl font-bold text-primary">Welcome Back</CardTitle>
       </CardHeader>
       <CardContent className="pt-6">
-        <Tabs defaultValue="email" className="w-full" onValueChange={setLoginMethod}>
+        <Tabs value={loginMethod} onValueChange={setLoginMethod} className="w-full">
           <div className="space-y-6">
             <TabsContent value="email" className="m-0">
                 <div className="grid gap-2">
@@ -86,10 +86,15 @@ export function LoginForm() {
               </div>
             </div>
 
-            <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="email">Email</TabsTrigger>
-                <TabsTrigger value="phone">Phone</TabsTrigger>
-            </TabsList>
+            <div className="text-center">
+                <Button 
+                    variant="link" 
+                    onClick={() => setLoginMethod(loginMethod === 'email' ? 'phone' : 'email')}
+                    className="text-primary"
+                >
+                    {loginMethod === 'email' ? 'Use Phone Number' : 'Use Email'}
+                </Button>
+            </div>
           </div>
         </Tabs>
       </CardContent>
