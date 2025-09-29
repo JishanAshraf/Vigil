@@ -26,8 +26,7 @@ export default function RootLayout({
     setIsClient(true);
   }, []);
 
-  const showHeader = isClient && !['/login'].includes(pathname);
-  const isAuthPage = ['/login'].includes(pathname);
+  const showHeader = isClient && !pathname.startsWith('/login');
 
   return (
     <html lang="en" suppressHydrationWarning>
@@ -44,7 +43,7 @@ export default function RootLayout({
         >
           <div className="flex min-h-screen w-full flex-col">
             {showHeader && <MainHeader />}
-            <main className={`flex flex-1 flex-col ${isAuthPage ? 'p-0' : 'gap-4 p-4 md:gap-8 md:p-8 md:pl-64 pb-28 md:pb-8'}`}>
+            <main className={`flex flex-1 flex-col ${!showHeader ? '' : 'gap-4 p-4 md:gap-8 md:p-8 md:pl-64 pb-28 md:pb-8'}`}>
               {children}
             </main>
           </div>
