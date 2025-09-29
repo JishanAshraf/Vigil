@@ -1,22 +1,18 @@
 
 import { Button } from "@/components/ui/button";
 import Link from 'next/link';
-import Image from 'next/image';
 
 export default function AuthPage() {
   return (
     <div className="flex flex-col h-screen bg-background">
-      <div className="relative flex-1">
-        <Image
-          src="/auth-background.png" 
-          alt="Community background"
-          width={1200}
-          height={800}
-          className="object-cover w-full h-full"
-          data-ai-hint="community people"
-        />
+      <div
+        className="flex-grow bg-cover bg-center"
+        style={{ backgroundImage: "url('/auth-background.png')" }}
+        data-ai-hint="community people"
+      >
+        {/* This div will contain the background image */}
       </div>
-      <div className="p-8 grid gap-4">
+      <div className="p-8 grid gap-4 border-t">
           <Button asChild className="w-full font-bold text-base glossy-button">
             <Link href="/login">Login</Link>
           </Button>
