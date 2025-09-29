@@ -21,11 +21,11 @@ export default function AuthPage() {
       </div>
       
       {/* Buttons */}
-      <div className="flex-1 p-8 grid gap-1 max-w-md mx-auto w-full">
+      <div className="flex-1 p-8 flex flex-col max-w-md mx-auto w-full justify-center">
         <Button asChild className="w-full font-bold text-base">
           <Link href="/login">Login</Link>
         </Button>
-        <Button asChild variant="outline" className="w-full font-bold text-base">
+        <Button asChild variant="outline" className="w-full font-bold text-base mt-2">
           <Link href="/signup">Sign Up</Link>
         </Button>
       </div>
