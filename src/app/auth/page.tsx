@@ -5,20 +5,23 @@ import Image from 'next/image';
 export default function AuthPage() {
   return (
     <div className="flex flex-col h-screen bg-background">
-      <div className="relative h-2/3">
+      {/* Simple image container */}
+      <div className="flex-1 bg-gray-100 relative">
         <Image
-          src="/auth-background.png"
-          alt="Community members collaborating"
-          className="object-cover"
+          src="/Vigil-login-page.png"
+          alt="Login background"
           fill
-          data-ai-hint="community people"
+          className="object-cover"
+          priority
         />
       </div>
+      
+      {/* Buttons */}
       <div className="p-8 grid gap-4">
-        <Button asChild className="w-full font-bold text-base glossy-button">
+        <Button asChild className="w-full font-bold text-base">
           <Link href="/login">Login</Link>
         </Button>
-        <Button asChild variant="outline" className="w-full font-bold text-base glossy-button">
+        <Button asChild variant="outline" className="w-full font-bold text-base">
           <Link href="/signup">Sign Up</Link>
         </Button>
       </div>
