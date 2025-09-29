@@ -7,7 +7,7 @@ export default function LoginLayout({
     children: React.ReactNode;
 }) {
     return (
-        <div className="flex flex-col h-screen items-center justify-center p-8 bg-background">
+        <div className="relative flex flex-col h-screen bg-background">
             {children}
         </div>
     );
