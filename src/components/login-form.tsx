@@ -81,7 +81,7 @@ export function LoginForm() {
               </div>
               <div className="relative flex justify-center text-xs uppercase">
                 <span className="bg-card px-2 text-muted-foreground">
-                  Or continue with
+                  Or sign in with
                 </span>
               </div>
             </div>
@@ -92,7 +92,7 @@ export function LoginForm() {
                     onClick={() => setLoginMethod(loginMethod === 'email' ? 'phone' : 'email')}
                     className="text-primary"
                 >
-                    {loginMethod === 'email' ? 'Use Phone Number' : 'Use Email'}
+                    {loginMethod === 'email' ? 'Phone Number' : 'Email'}
                 </Button>
             </div>
           </div>
