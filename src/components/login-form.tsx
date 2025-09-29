@@ -8,7 +8,6 @@ import { Label } from "@/components/ui/label";
 import Link from 'next/link';
 import { Checkbox } from "./ui/checkbox";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import { FacebookIcon, TwitterIcon, GoogleIcon, AppleIcon } from './social-icons';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { Mail, Phone } from "lucide-react";
 
@@ -91,25 +90,9 @@ export function LoginForm() {
                 <TabsTrigger value="email">Email</TabsTrigger>
                 <TabsTrigger value="phone">Phone</TabsTrigger>
             </TabsList>
-            
-            <div className="flex justify-center gap-6 pb-4 pt-4">
-                <Button variant="outline" size="icon" className="rounded-full">
-                    <FacebookIcon className="h-6 w-6" />
-                </Button>
-                <Button variant="outline" size="icon" className="rounded-full">
-                    <TwitterIcon className="h-6 w-6" />
-                </Button>
-                <Button variant="outline" size="icon" className="rounded-full">
-                    <GoogleIcon className="h-6 w-6" />
-                </Button>
-                <Button variant="outline" size="icon" className="rounded-full">
-                    <AppleIcon className="h-6 w-6" />
-                </Button>
-            </div>
           </div>
         </Tabs>
       </CardContent>
     </Card>
   );
 }
-
