@@ -22,8 +22,8 @@ export default function AuthPage() {
       
       {/* Buttons */}
       <div className="flex-1 p-8 flex flex-col max-w-md mx-auto w-full justify-center">
-        <Button asChild className="w-full font-bold text-base">
-          <Link href="/login">Login</Link>
+        <Button asChild className="w-full font-bold text-base mt-2 slide-in-button">
+          <Link href="/login"><span>Login</span></Link>
         </Button>
         <Button asChild variant="outline" className="w-full font-bold text-base mt-2">
           <Link href="/signup">Sign Up</Link>
