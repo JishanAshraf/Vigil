@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import Link from 'next/link';
 import { Mail, Phone, Lock, Eye, EyeOff } from "lucide-react";
 import { Checkbox } from "./ui/checkbox";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "./ui/card";
+import { Card, CardContent } from "./ui/card";
 import { Switch } from "@/components/ui/switch";
 
 export function LoginForm() {
@@ -17,11 +17,7 @@ export function LoginForm() {
 
   return (
     <Card className="w-full max-w-sm">
-      <CardHeader className="text-center">
-        <CardTitle className="text-2xl">Login</CardTitle>
-        <CardDescription>Enter your credentials to access your account</CardDescription>
-      </CardHeader>
-      <CardContent>
+      <CardContent className="pt-6">
         <div className="space-y-4">
           <div className="flex items-center justify-center space-x-2">
             <Label htmlFor="login-toggle" className={!loginWithEmail ? "text-muted-foreground" : ""}>Email</Label>
