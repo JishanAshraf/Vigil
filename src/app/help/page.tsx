@@ -2,7 +2,6 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Mail, Phone } from 'lucide-react';
-import { MainHeader } from '@/components/main-header';
 
 const faqs = [
     {
@@ -29,47 +28,42 @@ const faqs = [
 
 export default function HelpPage() {
   return (
-    <div className="flex min-h-screen w-full flex-col">
-        <MainHeader />
-        <main className="flex flex-1 flex-col items-center justify-center gap-4 p-4 md:gap-8 md:p-8 md:pl-64 pb-28 md:pb-8">
-            <div className="mx-auto w-full max-w-3xl">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Help & Support</CardTitle>
-                  <CardDescription>
-                    Find answers to common questions and get in touch with our support team.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <Accordion type="single" collapsible className="w-full">
-                        {faqs.map((faq, index) => (
-                            <AccordionItem key={index} value={`item-${index}`}>
-                                <AccordionTrigger>{faq.question}</AccordionTrigger>
-                                <AccordionContent>
-                                    {faq.answer}
-                                </AccordionContent>
-                            </AccordionItem>
-                        ))}
-                    </Accordion>
-                    
-                    <div className="mt-8 border-t pt-6">
-                        <h3 className="text-lg font-semibold">Contact Us</h3>
-                        <p className="text-muted-foreground mt-1">If you can't find the answer you're looking for, please reach out to us.</p>
-                        <div className="mt-4 flex flex-col gap-4">
-                            <div className="flex items-center gap-3">
-                                <Mail className="h-5 w-5 text-primary" />
-                                <a href="mailto:support@vigil.app" className="hover:underline">support@vigil.app</a>
-                            </div>
-                             <div className="flex items-center gap-3">
-                                <Phone className="h-5 w-5 text-primary" />
-                                <span>+1 (555) 123-4567</span>
-                            </div>
-                        </div>
+    <div className="mx-auto w-full max-w-3xl">
+      <Card>
+        <CardHeader>
+          <CardTitle>Help & Support</CardTitle>
+          <CardDescription>
+            Find answers to common questions and get in touch with our support team.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+            <Accordion type="single" collapsible className="w-full">
+                {faqs.map((faq, index) => (
+                    <AccordionItem key={index} value={`item-${index}`}>
+                        <AccordionTrigger>{faq.question}</AccordionTrigger>
+                        <AccordionContent>
+                            {faq.answer}
+                        </AccordionContent>
+                    </AccordionItem>
+                ))}
+            </Accordion>
+            
+            <div className="mt-8 border-t pt-6">
+                <h3 className="text-lg font-semibold">Contact Us</h3>
+                <p className="text-muted-foreground mt-1">If you can't find the answer you're looking for, please reach out to us.</p>
+                <div className="mt-4 flex flex-col gap-4">
+                    <div className="flex items-center gap-3">
+                        <Mail className="h-5 w-5 text-primary" />
+                        <a href="mailto:support@vigil.app" className="hover:underline">support@vigil.app</a>
                     </div>
-                </CardContent>
-              </Card>
+                     <div className="flex items-center gap-3">
+                        <Phone className="h-5 w-5 text-primary" />
+                        <span>+1 (555) 123-4567</span>
+                    </div>
+                </div>
             </div>
-        </main>
+        </CardContent>
+      </Card>
     </div>
   );
 }
