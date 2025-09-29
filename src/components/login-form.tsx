@@ -18,11 +18,11 @@ export function LoginForm() {
     <Card className="w-full max-w-md mx-auto rounded-t-3xl rounded-b-none border-none shadow-2xl overflow-hidden animate-in slide-in-from-bottom-16 duration-500">
       <div className="relative w-full aspect-[16/7]">
         <Image 
-          src="/Vigil-login-page.png" 
-          alt="Community watch app screenshot" 
+          src="/vigil-welcome-border.png" 
+          alt="Vigil app welcome border" 
           fill
           className="object-cover"
-          data-ai-hint="app screenshot"
+          data-ai-hint="abstract pattern"
         />
       </div>
       <CardHeader className="text-center pt-6 pb-4">
