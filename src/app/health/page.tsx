@@ -7,7 +7,7 @@ export default function HealthPage() {
         <>
             <MainHeader />
             <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8 md:pl-64 pb-28 md:pb-8">
-                <div className="flex flex-1 items-end justify-center w-full pb-8">
+                <div className="flex flex-1 items-end justify-center w-full">
                     <SymptomChecker />
                 </div>
             </main>
