@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { AlertTriangle, Send, Loader2, Sparkles } from 'lucide-react';
+import { AlertTriangle, Send, Loader2 } from 'lucide-react';
 
 import { getHealthAnalysis } from '@/app/actions';
 import type { HealthSymptomCheckerOutput } from '@/ai/flows/health-symptom-checker';
@@ -14,6 +14,7 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from '@/component
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { VitalMascot } from './vital-mascot';
 
 const formSchema = z.object({
   symptoms: z.string().min(10, { message: 'Please describe your symptoms in at least 10 characters.' }),
@@ -50,7 +51,7 @@ export function SymptomChecker() {
     <Card className="w-full max-w-2xl mx-auto">
       <CardHeader>
         <div className="flex items-center gap-3">
-            <Sparkles className="w-8 h-8 text-primary" />
+            <VitalMascot className="w-10 h-10 text-primary" />
             <div>
                 <CardTitle className="text-3xl font-headline font-bold tracking-tight text-primary">Vital</CardTitle>
                 <CardDescription>Describe your symptoms to get information.</CardDescription>
