@@ -52,7 +52,7 @@ export function SymptomChecker() {
         <div className="flex items-center gap-3">
             <Sparkles className="w-8 h-8 text-primary" />
             <div>
-                <CardTitle className="font-headline text-2xl">Vital</CardTitle>
+                <CardTitle className="text-3xl font-headline font-bold tracking-tight text-primary">Vital</CardTitle>
                 <CardDescription>Describe your symptoms to get information.</CardDescription>
             </div>
         </div>
