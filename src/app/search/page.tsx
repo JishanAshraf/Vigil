@@ -10,28 +10,30 @@ export default function SearchPage() {
     <>
         <MainHeader />
         <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8 md:pl-64 pb-28 md:pb-8">
-            <div className="mx-auto w-full max-w-2xl">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Search Alerts</CardTitle>
-                  <CardDescription>
-                    Find alerts by keyword, category, or location.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex w-full items-center space-x-2">
-                    <div className="relative flex-1">
-                      <Input
-                        type="search"
-                        placeholder="Search..."
-                        className="pl-10"
-                      />
-                      <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+            <div className="flex flex-1 items-end justify-center w-full pb-8">
+              <div className="mx-auto w-full max-w-2xl">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Search Alerts</CardTitle>
+                    <CardDescription>
+                      Find alerts by keyword, category, or location.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex w-full items-center space-x-2">
+                      <div className="relative flex-1">
+                        <Input
+                          type="search"
+                          placeholder="Search..."
+                          className="pl-10"
+                        />
+                        <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                      </div>
+                      <Button type="submit" className="glossy-button">Search</Button>
                     </div>
-                    <Button type="submit" className="glossy-button">Search</Button>
-                  </div>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              </div>
             </div>
         </main>
     </>
