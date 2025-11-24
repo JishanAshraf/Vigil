@@ -1,4 +1,3 @@
-
 # Firebase Studio Project Export
 
 This file contains the full contents of your project for easy transfer to a local development environment like Cursor.
