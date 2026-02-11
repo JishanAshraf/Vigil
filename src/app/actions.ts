@@ -1,6 +1,13 @@
 "use server";
 
-import { healthSymptomChecker, HealthSymptomCheckerInput, HealthSymptomCheckerOutput } from '@/ai/flows/health-symptom-checker';
+import { getRuleBasedHealthResponse, HealthKnowledgeOutput } from '@/lib/health-knowledge-base';
+
+export interface HealthSymptomCheckerInput {
+  symptoms: string;
+}
+
+export type HealthSymptomCheckerOutput = HealthKnowledgeOutput;
+
 
 export async function getHealthAnalysis(input: HealthSymptomCheckerInput): Promise<HealthSymptomCheckerOutput> {
   // TODO: Implement real authentication check here.
@@ -13,8 +20,8 @@ export async function getHealthAnalysis(input: HealthSymptomCheckerInput): Promi
   }
 
   try {
-    const result = await healthSymptomChecker(input);
-    return result;
+    const result = getRuleBasedHealthResponse(input.symptoms);
+    return await Promise.resolve(result);
   } catch (error) {
     console.error("Error in getHealthAnalysis:", error);
     throw new Error("Failed to get health analysis. Please try again later.");

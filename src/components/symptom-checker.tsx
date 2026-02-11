@@ -8,7 +8,7 @@ import * as z from 'zod';
 import { AlertTriangle, Send, Loader2, Sparkles } from 'lucide-react';
 
 import { getHealthAnalysis } from '@/app/actions';
-import type { HealthSymptomCheckerOutput } from '@/ai/flows/health-symptom-checker';
+import type { HealthSymptomCheckerOutput } from '@/app/actions';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
@@ -119,7 +119,8 @@ export function SymptomChecker() {
                     <AlertTitle className="font-semibold text-yellow-800 dark:text-yellow-300">Disclaimer</AlertTitle>
                     <AlertDescription className="text-yellow-700 dark:text-yellow-400">
                         {analysis.disclaimer}
-                    </AlertDescription>
+                    </Aler
+                    tDescription>
                 </Alert>
                 
                 <div className="space-y-4 text-sm">
