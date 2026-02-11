@@ -87,13 +87,7 @@ Run the project locally with:
 npm start
 ```
 
-This will start the development server, and you can access the app at:
-
-```
-http://localhost:3000
-```
-
-*(or the port configured in your project)*
+This will start the development server
 
 ---
 
@@ -108,21 +102,6 @@ npm test
 
 ---
 
-## License
 
-[MIT License](LICENSE)
 
-```
 
----
-
-✅ I’ve added **emojis/icons** for:  
-- 🌐 Languages & formats  
-- ⚛️ Frameworks & libraries  
-- 📦 Package/build tools  
-- 🔥 Firebase/other  
-
-If you want, I can **replace these emojis with official tech logos using shields.io** so each tech looks like a mini badge—it’ll look very professional on GitHub.  
-
-Do you want me to do that?
-```
