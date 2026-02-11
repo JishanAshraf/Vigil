@@ -24,6 +24,10 @@ This project leverages the following tools and technologies:
 
 ---
 
+## Vercel link for the app
+
+https://vigil-peach-three.vercel.app
+
 ## Table of Contents
 
 - [Overview](#overview)  
