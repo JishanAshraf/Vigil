@@ -16,7 +16,7 @@ import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 const formSchema = z.object({
-  symptoms: z.string().min(10, { message: 'Please describe your symptoms in at least 10 characters.' }),
+  symptoms: z.string().min(1, { message: 'Please enter a symptom.' }),
 });
 
 export function SymptomChecker() {
