@@ -1,4 +1,3 @@
-
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -6,6 +5,7 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { MapPin, Image as ImageIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -22,6 +22,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
+import { Badge } from "@/components/ui/badge";
 
 const issueCategories = [
   "Suspicious Activity",
@@ -46,6 +47,7 @@ const formSchema = z.object({
 export function ReportIssueForm() {
   const { toast } = useToast();
   const router = useRouter();
+  const [selectedFileNames, setSelectedFileNames] = useState<string[]>([]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -109,10 +111,34 @@ export function ReportIssueForm() {
                             <p className="mb-2 text-sm text-muted-foreground"><span className="font-semibold">Click to upload</span> or drag and drop</p>
                             <p className="text-xs text-muted-foreground">PNG, JPG, GIF</p>
                         </div>
-                        <Input id="dropzone-file" type="file" className="hidden" {...field} multiple />
+                        <Input 
+                          id="dropzone-file" 
+                          type="file" 
+                          className="hidden" 
+                          multiple 
+                          accept="image/png, image/jpeg, image/gif"
+                          onChange={(e) => {
+                            field.onChange(e.target.files);
+                            if (e.target.files) {
+                              setSelectedFileNames(Array.from(e.target.files).map(f => f.name));
+                            } else {
+                              setSelectedFileNames([]);
+                            }
+                          }}
+                        />
                     </label>
                 </div> 
               </FormControl>
+              {selectedFileNames.length > 0 && (
+                <div className="mt-4 space-y-2">
+                  <FormLabel>Selected files</FormLabel>
+                  <div className="flex flex-wrap gap-2">
+                    {selectedFileNames.map((name, i) => (
+                      <Badge key={i} variant="secondary">{name}</Badge>
+                    ))}
+                  </div>
+                </div>
+              )}
               <FormMessage />
             </FormItem>
           )}
