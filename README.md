@@ -9,7 +9,7 @@
 
 **Empowering Innovation, Accelerating Impact, Redefining Possibilities**
 
-**VIGIL** is a community-driven watch system that allows residents to report issues in real-time, tag relevant authorities, and get AI-powered suggestions for minor problems. It combines convenience, safety, and technology to make neighborhoods smarter and more responsive.
+**VIGIL** which means "To stay Alert" is a community-driven watch system that allows residents to report issues in real-time, tag relevant authorities, and get suggestions from our in-built health assistant "Vital" for minor problems. It combines convenience, safety, and technology to make neighborhoods smarter and more responsive.
 
 ---
 
