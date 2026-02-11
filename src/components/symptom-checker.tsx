@@ -119,8 +119,7 @@ export function SymptomChecker() {
                     <AlertTitle className="font-semibold text-yellow-800 dark:text-yellow-300">Disclaimer</AlertTitle>
                     <AlertDescription className="text-yellow-700 dark:text-yellow-400">
                         {analysis.disclaimer}
-                    </Aler
-                    tDescription>
+                    </AlertDescription>
                 </Alert>
                 
                 <div className="space-y-4 text-sm">
