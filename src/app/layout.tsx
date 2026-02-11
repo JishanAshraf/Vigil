@@ -1,14 +1,11 @@
-
 'use client';
 
 import './globals.css';
-import type { Metadata } from 'next';
 import { Toaster } from '@/components/ui/toaster';
-import { MainHeader } from '@/components/main-header';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Inter, Playfair_Display } from 'next/font/google';
 import { cn } from '@/lib/utils';
-import { usePathname } from 'next/navigation';
+import { AlertsProvider } from '@/contexts/AlertsContext';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 const headlineFont = Playfair_Display({ subsets: ['latin'], variable: '--font-headline', weight: '400' });
@@ -27,8 +24,10 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange={false}
         >
-          {children}
-          <Toaster />
+          <AlertsProvider>
+            {children}
+            <Toaster />
+          </AlertsProvider>
         </ThemeProvider>
       </body>
     </html>

@@ -23,6 +23,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
+import { useAlerts } from "@/contexts/AlertsContext";
 
 const issueCategories = [
   "Suspicious Activity",
@@ -47,6 +48,7 @@ const formSchema = z.object({
 export function ReportIssueForm() {
   const { toast } = useToast();
   const router = useRouter();
+  const { addAlert } = useAlerts();
   const [selectedFileNames, setSelectedFileNames] = useState<string[]>([]);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -61,12 +63,23 @@ export function ReportIssueForm() {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    const images = values.images && (values.images as FileList).length > 0
+        ? Array.from(values.images as FileList).map(file => ({ url: URL.createObjectURL(file), hint: 'custom upload' }))
+        : [{ url: 'https://picsum.photos/seed/newissue/600/400', hint: 'issue report' }];
+
+    addAlert({
+      category: values.category,
+      description: values.description,
+      location: values.location || 'Location not specified',
+      isAnonymous: values.postAnonymously || false,
+      images,
+    });
+    
     toast({
       title: "Issue Reported!",
       description: "Thank you for helping improve your community.",
     });
-    setTimeout(() => router.push('/'), 1000);
+    router.push('/');
   }
 
   return (

@@ -1,9 +1,9 @@
+'use client';
 
-import { Alert } from '@/lib/types';
 import { AlertsGrid } from './alerts-grid';
-import { mockAlerts } from '@/lib/mock-data';
+import { useAlerts } from '@/contexts/AlertsContext';
 
 export function AlertsFeed() {
-  const alerts: Alert[] = mockAlerts;
+  const { alerts } = useAlerts();
   return <AlertsGrid alerts={alerts} />;
 }
