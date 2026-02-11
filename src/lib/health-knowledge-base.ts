@@ -1,11 +1,9 @@
 
-'use server';
-
 export interface HealthKnowledgeOutput {
   disclaimer: string;
   possibleConditions: string;
   generalCareAdvice: string;
-  otcSuggestions: string;
+  otcSuggestions:string;
   emergencyResponse?: string;
 }
 
