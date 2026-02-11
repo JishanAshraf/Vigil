@@ -15,6 +15,7 @@ interface AlertsContextType {
   alerts: Alert[];
   addAlert: (newAlertData: Omit<Alert, 'id' | 'user' | 'timestamp' | 'comments' | 'status'>) => void;
   getUserAlerts: (userId: string) => Alert[];
+  deleteAlert: (alertId: string) => void;
 }
 
 const AlertsContext = createContext<AlertsContextType | undefined>(undefined);
@@ -34,13 +35,17 @@ export const AlertsProvider = ({ children }: { children: ReactNode }) => {
     setAlerts(prevAlerts => [newAlert, ...prevAlerts]);
   };
 
+  const deleteAlert = (alertId: string) => {
+    setAlerts(prevAlerts => prevAlerts.filter(alert => alert.id !== alertId));
+  };
+
   const getUserAlerts = (userId: string) => {
     // Only return non-anonymous posts for the user's profile
     return alerts.filter(alert => alert.user.id === userId && !alert.isAnonymous);
   };
 
   return (
-    <AlertsContext.Provider value={{ alerts, addAlert, getUserAlerts }}>
+    <AlertsContext.Provider value={{ alerts, addAlert, getUserAlerts, deleteAlert }}>
       {children}
     </AlertsContext.Provider>
   );

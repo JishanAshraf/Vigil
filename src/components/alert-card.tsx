@@ -1,8 +1,8 @@
-
 'use client';
 
 import Image from 'next/image';
-import { AlertCircle, Bell, CheckCircle, HelpCircle, Tag, Clock, MapPin, VenetianMask, MessageSquare } from 'lucide-react';
+import { AlertCircle, Bell, CheckCircle, HelpCircle, Clock, MapPin, VenetianMask, MessageSquare, Trash2 } from 'lucide-react';
+import React, { useState } from 'react';
 
 import type { Alert } from '@/lib/types';
 import { cn } from '@/lib/utils';
@@ -12,7 +12,9 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { AlertDetailsDialog } from './alert-details-dialog';
-import { useState } from 'react';
+import { useAlerts, mockLoggedInUser } from '@/contexts/AlertsContext';
+import { Button } from './ui/button';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from './ui/alert-dialog';
 
 type AlertCardProps = {
   alert: Alert;
@@ -27,6 +29,12 @@ const statusConfig = {
 export function AlertCard({ alert }: AlertCardProps) {
   const status = statusConfig[alert.status] || { icon: HelpCircle, className: 'bg-gray-500/20 text-gray-400 border-gray-500/30', label: 'Unknown' };
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const { deleteAlert } = useAlerts();
+  const isOwner = mockLoggedInUser.id === alert.user.id;
+
+  const handleDelete = () => {
+    deleteAlert(alert.id);
+  };
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -46,7 +54,40 @@ export function AlertCard({ alert }: AlertCardProps) {
                 <span>{alert.timestamp}</span>
               </div>
             </div>
-            <Badge variant="secondary" className="whitespace-nowrap">{alert.category}</Badge>
+            <div className="flex items-center gap-2">
+                <Badge variant="secondary" className="whitespace-nowrap">{alert.category}</Badge>
+                 {isOwner && !alert.isAnonymous && (
+                    <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                            <Button
+                            variant="ghost"
+                            size="icon"
+                            className="text-destructive hover:text-destructive hover:bg-destructive/10 h-8 w-8"
+                            onClick={(e) => { e.stopPropagation(); }}
+                            >
+                            <Trash2 className="h-4 w-4" />
+                            </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                            <AlertDialogHeader>
+                                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                    This action cannot be undone. This will permanently delete your issue report.
+                                </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction
+                                className="bg-destructive hover:bg-destructive/90"
+                                onClick={handleDelete}
+                            >
+                                Delete
+                            </AlertDialogAction>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialog>
+                )}
+            </div>
           </CardHeader>
           
           <CardContent className="p-0 flex-1">
@@ -98,7 +139,7 @@ export function AlertCard({ alert }: AlertCardProps) {
         </Card>
       </DialogTrigger>
       <DialogContent className="max-w-3xl p-0">
-        <AlertDetailsDialog alert={alert} />
+        <AlertDetailsDialog alert={alert} onOpenChange={setIsDialogOpen} />
       </DialogContent>
     </Dialog>
   );

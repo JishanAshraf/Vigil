@@ -1,11 +1,10 @@
-
 'use client';
 
 import type { Alert } from '@/lib/types';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import Image from 'next/image';
-import { MapPin, Clock, VenetianMask, Send } from 'lucide-react';
+import { MapPin, Clock, VenetianMask, Send, Trash2 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
@@ -13,12 +12,33 @@ import { CommentCard } from './comment-card';
 import { Textarea } from './ui/textarea';
 import { Button } from './ui/button';
 import { ScrollArea } from './ui/scroll-area';
+import { useAlerts, mockLoggedInUser } from '@/contexts/AlertsContext';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 interface AlertDetailsDialogProps {
   alert: Alert;
+  onOpenChange: (open: boolean) => void;
 }
 
-export function AlertDetailsDialog({ alert }: AlertDetailsDialogProps) {
+export function AlertDetailsDialog({ alert, onOpenChange }: AlertDetailsDialogProps) {
+  const { deleteAlert } = useAlerts();
+  const isOwner = mockLoggedInUser.id === alert.user.id;
+
+  const handleDelete = () => {
+    deleteAlert(alert.id);
+    onOpenChange(false);
+  };
+
   return (
     <div className="grid md:grid-cols-2 max-h-[80vh]">
       <div className="p-0 relative hidden md:block">
@@ -71,7 +91,30 @@ export function AlertDetailsDialog({ alert }: AlertDetailsDialogProps) {
                         <span>{alert.timestamp}</span>
                     </div>
                 </div>
-                <Badge variant="secondary">{alert.category}</Badge>
+                <div className="flex items-center gap-2">
+                    <Badge variant="secondary">{alert.category}</Badge>
+                    {isOwner && !alert.isAnonymous && (
+                        <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                               <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive hover:bg-destructive/10 h-8 w-8">
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  This action cannot be undone. This will permanently delete this issue report.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction onClick={handleDelete} className="bg-destructive hover:bg-destructive/90">Delete</AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
+                    )}
+                </div>
               </div>
             </CardHeader>
 
