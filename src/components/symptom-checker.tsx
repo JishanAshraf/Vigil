@@ -129,8 +129,8 @@ export function SymptomChecker() {
                     <h4 className="font-semibold text-base">General Care Advice</h4>
                     <p className="text-foreground/80 whitespace-pre-line">{analysis.generalCareAdvice}</p>
                     
-                    <h4 className="font-semibold text-base">Over-The-Counter (OTC) Suggestions</h4>
-                    <p className="text-foreground/80 whitespace-pre-line">{analysis.otcSuggestions}</p>
+                    <h4 className="font-semibold text-base">Home Remedies</h4>
+                    <p className="text-foreground/80 whitespace-pre-line">{analysis.homeRemedies}</p>
                 </div>
                 </>
             )}
