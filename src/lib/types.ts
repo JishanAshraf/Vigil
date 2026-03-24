@@ -5,7 +5,7 @@ export type User = {
 };
 
 export type Comment = {
-  id: string;
+  id:string;
   user: User;
   timestamp: string;
   text: string;
@@ -22,4 +22,5 @@ export type Alert = {
   location: string;
   status: 'Reported' | 'Authorities Notified' | 'Resolved';
   comments: Comment[];
+  reports: number;
 };

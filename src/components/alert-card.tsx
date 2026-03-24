@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { AlertCircle, Bell, CheckCircle, HelpCircle, Clock, MapPin, VenetianMask, MessageSquare, Trash2 } from 'lucide-react';
+import { AlertCircle, Bell, CheckCircle, HelpCircle, Clock, MapPin, VenetianMask, MessageSquare, Trash2, AlertTriangle } from 'lucide-react';
 import React, { useState } from 'react';
 
 import type { Alert } from '@/lib/types';
@@ -29,11 +29,19 @@ const statusConfig = {
 export function AlertCard({ alert }: AlertCardProps) {
   const status = statusConfig[alert.status] || { icon: HelpCircle, className: 'bg-gray-500/20 text-gray-400 border-gray-500/30', label: 'Unknown' };
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const { deleteAlert } = useAlerts();
+  const { deleteAlert, reportAlert } = useAlerts();
   const isOwner = mockLoggedInUser.id === alert.user.id;
+  const [isReported, setIsReported] = useState(false);
 
   const handleDelete = () => {
     deleteAlert(alert.id);
+  };
+  
+  const handleReport = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (isReported) return;
+    reportAlert(alert.id);
+    setIsReported(true);
   };
 
   return (
@@ -131,9 +139,23 @@ export function AlertCard({ alert }: AlertCardProps) {
               {status.label}
             </Badge>
 
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <MessageSquare className="h-4 w-4" />
-              <span>{alert.comments.length} {alert.comments.length === 1 ? 'comment' : 'comments'}</span>
+            <div className="flex items-center gap-4 text-xs text-muted-foreground">
+              <Button
+                variant="ghost"
+                size="sm"
+                className={cn(
+                  "flex items-center gap-1.5 h-auto px-2 py-1 text-xs",
+                  isReported ? "text-destructive cursor-default" : "hover:bg-destructive/10 hover:text-destructive"
+                )}
+                onClick={handleReport}
+              >
+                <AlertTriangle className="h-4 w-4" />
+                <span>{alert.reports}</span>
+              </Button>
+              <div className="flex items-center gap-2">
+                <MessageSquare className="h-4 w-4" />
+                <span>{alert.comments.length} {alert.comments.length === 1 ? 'comment' : 'comments'}</span>
+              </div>
             </div>
           </CardFooter>
         </Card>

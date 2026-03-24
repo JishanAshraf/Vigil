@@ -24,7 +24,8 @@ export const mockAlerts: Alert[] = [
     comments: [
       { id: 'comment-1', user: users[1], timestamp: '1 hour ago', text: 'I saw that too! My car almost got swallowed.' },
       { id: 'comment-2', user: users[3], timestamp: '30 minutes ago', text: 'Just reported it to the city via their app as well.' },
-    ]
+    ],
+    reports: 12
   },
   {
     id: 'alert-2',
@@ -37,6 +38,7 @@ export const mockAlerts: Alert[] = [
     location: 'Community Park',
     status: 'Authorities Notified',
     comments: [],
+    reports: 3
   },
   {
     id: 'alert-3',
@@ -51,7 +53,8 @@ export const mockAlerts: Alert[] = [
     comments: [
       { id: 'comment-3', user: users[0], timestamp: '2 days ago', text: 'I think I saw him near the school! I hope you find him soon.' },
       { id: 'comment-4', user: users[2], timestamp: '1 day ago', text: 'Update: Buddy is home safe! Thanks for the help, everyone.' },
-    ]
+    ],
+    reports: 0
   },
     {
     id: 'alert-4',
@@ -64,6 +67,7 @@ export const mockAlerts: Alert[] = [
     location: 'Alley behind Grove Mart',
     status: 'Reported',
     comments: [],
+    reports: 7
   },
     {
     id: 'alert-5',
@@ -78,5 +82,6 @@ export const mockAlerts: Alert[] = [
     comments: [
       { id: 'comment-5', user: users[3], timestamp: '10 hours ago', text: 'It\'s a delivery van for the new bakery. They told me they\'d be parking there for a bit.' }
     ],
+    reports: 1
   },
 ];

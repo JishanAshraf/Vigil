@@ -13,9 +13,10 @@ export const mockLoggedInUser: User = {
 
 interface AlertsContextType {
   alerts: Alert[];
-  addAlert: (newAlertData: Omit<Alert, 'id' | 'user' | 'timestamp' | 'comments' | 'status'>) => void;
+  addAlert: (newAlertData: Omit<Alert, 'id' | 'user' | 'timestamp' | 'comments' | 'status' | 'reports'>) => void;
   getUserAlerts: (userId: string) => Alert[];
   deleteAlert: (alertId: string) => void;
+  reportAlert: (alertId: string) => void;
 }
 
 const AlertsContext = createContext<AlertsContextType | undefined>(undefined);
@@ -23,7 +24,7 @@ const AlertsContext = createContext<AlertsContextType | undefined>(undefined);
 export const AlertsProvider = ({ children }: { children: ReactNode }) => {
   const [alerts, setAlerts] = useState<Alert[]>(mockAlerts);
 
-  const addAlert = (newAlertData: Omit<Alert, 'id' | 'user' | 'timestamp' | 'comments' | 'status'>) => {
+  const addAlert = (newAlertData: Omit<Alert, 'id' | 'user' | 'timestamp' | 'comments' | 'status' | 'reports'>) => {
     const newAlert: Alert = {
       ...newAlertData,
       id: `alert-${Date.now()}`,
@@ -31,6 +32,7 @@ export const AlertsProvider = ({ children }: { children: ReactNode }) => {
       timestamp: 'Just now',
       comments: [],
       status: 'Reported',
+      reports: 0,
     };
     setAlerts(prevAlerts => [newAlert, ...prevAlerts]);
   };
@@ -39,13 +41,21 @@ export const AlertsProvider = ({ children }: { children: ReactNode }) => {
     setAlerts(prevAlerts => prevAlerts.filter(alert => alert.id !== alertId));
   };
 
+  const reportAlert = (alertId: string) => {
+    setAlerts(prevAlerts =>
+      prevAlerts.map(alert =>
+        alert.id === alertId ? { ...alert, reports: alert.reports + 1 } : alert
+      )
+    );
+  };
+
   const getUserAlerts = (userId: string) => {
     // Only return non-anonymous posts for the user's profile
     return alerts.filter(alert => alert.user.id === userId && !alert.isAnonymous);
   };
 
   return (
-    <AlertsContext.Provider value={{ alerts, addAlert, getUserAlerts, deleteAlert }}>
+    <AlertsContext.Provider value={{ alerts, addAlert, getUserAlerts, deleteAlert, reportAlert }}>
       {children}
     </AlertsContext.Provider>
   );
