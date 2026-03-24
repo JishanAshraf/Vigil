@@ -16,16 +16,16 @@ export default function HealthPage() {
                 <Tabs defaultValue="symptoms" className="w-full max-w-4xl mx-auto">
                     <TabsList className="grid w-full grid-cols-3">
                         <TabsTrigger value="symptoms">
-                            <Stethoscope className="mr-2 h-4 w-4"/>
-                            Symptom Checker
+                            <Stethoscope className="h-5 w-5 md:h-4 md:w-4 md:mr-2"/>
+                            <span className="hidden md:inline">Symptom Checker</span>
                         </TabsTrigger>
                         <TabsTrigger value="order">
-                            <Pill className="mr-2 h-4 w-4"/>
-                            Order Medicines
+                            <Pill className="h-5 w-5 md:h-4 md:w-4 md:mr-2"/>
+                            <span className="hidden md:inline">Order Medicines</span>
                         </TabsTrigger>
                         <TabsTrigger value="doctor">
-                            <BriefcaseMedical className="mr-2 h-4 w-4"/>
-                           Find a Doctor
+                            <BriefcaseMedical className="h-5 w-5 md:h-4 md:w-4 md:mr-2"/>
+                           <span className="hidden md:inline">Find a Doctor</span>
                         </TabsTrigger>
                     </TabsList>
                     <TabsContent value="symptoms" className="mt-6">
