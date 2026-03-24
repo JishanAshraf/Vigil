@@ -1,4 +1,3 @@
-
 'use client';
 
 import Link from 'next/link';
@@ -73,7 +72,7 @@ export function MainHeader() {
             </div>
             <div className="mt-auto p-6">
               <Button asChild variant="ghost" className="w-full glossy-button text-destructive hover:text-destructive justify-start">
-                  <Link href="/login">
+                  <Link href="/auth">
                       <LogOut className="mr-2 h-5 w-5" />
                       Log out
                   </Link>
@@ -154,7 +153,7 @@ export function MainHeader() {
                 Help & Support
             </Link>
             <Button asChild variant="ghost" className="glossy-button justify-start mt-4 text-destructive hover:text-destructive">
-                <Link href="/login">
+                <Link href="/auth">
                     <LogOut className="mr-2 h-5 w-5" />
                     Log out
                 </Link>
