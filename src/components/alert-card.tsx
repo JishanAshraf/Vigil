@@ -29,7 +29,7 @@ const statusConfig = {
 export function AlertCard({ alert }: AlertCardProps) {
   const status = statusConfig[alert.status] || { icon: HelpCircle, className: 'bg-gray-500/20 text-gray-400 border-gray-500/30', label: 'Unknown' };
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const { deleteAlert, reportAlert } = useAlerts();
+  const { deleteAlert, incrementReport, decrementReport } = useAlerts();
   const isOwner = mockLoggedInUser.id === alert.user.id;
   const [isReported, setIsReported] = useState(false);
 
@@ -37,11 +37,15 @@ export function AlertCard({ alert }: AlertCardProps) {
     deleteAlert(alert.id);
   };
   
-  const handleReport = (e: React.MouseEvent) => {
+  const handleReportToggle = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (isReported) return;
-    reportAlert(alert.id);
-    setIsReported(true);
+    if (isReported) {
+      decrementReport(alert.id);
+      setIsReported(false);
+    } else {
+      incrementReport(alert.id);
+      setIsReported(true);
+    }
   };
 
   return (
@@ -144,10 +148,10 @@ export function AlertCard({ alert }: AlertCardProps) {
                 variant="ghost"
                 size="sm"
                 className={cn(
-                  "flex items-center gap-1.5 h-auto px-2 py-1 text-xs",
-                  isReported ? "text-destructive cursor-default" : "hover:bg-destructive/10 hover:text-destructive"
+                  "flex items-center gap-1.5 h-auto px-2 py-1 text-xs hover:bg-destructive/10",
+                  isReported ? "text-destructive hover:text-destructive/80" : "hover:text-destructive"
                 )}
-                onClick={handleReport}
+                onClick={handleReportToggle}
               >
                 <AlertTriangle className="h-4 w-4" />
                 <span>{alert.reports}</span>

@@ -16,7 +16,8 @@ interface AlertsContextType {
   addAlert: (newAlertData: Omit<Alert, 'id' | 'user' | 'timestamp' | 'comments' | 'status' | 'reports'>) => void;
   getUserAlerts: (userId: string) => Alert[];
   deleteAlert: (alertId: string) => void;
-  reportAlert: (alertId: string) => void;
+  incrementReport: (alertId: string) => void;
+  decrementReport: (alertId: string) => void;
 }
 
 const AlertsContext = createContext<AlertsContextType | undefined>(undefined);
@@ -41,10 +42,18 @@ export const AlertsProvider = ({ children }: { children: ReactNode }) => {
     setAlerts(prevAlerts => prevAlerts.filter(alert => alert.id !== alertId));
   };
 
-  const reportAlert = (alertId: string) => {
+  const incrementReport = (alertId: string) => {
     setAlerts(prevAlerts =>
       prevAlerts.map(alert =>
         alert.id === alertId ? { ...alert, reports: alert.reports + 1 } : alert
+      )
+    );
+  };
+
+  const decrementReport = (alertId: string) => {
+    setAlerts(prevAlerts =>
+      prevAlerts.map(alert =>
+        alert.id === alertId ? { ...alert, reports: Math.max(0, alert.reports - 1) } : alert
       )
     );
   };
@@ -55,7 +64,7 @@ export const AlertsProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AlertsContext.Provider value={{ alerts, addAlert, getUserAlerts, deleteAlert, reportAlert }}>
+    <AlertsContext.Provider value={{ alerts, addAlert, getUserAlerts, deleteAlert, incrementReport, decrementReport }}>
       {children}
     </AlertsContext.Provider>
   );
