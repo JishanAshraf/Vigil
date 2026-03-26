@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,18 +8,10 @@ import { Label } from "@/components/ui/label";
 import Link from 'next/link';
 import { Phone, KeyRound, Loader2, AlertTriangle } from "lucide-react";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "./ui/card";
-import { useAuth } from '@/firebase';
-import { RecaptchaVerifier, signInWithPhoneNumber, ConfirmationResult } from 'firebase/auth';
 import { useToast } from '@/hooks/use-toast';
 import { Alert, AlertDescription, AlertTitle } from './ui/alert';
 
-// Extend Window interface to include recaptchaVerifier
-declare global {
-  interface Window {
-    recaptchaVerifier?: RecaptchaVerifier;
-    confirmationResult?: ConfirmationResult;
-  }
-}
+const DUMMY_OTP = "123456";
 
 export function SignUpForm() {
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -28,90 +20,49 @@ export function SignUpForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const auth = useAuth();
   const router = useRouter();
   const { toast } = useToast();
 
-  // Set up reCAPTCHA verifier
-  useEffect(() => {
-    if (!auth) return;
-
-    if (!window.recaptchaVerifier) {
-      window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
-        'size': 'invisible',
-        'callback': (response: any) => {
-          // reCAPTCHA solved, allow signInWithPhoneNumber.
-        }
-      });
-    }
-  }, [auth]);
-
   const handlePhoneSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!auth || !window.recaptchaVerifier) return;
-    
     setError(null);
     setIsLoading(true);
 
-    try {
-      const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, window.recaptchaVerifier);
-      window.confirmationResult = confirmationResult;
+    // Simulate sending OTP
+    setTimeout(() => {
+      setIsLoading(false);
       setStep('otpInput');
       toast({
-        title: "OTP Sent",
-        description: "Please check your phone for the verification code.",
+        title: "Dummy OTP Sent",
+        description: `For this demo, your OTP is: ${DUMMY_OTP}`,
+        duration: 9000,
       });
-    } catch (err: any) {
-      console.error(err);
-      if (err.code === 'auth/configuration-not-found') {
-        setError("Configuration Error: Phone sign-in must be enabled in your Firebase project. Please go to the Firebase Console -> Authentication -> Sign-in method and enable the 'Phone' provider.");
-      } else {
-        setError(err.message || "Failed to send OTP. Please check the phone number and try again.");
-      }
-      
-      // Reset reCAPTCHA
-       if (window.recaptchaVerifier) {
-        window.recaptchaVerifier.render().then((widgetId) => {
-            if(auth) {
-                // @ts-ignore
-                grecaptcha.reset(widgetId);
-            }
-        });
-      }
-    } finally {
-      setIsLoading(false);
-    }
+    }, 1000);
   };
 
   const handleOtpVerify = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!window.confirmationResult) {
-      setError("Something went wrong. Please try signing up again.");
-      return;
-    };
-    
     setError(null);
     setIsLoading(true);
 
-    try {
-      await window.confirmationResult.confirm(otp);
-      toast({
-        title: "Success!",
-        description: "You have been signed up successfully.",
-      });
-      router.push('/');
-    } catch (err: any) {
-      console.error(err);
-      setError(err.message || "Invalid OTP. Please try again.");
-    } finally {
+    // Simulate OTP verification
+    setTimeout(() => {
       setIsLoading(false);
-    }
+      if (otp === DUMMY_OTP) {
+        toast({
+          title: "Success!",
+          description: "You have been signed up successfully.",
+        });
+        router.push('/');
+      } else {
+        setError("Invalid OTP. Please try again.");
+      }
+    }, 1000);
   };
   
 
   return (
     <Card className="w-full max-w-sm">
-      <div id="recaptcha-container"></div>
       <CardHeader className="text-center">
         <CardTitle className="text-2xl">Create an Account</CardTitle>
         <CardDescription>Enter your phone number to sign up.</CardDescription>
@@ -182,7 +133,7 @@ export function SignUpForm() {
       </CardContent>
       <CardFooter className="px-6 pb-6">
         <p className="text-xs text-muted-foreground text-center w-full">
-            Phone authentication is provided by Firebase and is free for up to 10,000 verifications per month on the Spark Plan.
+            This is a demo. No real SMS will be sent.
         </p>
       </CardFooter>
     </Card>
