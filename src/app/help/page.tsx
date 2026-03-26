@@ -62,7 +62,7 @@ export default function HelpPage() {
                             </div>
                              <div className="flex items-center gap-3">
                                 <Phone className="h-5 w-5 text-primary" />
-                                <span>+1 (555) 123-4567</span>
+                                <span>+91 98765 43210</span>
                             </div>
                         </div>
                     </div>

@@ -14,9 +14,9 @@ export type Doctor = {
 };
 
 export const mockVendors: Vendor[] = [
-  { id: 'vendor-1', name: 'City Pharmacy', address: '123 Main St, Downtown', phone: '(555) 111-2222' },
-  { id: 'vendor-2', name: 'Wellness Drugstore', address: '456 Oak Ave, Suburbia', phone: '(555) 333-4444' },
-  { id: 'vendor-3', name: 'HealthFirst Meds', address: '789 Pine Ln, Uptown', phone: '(555) 555-6666' },
+  { id: 'vendor-1', name: 'City Pharmacy', address: '123 Main St, Downtown', phone: '+919876543211' },
+  { id: 'vendor-2', name: 'Wellness Drugstore', address: '456 Oak Ave, Suburbia', phone: '+919876543212' },
+  { id: 'vendor-3', name: 'HealthFirst Meds', address: '789 Pine Ln, Uptown', phone: '+919876543213' },
 ];
 
 export const mockDoctors: Doctor[] = [

@@ -132,7 +132,7 @@ export function ProfileForm({ profileData }: ProfileFormProps) {
             <FormItem>
               <FormLabel>Phone Number</FormLabel>
               <FormControl>
-                <Input type="tel" placeholder="Your phone number" {...field} />
+                <Input type="tel" placeholder="+91 98765 43210" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -146,7 +146,7 @@ export function ProfileForm({ profileData }: ProfileFormProps) {
             <FormItem>
               <FormLabel>Postal Code / Neighbourhood</FormLabel>
               <FormControl>
-                <Input placeholder="Your postal code" {...field} />
+                <Input placeholder="e.g., 110001" {...field} />
               </FormControl>
               <FormDescription>This helps us show you relevant community alerts.</FormDescription>
               <FormMessage />

@@ -172,11 +172,11 @@ export function AlertCard({ alert }: AlertCardProps) {
                   onDoubleClick={handleOpenReporters}
                 >
                   <AlertTriangle className="h-4 w-4" />
-                  <span>{alert.reporters.length}</span>
+                  <span>{alert.reporters.length.toLocaleString('en-IN')}</span>
                 </Button>
                 <div className="flex items-center gap-2">
                   <MessageSquare className="h-4 w-4" />
-                  <span>{alert.comments.length} {alert.comments.length === 1 ? 'comment' : 'comments'}</span>
+                  <span>{alert.comments.length.toLocaleString('en-IN')} {alert.comments.length === 1 ? 'comment' : 'comments'}</span>
                 </div>
               </div>
             </CardFooter>

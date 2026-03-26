@@ -31,8 +31,8 @@ export function LoginForm() {
             userToLogin = {
                 name: "Alex Doe",
                 email: "alex.doe@example.com",
-                phone: "+1 555 123 4567",
-                postalCode: "90210",
+                phone: "+91 98765 43210",
+                postalCode: "110001",
                 avatarUrl: "",
             };
         }
@@ -40,8 +40,8 @@ export function LoginForm() {
         userToLogin = {
             name: "Alex Doe",
             email: "alex.doe@example.com",
-            phone: "+1 555 123 4567",
-            postalCode: "90210",
+            phone: "+91 98765 43210",
+            postalCode: "110001",
             avatarUrl: "",
         };
     }
@@ -91,7 +91,7 @@ export function LoginForm() {
                       <Input
                           id="phone"
                           type="tel"
-                          placeholder="+1 (555) 123-4567"
+                          placeholder="+91 98765 43210"
                           required
                            className="pl-10"
                       />

@@ -149,7 +149,7 @@ export function AlertDetailsDialog({ alert, onOpenChange }: AlertDetailsDialogPr
           <Separator />
             
           <div className="p-6 space-y-4">
-            <h4 className="text-sm font-semibold tracking-tight">Comments ({alert.comments.length})</h4>
+            <h4 className="text-sm font-semibold tracking-tight">Comments ({alert.comments.length.toLocaleString('en-IN')})</h4>
             {alert.comments.length > 0 ? (
               <div className="space-y-4">
                 {alert.comments.map(comment => (
