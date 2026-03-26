@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import Link from 'next/link';
 import { Checkbox } from "./ui/checkbox";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import { Mail, Phone, KeyRound } from "lucide-react";
+import { Mail, KeyRound, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { signInWithEmailAndPassword } from "firebase/auth";
@@ -22,7 +22,7 @@ export function LoginForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
 
-  const handleLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
 
@@ -75,14 +75,14 @@ export function LoginForm() {
         <CardTitle className="text-3xl font-bold text-primary">Welcome Back</CardTitle>
       </CardHeader>
       <CardContent className="pt-6">
-        <form className="space-y-6">
+        <form className="space-y-6" onSubmit={handleLogin}>
             <div className="grid gap-2">
                 <Label htmlFor="email" className="text-xs text-muted-foreground">Email</Label>
                 <div className="relative">
                     <Input
                         id="email"
                         type="email"
-                        placeholder="kris.adams@gamil.com"
+                        placeholder="your.email@example.com"
                         required
                         className="pl-10"
                         value={email}
@@ -116,8 +116,15 @@ export function LoginForm() {
               Forgot Password?
             </Link>
           </div>
-          <Button type="submit" className="w-full font-bold text-base h-12 rounded-full slide-in-button" onClick={handleLogin} disabled={isSubmitting}>
-            <span>{isSubmitting ? 'Logging in...' : 'Login'}</span>
+          <Button type="submit" className="w-full font-bold text-base h-12 rounded-full slide-in-button" disabled={isSubmitting}>
+            {isSubmitting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <span>Logging in...</span>
+              </>
+            ) : (
+              <span>Login</span>
+            )}
           </Button>
           
            <div className="mt-4 text-center text-sm text-muted-foreground">

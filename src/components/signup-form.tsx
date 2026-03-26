@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from 'next/link';
-import { Mail, KeyRound, User } from "lucide-react";
+import { Mail, KeyRound, User, Loader2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "./ui/card";
 import { useToast } from '@/hooks/use-toast';
 import { Form, FormControl, FormField, FormItem, FormMessage } from "./ui/form";
@@ -100,7 +100,7 @@ export function SignUpForm() {
                   <Label htmlFor="name">Name</Label>
                   <div className="relative">
                     <FormControl>
-                      <Input id="name" placeholder="John Doe" {...field} className="pl-10"/>
+                      <Input id="name" placeholder="Your Name" {...field} className="pl-10"/>
                     </FormControl>
                      <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                   </div>
@@ -116,7 +116,7 @@ export function SignUpForm() {
                   <Label htmlFor="email">Email</Label>
                   <div className="relative">
                     <FormControl>
-                      <Input id="email" type="email" placeholder="john.doe@example.com" {...field} className="pl-10"/>
+                      <Input id="email" type="email" placeholder="your.email@example.com" {...field} className="pl-10"/>
                     </FormControl>
                     <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                   </div>
@@ -141,7 +141,12 @@ export function SignUpForm() {
               )}
             />
             <Button type="submit" className="w-full font-bold text-base glossy-button" disabled={form.formState.isSubmitting}>
-              {form.formState.isSubmitting ? "Signing up..." : 'Sign Up'}
+              {form.formState.isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Signing up...
+                </>
+              ) : 'Sign Up'}
             </Button>
           </form>
         </Form>
