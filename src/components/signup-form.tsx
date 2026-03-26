@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -145,6 +144,8 @@ export function SignUpForm() {
                 <Input
                   id="otp"
                   type="text"
+                  inputMode="numeric"
+                  autoComplete="one-time-code"
                   placeholder="Enter the 6-digit code"
                   required
                   className="pl-10"
