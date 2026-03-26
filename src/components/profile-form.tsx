@@ -4,6 +4,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { useEffect, useRef, useState } from 'react';
+import { doc, updateDoc } from "firebase/firestore";
+import { firestore } from "@/firebase";
+
 
 import { Button } from "@/components/ui/button";
 import {
@@ -19,7 +22,7 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Camera } from "lucide-react";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth, UserProfile } from "@/contexts/AuthContext";
 
 const profileSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
@@ -29,19 +32,19 @@ const profileSchema = z.object({
   avatarUrl: z.string().optional(),
 });
 
-type ProfileData = z.infer<typeof profileSchema>;
+type ProfileFormData = z.infer<typeof profileSchema>;
 
 interface ProfileFormProps {
-  profileData: ProfileData;
+  profileData: UserProfile;
 }
 
 export function ProfileForm({ profileData }: ProfileFormProps) {
   const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { login } = useAuth();
+  const { user } = useAuth();
   const [avatarPreview, setAvatarPreview] = useState<string | undefined>(profileData.avatarUrl);
 
-  const form = useForm<ProfileData>({
+  const form = useForm<ProfileFormData>({
     resolver: zodResolver(profileSchema),
     values: profileData,
   });
@@ -65,12 +68,31 @@ export function ProfileForm({ profileData }: ProfileFormProps) {
   };
 
 
-  function onSubmit(values: z.infer<typeof profileSchema>) {
-    login(values);
-    toast({
-      title: "Profile Updated",
-      description: "Your information has been saved successfully.",
-    });
+  async function onSubmit(values: ProfileFormData) {
+    if (!user) {
+        toast({ variant: "destructive", title: "Not Authenticated", description: "You must be logged in to update your profile." });
+        return;
+    }
+
+    try {
+        const userDocRef = doc(firestore, "users", user.uid);
+        await updateDoc(userDocRef, {
+            name: values.name,
+            phone: values.phone,
+            postalCode: values.postalCode,
+            avatarUrl: values.avatarUrl,
+        });
+        toast({
+            title: "Profile Updated",
+            description: "Your information has been saved successfully.",
+        });
+    } catch (error: any) {
+        toast({
+            variant: "destructive",
+            title: "Update Failed",
+            description: error.message || "Could not update profile.",
+        });
+    }
   }
 
   return (
@@ -118,7 +140,7 @@ export function ProfileForm({ profileData }: ProfileFormProps) {
             <FormItem>
               <FormLabel>Email Address</FormLabel>
               <FormControl>
-                <Input type="email" placeholder="your@email.com" {...field} />
+                <Input type="email" placeholder="your@email.com" {...field} disabled />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -154,7 +176,9 @@ export function ProfileForm({ profileData }: ProfileFormProps) {
           )}
         />
 
-        <Button type="submit" className="glossy-button">Update Profile</Button>
+        <Button type="submit" className="glossy-button" disabled={form.formState.isSubmitting}>
+            {form.formState.isSubmitting ? 'Updating...' : 'Update Profile'}
+        </Button>
       </form>
     </Form>
   );

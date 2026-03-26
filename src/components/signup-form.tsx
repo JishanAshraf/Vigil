@@ -11,7 +11,11 @@ import { Mail, KeyRound, User } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "./ui/card";
 import { useToast } from '@/hooks/use-toast';
 import { Form, FormControl, FormField, FormItem, FormMessage } from "./ui/form";
-import { useAuth } from "@/contexts/AuthContext";
+import { useRouter } from "next/navigation";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+import { auth, firestore } from "@/firebase";
+
 
 const formSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
@@ -20,8 +24,8 @@ const formSchema = z.object({
 });
 
 export function SignUpForm() {
-  const { login } = useAuth();
   const { toast } = useToast();
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -32,19 +36,34 @@ export function SignUpForm() {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    const userProfile = {
-      name: values.name,
-      email: values.email,
-      avatarUrl: "",
-    };
-    
-    login(userProfile);
-    
-    toast({
-      title: "Account Created!",
-      description: "You have been successfully signed up.",
-    });
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
+      const user = userCredential.user;
+
+      // Create a user profile document in Firestore
+      await setDoc(doc(firestore, "users", user.uid), {
+        name: values.name,
+        email: values.email,
+        phone: "",
+        postalCode: "",
+        avatarUrl: "",
+      });
+      
+      toast({
+        title: "Account Created!",
+        description: "You have been successfully signed up.",
+      });
+
+      router.push('/');
+
+    } catch (error: any) {
+       toast({
+        variant: "destructive",
+        title: "Sign Up Failed",
+        description: error.message || "An unexpected error occurred.",
+      });
+    }
   };
 
   return (

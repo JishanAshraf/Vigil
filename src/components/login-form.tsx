@@ -8,49 +8,40 @@ import { Label } from "@/components/ui/label";
 import Link from 'next/link';
 import { Checkbox } from "./ui/checkbox";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import { Mail, Phone } from "lucide-react";
-import { useAuth } from "@/contexts/AuthContext";
+import { Mail, Phone, KeyRound } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "@/firebase";
 
 export function LoginForm() {
-  const [loginMethod, setLoginMethod] = useState("email");
-  const { login } = useAuth();
   const { toast } = useToast();
+  const router = useRouter();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleLogin = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+
+  const handleLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    // For this dummy login, we'll log in a default user.
-    // We'll check if a user profile exists in localStorage from a previous signup,
-    // otherwise we'll create a new default one.
-    let userToLogin;
-    const storedProfile = localStorage.getItem('dummy-user-profile');
-    if (storedProfile) {
-        try {
-            userToLogin = JSON.parse(storedProfile);
-        } catch {
-            userToLogin = {
-                name: "Alex Doe",
-                email: "alex.doe@example.com",
-                phone: "+91 98765 43210",
-                postalCode: "110001",
-                avatarUrl: "",
-            };
-        }
-    } else {
-        userToLogin = {
-            name: "Alex Doe",
-            email: "alex.doe@example.com",
-            phone: "+91 98765 43210",
-            postalCode: "110001",
-            avatarUrl: "",
-        };
-    }
+    setIsSubmitting(true);
 
-    login(userToLogin);
-    toast({
-        title: "Logged In!",
-        description: `Welcome back, ${userToLogin.name}!`,
-    });
+    try {
+        await signInWithEmailAndPassword(auth, email, password);
+        toast({
+            title: "Logged In!",
+            description: `Welcome back!`,
+        });
+        router.push('/');
+    } catch (error: any) {
+        toast({
+            variant: "destructive",
+            title: "Login Failed",
+            description: error.message || "Invalid email or password.",
+        });
+    } finally {
+        setIsSubmitting(false);
+    }
   }
 
   return (
@@ -68,46 +59,36 @@ export function LoginForm() {
         <CardTitle className="text-3xl font-bold text-primary">Welcome Back</CardTitle>
       </CardHeader>
       <CardContent className="pt-6">
-        <div className="space-y-6">
-          {loginMethod === 'email' && (
-              <div className="grid gap-2">
-                  <Label htmlFor="email" className="text-xs text-muted-foreground">Email</Label>
-                  <div className="relative">
-                      <Input
-                          id="email"
-                          type="email"
-                          placeholder="kris.adams@gamil.com"
-                          required
-                          className="pl-10"
-                      />
-                       <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                  </div>
-              </div>
-          )}
-          {loginMethod === 'phone' && (
-              <div className="grid gap-2">
-                  <Label htmlFor="phone" className="text-xs text-muted-foreground">Phone Number</Label>
-                  <div className="relative">
-                      <Input
-                          id="phone"
-                          type="tel"
-                          placeholder="+91 98765 43210"
-                          required
-                           className="pl-10"
-                      />
-                      <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                  </div>
-              </div>
-          )}
+        <form className="space-y-6">
+            <div className="grid gap-2">
+                <Label htmlFor="email" className="text-xs text-muted-foreground">Email</Label>
+                <div className="relative">
+                    <Input
+                        id="email"
+                        type="email"
+                        placeholder="kris.adams@gamil.com"
+                        required
+                        className="pl-10"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                </div>
+            </div>
 
           <div className="grid gap-2">
             <Label htmlFor="password" className="text-xs text-muted-foreground">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="**********"
-                required
-              />
+              <div className="relative">
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="**********"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground hidden"/>
+              </div>
           </div>
           <div className="flex items-center justify-between text-sm">
             <div className="flex items-center gap-2">
@@ -118,31 +99,14 @@ export function LoginForm() {
               Forgot Password?
             </Link>
           </div>
-          <Button asChild type="submit" className="w-full font-bold text-base h-12 rounded-full slide-in-button">
-            <a href="/" onClick={handleLogin}><span>Login</span></a>
+          <Button type="submit" className="w-full font-bold text-base h-12 rounded-full slide-in-button" onClick={handleLogin} disabled={isSubmitting}>
+            <span>{isSubmitting ? 'Logging in...' : 'Login'}</span>
           </Button>
           
-          <div className="relative text-center my-4">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t" />
+           <div className="mt-4 text-center text-sm text-muted-foreground">
+              Don&apos;t have an account? <Link href="/signup" className="underline font-semibold text-primary hover:text-primary/80">Sign Up</Link>
             </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-card px-2 text-muted-foreground">
-                Or sign in with
-              </span>
-            </div>
-          </div>
-
-          <div className="text-center">
-              <Button 
-                  variant="link" 
-                  onClick={() => setLoginMethod(loginMethod === 'email' ? 'phone' : 'email')}
-                  className="text-primary"
-              >
-                  {loginMethod === 'email' ? 'Phone Number' : 'Email'}
-              </Button>
-          </div>
-        </div>
+        </form>
       </CardContent>
     </Card>
   );

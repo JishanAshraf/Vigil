@@ -20,7 +20,7 @@ export const AlertsProvider = ({ children }: { children: ReactNode }) => {
   const [alerts, setAlerts] = useState<Alert[]>(mockAlerts);
   const { user: authUser } = useAuth();
 
-  const currentUser: User | null = authUser ? { id: authUser.email, name: authUser.name, avatarUrl: authUser.avatarUrl } : null;
+  const currentUser: User | null = authUser ? { id: authUser.uid, name: authUser.name, avatarUrl: authUser.avatarUrl } : null;
 
   const addAlert = (newAlertData: Omit<Alert, 'id' | 'user' | 'timestamp' | 'comments' | 'status' | 'reporters'>) => {
     if (!currentUser) {
