@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useForm } from "react-hook-form";
@@ -40,6 +39,7 @@ export function SignUpForm() {
       email: values.email,
       phone: "",
       postalCode: "",
+      avatarUrl: "",
     };
     localStorage.setItem('dummy-user-profile', JSON.stringify(userProfile));
     

@@ -1,10 +1,9 @@
-
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { Button } from "@/components/ui/button";
 import {
@@ -18,12 +17,15 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Camera } from "lucide-react";
 
 const profileSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
   email: z.string().email(),
   phone: z.string().optional(),
   postalCode: z.string().min(5, { message: "Please enter a valid postal code." }),
+  avatarUrl: z.string().optional(),
 });
 
 type ProfileData = z.infer<typeof profileSchema>;
@@ -34,21 +36,34 @@ interface ProfileFormProps {
 
 export function ProfileForm({ profileData }: ProfileFormProps) {
   const { toast } = useToast();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [avatarPreview, setAvatarPreview] = useState<string | undefined>(profileData.avatarUrl);
 
   const form = useForm<ProfileData>({
     resolver: zodResolver(profileSchema),
-    // The form values will be controlled by the profileData prop
     values: profileData,
   });
 
-  // This effect resets the form when the profileData prop changes.
-  // This is important for when the data is loaded asynchronously from localStorage.
   useEffect(() => {
     form.reset(profileData);
+    setAvatarPreview(profileData.avatarUrl);
   }, [profileData, form]);
 
+  const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const dataUrl = reader.result as string;
+        setAvatarPreview(dataUrl);
+        form.setValue("avatarUrl", dataUrl);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+
   function onSubmit(values: z.infer<typeof profileSchema>) {
-    // When the user updates their profile, save it back to localStorage
     localStorage.setItem('dummy-user-profile', JSON.stringify(values));
     toast({
       title: "Profile Updated",
@@ -59,19 +74,40 @@ export function ProfileForm({ profileData }: ProfileFormProps) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Full Name</FormLabel>
-              <FormControl>
-                <Input placeholder="Your Name" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <div className="flex items-center gap-6">
+          <div className="relative">
+            <Avatar className="h-24 w-24 cursor-pointer" onClick={() => fileInputRef.current?.click()}>
+              <AvatarImage src={avatarPreview} />
+              <AvatarFallback>{form.getValues('name')?.[0]}</AvatarFallback>
+            </Avatar>
+             <div 
+              className="absolute bottom-0 right-0 rounded-full bg-primary p-1.5 cursor-pointer border-2 border-background hover:bg-primary/80"
+              onClick={() => fileInputRef.current?.click()}
+            >
+              <Camera className="h-4 w-4 text-primary-foreground" />
+            </div>
+            <Input 
+              type="file" 
+              ref={fileInputRef} 
+              className="hidden" 
+              accept="image/png, image/jpeg"
+              onChange={handleAvatarChange}
+            />
+          </div>
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem className="flex-1">
+                <FormLabel>Full Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="Your Name" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
         
         <FormField
           control={form.control}

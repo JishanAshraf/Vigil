@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -14,6 +13,7 @@ const defaultProfile = {
   email: "alex.doe@example.com",
   phone: "+1 555 123 4567",
   postalCode: "90210",
+  avatarUrl: "",
 };
 
 export default function ProfilePage() {
