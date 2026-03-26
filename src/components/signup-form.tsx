@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,8 +10,16 @@ import { Phone, KeyRound, Loader2, AlertTriangle } from "lucide-react";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "./ui/card";
 import { useToast } from '@/hooks/use-toast';
 import { Alert, AlertDescription, AlertTitle } from './ui/alert';
+import { useAuth, useFirestore } from '@/firebase';
+import { RecaptchaVerifier, signInWithPhoneNumber, type ConfirmationResult } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
 
-const DUMMY_OTP = "123456";
+// Extend the Window interface for the reCAPTCHA verifier
+declare global {
+  interface Window {
+    recaptchaVerifier?: RecaptchaVerifier;
+  }
+}
 
 export function SignUpForm() {
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -19,55 +27,103 @@ export function SignUpForm() {
   const [step, setStep] = useState<'phoneInput' | 'otpInput'>('phoneInput');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [confirmationResult, setConfirmationResult] = useState<ConfirmationResult | null>(null);
 
   const router = useRouter();
   const { toast } = useToast();
+  const auth = useAuth();
+  const firestore = useFirestore();
+
+  useEffect(() => {
+    if (!auth) return;
+
+    // To prevent re-rendering issues, we only initialize reCAPTCHA once.
+    if (!window.recaptchaVerifier) {
+      window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
+        'size': 'invisible',
+        'callback': () => {
+          // reCAPTCHA solved, allow signInWithPhoneNumber.
+        }
+      });
+    }
+  }, [auth]);
 
   const handlePhoneSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     setIsLoading(true);
 
-    // Simulate sending OTP
-    setTimeout(() => {
+    if (!window.recaptchaVerifier) {
+      setError("reCAPTCHA verifier not initialized. Please try refreshing.");
       setIsLoading(false);
+      return;
+    }
+
+    try {
+      const confirmation = await signInWithPhoneNumber(auth, phoneNumber, window.recaptchaVerifier);
+      setConfirmationResult(confirmation);
       setStep('otpInput');
       toast({
-        title: "Dummy OTP Sent",
-        description: `For this demo, your OTP is: ${DUMMY_OTP}`,
-        duration: 9000,
+        title: "Verification code sent!",
+        description: `A code has been sent to ${phoneNumber}.`,
       });
-    }, 1000);
+    } catch (err: any) {
+      console.error(err);
+      if (err.code === 'auth/configuration-not-found') {
+          setError('Configuration Error: Phone sign-in must be enabled in your Firebase project. Please go to the Firebase Console -> Authentication -> Sign-in method and enable the \'Phone\' provider.');
+      } else {
+        setError(err.message || "Failed to send verification code. Please check the phone number and try again.");
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleOtpVerify = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!confirmationResult) {
+      setError("Could not verify OTP. Please try sending the code again.");
+      return;
+    }
     setError(null);
     setIsLoading(true);
 
-    // Simulate OTP verification
-    setTimeout(() => {
-      setIsLoading(false);
-      if (otp === DUMMY_OTP) {
-        toast({
-          title: "Success!",
-          description: "You have been signed up successfully.",
-        });
-        router.push('/');
-      } else {
-        setError("Invalid OTP. Please try again.");
+    try {
+      const userCredential = await confirmationResult.confirm(otp);
+      const user = userCredential.user;
+
+      // Create a user profile document in Firestore
+      if (user && firestore) {
+        const userRef = doc(firestore, "users", user.uid);
+        await setDoc(userRef, {
+            phone: user.phoneNumber,
+            name: `User-${user.uid.substring(0, 5)}` // A default name for new users
+        }, { merge: true });
       }
-    }, 1000);
+
+      toast({
+        title: "Success!",
+        description: "You have been signed up and logged in.",
+      });
+      router.push('/');
+    } catch (err: any) {
+      console.error(err);
+      setError("Invalid verification code. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
-  
 
   return (
     <Card className="w-full max-w-sm">
       <CardHeader className="text-center">
         <CardTitle className="text-2xl">Create an Account</CardTitle>
-        <CardDescription>Enter your phone number to sign up.</CardDescription>
+        <CardDescription>Enter your phone number to sign up with Firebase.</CardDescription>
       </CardHeader>
       <CardContent>
+        {/* This div is used by Firebase for the invisible reCAPTCHA */}
+        <div id="recaptcha-container"></div>
+
         {step === 'phoneInput' && (
           <form onSubmit={handlePhoneSignUp} className="space-y-4">
             <div className="grid gap-2">
@@ -85,6 +141,7 @@ export function SignUpForm() {
                 />
                 <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
               </div>
+               <p className="text-xs text-muted-foreground">Include country code (e.g., +1 for USA).</p>
             </div>
             <Button type="submit" className="w-full font-bold text-base glossy-button" disabled={isLoading}>
               {isLoading ? <Loader2 className="animate-spin" /> : 'Send OTP'}
@@ -133,7 +190,7 @@ export function SignUpForm() {
       </CardContent>
       <CardFooter className="px-6 pb-6">
         <p className="text-xs text-muted-foreground text-center w-full">
-            This is a demo. No real SMS will be sent.
+            Phone authentication is provided via Firebase. Standard message rates may apply.
         </p>
       </CardFooter>
     </Card>
