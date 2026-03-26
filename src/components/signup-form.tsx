@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from 'next/link';
 import { Phone, KeyRound, Loader2, AlertTriangle } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "./ui/card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "./ui/card";
 import { useAuth } from '@/firebase';
 import { RecaptchaVerifier, signInWithPhoneNumber, ConfirmationResult } from 'firebase/auth';
 import { useToast } from '@/hooks/use-toast';
@@ -174,6 +174,11 @@ export function SignUpForm() {
           Already have an account? <Link href="/login" className="underline font-semibold text-primary hover:text-primary/80">Login</Link>
         </div>
       </CardContent>
+      <CardFooter className="px-6 pb-6">
+        <p className="text-xs text-muted-foreground text-center w-full">
+            Phone authentication is provided by Firebase and is free for up to 10,000 verifications per month on the Spark Plan.
+        </p>
+      </CardFooter>
     </Card>
   );
 }
