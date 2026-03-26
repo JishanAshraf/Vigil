@@ -18,8 +18,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { User } from "lucide-react";
 
 const profileSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
@@ -61,14 +59,6 @@ export function ProfileForm({ profileData }: ProfileFormProps) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <div className="flex items-center gap-4">
-            <Avatar className="h-20 w-20">
-                <AvatarImage src="https://i.pravatar.cc/150?u=a042581f4e29026707d" />
-                <AvatarFallback><User className="h-10 w-10" /></AvatarFallback>
-            </Avatar>
-            <Button type="button" variant="outline" className="glossy-button">Change Photo</Button>
-        </div>
-
         <FormField
           control={form.control}
           name="name"
