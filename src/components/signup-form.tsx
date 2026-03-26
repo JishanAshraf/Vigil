@@ -34,7 +34,15 @@ export function SignUpForm() {
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log("Dummy account created:", values);
+    // Store user data in localStorage to simulate a session
+    const userProfile = {
+      name: values.name,
+      email: values.email,
+      phone: "",
+      postalCode: "",
+    };
+    localStorage.setItem('dummy-user-profile', JSON.stringify(userProfile));
+    
     toast({
       title: "Account Created!",
       description: "You have been successfully signed up.",

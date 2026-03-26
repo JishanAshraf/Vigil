@@ -1,5 +1,7 @@
+
 'use client';
 
+import { useState, useEffect } from 'react';
 import { ProfileForm } from '@/components/profile-form';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { MainHeader } from '@/components/main-header';
@@ -7,9 +9,25 @@ import { useAlerts, mockLoggedInUser } from '@/contexts/AlertsContext';
 import { AlertsGrid } from '@/components/alerts-grid';
 import { Separator } from '@/components/ui/separator';
 
+const defaultProfile = {
+  name: "Alex Doe",
+  email: "alex.doe@example.com",
+  phone: "+1 555 123 4567",
+  postalCode: "90210",
+};
+
 export default function ProfilePage() {
   const { getUserAlerts } = useAlerts();
   const userAlerts = getUserAlerts(mockLoggedInUser.id);
+  const [profile, setProfile] = useState(defaultProfile);
+
+  useEffect(() => {
+    const storedProfile = localStorage.getItem('dummy-user-profile');
+    if (storedProfile) {
+      const savedData = JSON.parse(storedProfile);
+      setProfile(prevProfile => ({ ...prevProfile, ...savedData }));
+    }
+  }, []);
 
   return (
     <>
@@ -24,7 +42,7 @@ export default function ProfilePage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <ProfileForm />
+                  <ProfileForm profileData={profile} />
                 </CardContent>
               </Card>
 

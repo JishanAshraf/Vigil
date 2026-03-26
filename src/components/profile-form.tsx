@@ -4,6 +4,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import { useEffect } from 'react';
 
 import { Button } from "@/components/ui/button";
 import {
@@ -27,21 +28,30 @@ const profileSchema = z.object({
   postalCode: z.string().min(5, { message: "Please enter a valid postal code." }),
 });
 
-export function ProfileForm() {
+type ProfileData = z.infer<typeof profileSchema>;
+
+interface ProfileFormProps {
+  profileData: ProfileData;
+}
+
+export function ProfileForm({ profileData }: ProfileFormProps) {
   const { toast } = useToast();
 
-  const form = useForm<z.infer<typeof profileSchema>>({
+  const form = useForm<ProfileData>({
     resolver: zodResolver(profileSchema),
-    defaultValues: {
-      name: "Alex Doe",
-      email: "alex.doe@example.com",
-      phone: "+1 555 123 4567",
-      postalCode: "90210",
-    },
+    // The form values will be controlled by the profileData prop
+    values: profileData,
   });
 
+  // This effect resets the form when the profileData prop changes.
+  // This is important for when the data is loaded asynchronously from localStorage.
+  useEffect(() => {
+    form.reset(profileData);
+  }, [profileData, form]);
+
   function onSubmit(values: z.infer<typeof profileSchema>) {
-    console.log(values);
+    // When the user updates their profile, save it back to localStorage
+    localStorage.setItem('dummy-user-profile', JSON.stringify(values));
     toast({
       title: "Profile Updated",
       description: "Your information has been saved successfully.",
