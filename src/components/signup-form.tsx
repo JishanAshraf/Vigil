@@ -63,7 +63,12 @@ export function SignUpForm() {
       });
     } catch (err: any) {
       console.error(err);
-      setError(err.message || "Failed to send OTP. Please check the phone number and try again.");
+      if (err.code === 'auth/configuration-not-found') {
+        setError("Configuration Error: Phone sign-in must be enabled in your Firebase project. Please go to the Firebase Console -> Authentication -> Sign-in method and enable the 'Phone' provider.");
+      } else {
+        setError(err.message || "Failed to send OTP. Please check the phone number and try again.");
+      }
+      
       // Reset reCAPTCHA
        if (window.recaptchaVerifier) {
         window.recaptchaVerifier.render().then((widgetId) => {
