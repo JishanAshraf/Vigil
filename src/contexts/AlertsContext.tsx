@@ -13,11 +13,10 @@ export const mockLoggedInUser: User = {
 
 interface AlertsContextType {
   alerts: Alert[];
-  addAlert: (newAlertData: Omit<Alert, 'id' | 'user' | 'timestamp' | 'comments' | 'status' | 'reports'>) => void;
+  addAlert: (newAlertData: Omit<Alert, 'id' | 'user' | 'timestamp' | 'comments' | 'status' | 'reporters'>) => void;
   getUserAlerts: (userId: string) => Alert[];
   deleteAlert: (alertId: string) => void;
-  incrementReport: (alertId: string) => void;
-  decrementReport: (alertId: string) => void;
+  toggleReport: (alertId: string) => void;
 }
 
 const AlertsContext = createContext<AlertsContextType | undefined>(undefined);
@@ -25,7 +24,7 @@ const AlertsContext = createContext<AlertsContextType | undefined>(undefined);
 export const AlertsProvider = ({ children }: { children: ReactNode }) => {
   const [alerts, setAlerts] = useState<Alert[]>(mockAlerts);
 
-  const addAlert = (newAlertData: Omit<Alert, 'id' | 'user' | 'timestamp' | 'comments' | 'status' | 'reports'>) => {
+  const addAlert = (newAlertData: Omit<Alert, 'id' | 'user' | 'timestamp' | 'comments' | 'status' | 'reporters'>) => {
     const newAlert: Alert = {
       ...newAlertData,
       id: `alert-${Date.now()}`,
@@ -33,7 +32,7 @@ export const AlertsProvider = ({ children }: { children: ReactNode }) => {
       timestamp: 'Just now',
       comments: [],
       status: 'Reported',
-      reports: 0,
+      reporters: [],
     };
     setAlerts(prevAlerts => [newAlert, ...prevAlerts]);
   };
@@ -41,22 +40,25 @@ export const AlertsProvider = ({ children }: { children: ReactNode }) => {
   const deleteAlert = (alertId: string) => {
     setAlerts(prevAlerts => prevAlerts.filter(alert => alert.id !== alertId));
   };
-
-  const incrementReport = (alertId: string) => {
+  
+  const toggleReport = (alertId: string) => {
     setAlerts(prevAlerts =>
-      prevAlerts.map(alert =>
-        alert.id === alertId ? { ...alert, reports: alert.reports + 1 } : alert
-      )
+      prevAlerts.map(alert => {
+        if (alert.id === alertId) {
+          const isReported = alert.reporters.some(reporter => reporter.id === mockLoggedInUser.id);
+          if (isReported) {
+            // remove user from reporters
+            return { ...alert, reporters: alert.reporters.filter(reporter => reporter.id !== mockLoggedInUser.id) };
+          } else {
+            // add user to reporters
+            return { ...alert, reporters: [...alert.reporters, mockLoggedInUser] };
+          }
+        }
+        return alert;
+      })
     );
   };
 
-  const decrementReport = (alertId: string) => {
-    setAlerts(prevAlerts =>
-      prevAlerts.map(alert =>
-        alert.id === alertId ? { ...alert, reports: Math.max(0, alert.reports - 1) } : alert
-      )
-    );
-  };
 
   const getUserAlerts = (userId: string) => {
     // Only return non-anonymous posts for the user's profile
@@ -64,7 +66,7 @@ export const AlertsProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AlertsContext.Provider value={{ alerts, addAlert, getUserAlerts, deleteAlert, incrementReport, decrementReport }}>
+    <AlertsContext.Provider value={{ alerts, addAlert, getUserAlerts, deleteAlert, toggleReport }}>
       {children}
     </AlertsContext.Provider>
   );

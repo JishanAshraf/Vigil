@@ -22,5 +22,5 @@ export type Alert = {
   location: string;
   status: 'Reported' | 'Authorities Notified' | 'Resolved';
   comments: Comment[];
-  reports: number;
+  reporters: User[];
 };
