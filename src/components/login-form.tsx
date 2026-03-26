@@ -30,7 +30,7 @@ export function LoginForm() {
         await signInWithEmailAndPassword(auth, email, password);
         toast({
             title: "Logged In!",
-            description: `Welcome back!`,
+            description: `Welcome back! You are now logged in.`,
         });
         router.push('/');
     } catch (error: any) {
