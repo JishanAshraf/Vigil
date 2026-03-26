@@ -10,7 +10,6 @@ import { useState } from 'react';
 import { Button } from './ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from './ui/sheet';
 import { useAuth } from '@/contexts/AuthContext';
-import { Skeleton } from '@/components/ui/skeleton';
 
 const desktopNavItems = [
   { href: '/', label: 'Watch', icon: ShieldCheck },
@@ -72,21 +71,19 @@ export function MainHeader() {
               </nav>
             </div>
             <div className="mt-auto p-6">
-              {isLoading ? (
-                <Skeleton className="h-10 w-full" />
-              ) : user ? (
-                <Button variant="ghost" onClick={() => logout()} className="w-full glossy-button text-destructive hover:text-destructive justify-start">
-                    <LogOut className="mr-2 h-5 w-5" />
-                    Log out
-                </Button>
-              ) : (
-                <Button asChild variant="ghost" className="w-full glossy-button justify-start">
-                  <Link href="/auth">
-                    <LogIn className="mr-2 h-5 w-5" />
-                    Log In / Sign Up
-                  </Link>
-                </Button>
-              )}
+                {user ? (
+                    <Button variant="ghost" onClick={() => logout()} className="w-full glossy-button text-destructive hover:text-destructive justify-start">
+                        <LogOut className="mr-2 h-5 w-5" />
+                        Log out
+                    </Button>
+                ) : (
+                    <Button asChild variant="ghost" className="w-full glossy-button justify-start">
+                    <Link href="/auth">
+                        <LogIn className="mr-2 h-5 w-5" />
+                        Log In / Sign Up
+                    </Link>
+                    </Button>
+                )}
             </div>
           </SheetContent>
         </Sheet>
@@ -146,9 +143,7 @@ export function MainHeader() {
                     <span>{item.label}</span>
                 </Link>
             ))}
-            {isLoading ? (
-              <Skeleton className="h-10 rounded-lg" />
-            ) : user && (
+            {user && (
                  <Link
                     key="desktop-profile"
                     href="/profile"
@@ -191,9 +186,7 @@ export function MainHeader() {
                 <LifeBuoy className="h-5 w-5" />
                 Help & Support
             </Link>
-            {isLoading ? (
-              <Skeleton className="h-10 mt-4 rounded-lg" />
-            ) : user ? (
+             {user ? (
                  <Button variant="ghost" onClick={() => logout()} className="glossy-button justify-start mt-4 text-destructive hover:text-destructive">
                     <LogOut className="mr-2 h-5 w-5" />
                     Log out
