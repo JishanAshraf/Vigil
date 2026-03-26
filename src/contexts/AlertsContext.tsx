@@ -3,13 +3,7 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import type { Alert, User } from '@/lib/types';
 import { mockAlerts } from '@/lib/mock-data';
-
-// A mock logged-in user. In a real app, this would come from an auth context.
-export const mockLoggedInUser: User = {
-  id: 'user-4',
-  name: 'Diana Prince',
-  avatarUrl: 'https://i.pravatar.cc/150?u=a042581f4e29026707d',
-};
+import { useAuth } from './AuthContext';
 
 interface AlertsContextType {
   alerts: Alert[];
@@ -17,18 +11,26 @@ interface AlertsContextType {
   getUserAlerts: (userId: string) => Alert[];
   deleteAlert: (alertId: string) => void;
   toggleReport: (alertId: string) => void;
+  currentUser: User | null;
 }
 
 const AlertsContext = createContext<AlertsContextType | undefined>(undefined);
 
 export const AlertsProvider = ({ children }: { children: ReactNode }) => {
   const [alerts, setAlerts] = useState<Alert[]>(mockAlerts);
+  const { user: authUser } = useAuth();
+
+  const currentUser: User | null = authUser ? { id: authUser.email, name: authUser.name, avatarUrl: authUser.avatarUrl } : null;
 
   const addAlert = (newAlertData: Omit<Alert, 'id' | 'user' | 'timestamp' | 'comments' | 'status' | 'reporters'>) => {
+    if (!currentUser) {
+        console.error("User must be logged in to add an alert.");
+        return;
+    }
     const newAlert: Alert = {
       ...newAlertData,
       id: `alert-${Date.now()}`,
-      user: mockLoggedInUser,
+      user: currentUser,
       timestamp: 'Just now',
       comments: [],
       status: 'Reported',
@@ -42,16 +44,15 @@ export const AlertsProvider = ({ children }: { children: ReactNode }) => {
   };
   
   const toggleReport = (alertId: string) => {
+    if (!currentUser) return;
     setAlerts(prevAlerts =>
       prevAlerts.map(alert => {
         if (alert.id === alertId) {
-          const isReported = alert.reporters.some(reporter => reporter.id === mockLoggedInUser.id);
+          const isReported = alert.reporters.some(reporter => reporter.id === currentUser.id);
           if (isReported) {
-            // remove user from reporters
-            return { ...alert, reporters: alert.reporters.filter(reporter => reporter.id !== mockLoggedInUser.id) };
+            return { ...alert, reporters: alert.reporters.filter(reporter => reporter.id !== currentUser.id) };
           } else {
-            // add user to reporters
-            return { ...alert, reporters: [...alert.reporters, mockLoggedInUser] };
+            return { ...alert, reporters: [...alert.reporters, currentUser] };
           }
         }
         return alert;
@@ -61,12 +62,11 @@ export const AlertsProvider = ({ children }: { children: ReactNode }) => {
 
 
   const getUserAlerts = (userId: string) => {
-    // Only return non-anonymous posts for the user's profile
     return alerts.filter(alert => alert.user.id === userId && !alert.isAnonymous);
   };
 
   return (
-    <AlertsContext.Provider value={{ alerts, addAlert, getUserAlerts, deleteAlert, toggleReport }}>
+    <AlertsContext.Provider value={{ alerts, addAlert, getUserAlerts, deleteAlert, toggleReport, currentUser }}>
       {children}
     </AlertsContext.Provider>
   );

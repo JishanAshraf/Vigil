@@ -1,33 +1,79 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { ProfileForm } from '@/components/profile-form';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { MainHeader } from '@/components/main-header';
-import { useAlerts, mockLoggedInUser } from '@/contexts/AlertsContext';
+import { useAlerts } from '@/contexts/AlertsContext';
 import { AlertsGrid } from '@/components/alerts-grid';
 import { Separator } from '@/components/ui/separator';
-
-const defaultProfile = {
-  name: "Alex Doe",
-  email: "alex.doe@example.com",
-  phone: "+1 555 123 4567",
-  postalCode: "90210",
-  avatarUrl: "",
-};
+import { useAuth } from '@/contexts/AuthContext';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 export default function ProfilePage() {
-  const { getUserAlerts } = useAlerts();
-  const userAlerts = getUserAlerts(mockLoggedInUser.id);
-  const [profile, setProfile] = useState(defaultProfile);
+  const { user, isLoading } = useAuth();
+  const { getUserAlerts, currentUser } = useAlerts();
+  
+  const userAlerts = currentUser ? getUserAlerts(currentUser.id) : [];
 
-  useEffect(() => {
-    const storedProfile = localStorage.getItem('dummy-user-profile');
-    if (storedProfile) {
-      const savedData = JSON.parse(storedProfile);
-      setProfile(prevProfile => ({ ...prevProfile, ...savedData }));
-    }
-  }, []);
+  if (isLoading) {
+    return (
+      <>
+        <MainHeader />
+        <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8 md:pl-64 pb-28 md:pb-8">
+          <div className="mx-auto w-full max-w-4xl space-y-8">
+            <Card>
+              <CardHeader>
+                <Skeleton className="h-8 w-48" />
+                <Skeleton className="h-4 w-72" />
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-8">
+                  <div className="flex items-center gap-6">
+                    <Skeleton className="h-24 w-24 rounded-full" />
+                    <div className="flex-1 space-y-2">
+                       <Skeleton className="h-6 w-1/4" />
+                       <Skeleton className="h-10 w-full" />
+                    </div>
+                  </div>
+                  <Skeleton className="h-10 w-full" />
+                  <Skeleton className="h-10 w-full" />
+                  <Skeleton className="h-10 w-full" />
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </main>
+      </>
+    );
+  }
+
+  if (!user) {
+    return (
+       <>
+        <MainHeader />
+        <main className="flex flex-1 flex-col items-center justify-center gap-4 p-4 text-center pb-28 md:pb-8">
+            <Card className="w-full max-w-md">
+                <CardHeader>
+                    <CardTitle>Please Log In</CardTitle>
+                    <CardDescription>
+                        You need to be logged in to view your profile and interact with the app.
+                    </CardDescription>
+                </CardHeader>
+                <CardContent className="flex flex-col gap-4">
+                    <Button asChild>
+                        <Link href="/login">Log In</Link>
+                    </Button>
+                    <Button asChild variant="outline">
+                        <Link href="/signup">Sign Up</Link>
+                    </Button>
+                </CardContent>
+            </Card>
+        </main>
+      </>
+    )
+  }
 
   return (
     <>
@@ -42,7 +88,7 @@ export default function ProfilePage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <ProfileForm profileData={profile} />
+                  <ProfileForm profileData={user} />
                 </CardContent>
               </Card>
 

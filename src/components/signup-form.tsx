@@ -3,7 +3,6 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { useRouter } from 'next/navigation';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -12,6 +11,7 @@ import { Mail, KeyRound, User } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "./ui/card";
 import { useToast } from '@/hooks/use-toast';
 import { Form, FormControl, FormField, FormItem, FormMessage } from "./ui/form";
+import { useAuth } from "@/contexts/AuthContext";
 
 const formSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
@@ -20,7 +20,7 @@ const formSchema = z.object({
 });
 
 export function SignUpForm() {
-  const router = useRouter();
+  const { login } = useAuth();
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -33,21 +33,18 @@ export function SignUpForm() {
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    // Store user data in localStorage to simulate a session
     const userProfile = {
       name: values.name,
       email: values.email,
-      phone: "",
-      postalCode: "",
       avatarUrl: "",
     };
-    localStorage.setItem('dummy-user-profile', JSON.stringify(userProfile));
+    
+    login(userProfile);
     
     toast({
       title: "Account Created!",
       description: "You have been successfully signed up.",
     });
-    router.push('/');
   };
 
   return (

@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -10,9 +9,49 @@ import Link from 'next/link';
 import { Checkbox } from "./ui/checkbox";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Mail, Phone } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
 
 export function LoginForm() {
   const [loginMethod, setLoginMethod] = useState("email");
+  const { login } = useAuth();
+  const { toast } = useToast();
+
+  const handleLogin = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    e.preventDefault();
+    // For this dummy login, we'll log in a default user.
+    // We'll check if a user profile exists in localStorage from a previous signup,
+    // otherwise we'll create a new default one.
+    let userToLogin;
+    const storedProfile = localStorage.getItem('dummy-user-profile');
+    if (storedProfile) {
+        try {
+            userToLogin = JSON.parse(storedProfile);
+        } catch {
+            userToLogin = {
+                name: "Alex Doe",
+                email: "alex.doe@example.com",
+                phone: "+1 555 123 4567",
+                postalCode: "90210",
+                avatarUrl: "",
+            };
+        }
+    } else {
+        userToLogin = {
+            name: "Alex Doe",
+            email: "alex.doe@example.com",
+            phone: "+1 555 123 4567",
+            postalCode: "90210",
+            avatarUrl: "",
+        };
+    }
+
+    login(userToLogin);
+    toast({
+        title: "Logged In!",
+        description: `Welcome back, ${userToLogin.name}!`,
+    });
+  }
 
   return (
     <Card className="w-full max-w-md mx-auto rounded-t-3xl rounded-b-none border-none shadow-2xl overflow-hidden animate-in slide-in-from-bottom-16 duration-500">
@@ -80,7 +119,7 @@ export function LoginForm() {
             </Link>
           </div>
           <Button asChild type="submit" className="w-full font-bold text-base h-12 rounded-full slide-in-button">
-            <Link href="/"><span>Login</span></Link>
+            <a href="/" onClick={handleLogin}><span>Login</span></a>
           </Button>
           
           <div className="relative text-center my-4">

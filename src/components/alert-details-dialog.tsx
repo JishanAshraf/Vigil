@@ -1,7 +1,7 @@
 'use client';
 
 import type { Alert } from '@/lib/types';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import Image from 'next/image';
 import { MapPin, Clock, VenetianMask, Send, Trash2 } from 'lucide-react';
@@ -12,7 +12,7 @@ import { CommentCard } from './comment-card';
 import { Textarea } from './ui/textarea';
 import { Button } from './ui/button';
 import { ScrollArea } from './ui/scroll-area';
-import { useAlerts, mockLoggedInUser } from '@/contexts/AlertsContext';
+import { useAlerts } from '@/contexts/AlertsContext';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -24,6 +24,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { useToast } from '@/hooks/use-toast';
+import Link from 'next/link';
 
 interface AlertDetailsDialogProps {
   alert: Alert;
@@ -31,13 +33,30 @@ interface AlertDetailsDialogProps {
 }
 
 export function AlertDetailsDialog({ alert, onOpenChange }: AlertDetailsDialogProps) {
-  const { deleteAlert } = useAlerts();
-  const isOwner = mockLoggedInUser.id === alert.user.id;
+  const { deleteAlert, currentUser } = useAlerts();
+  const isOwner = currentUser?.id === alert.user.id;
+  const { toast } = useToast();
 
   const handleDelete = () => {
     deleteAlert(alert.id);
     onOpenChange(false);
   };
+  
+  const handleComment = () => {
+    if (!currentUser) {
+        toast({
+            variant: "destructive",
+            title: "Authentication Required",
+            description: "You must be logged in to comment.",
+            action: <Button asChild variant="secondary"><Link href="/login">Login</Link></Button>
+        })
+    } else {
+        toast({
+            title: "Comment Posted! (Dummy)",
+            description: "This is a demo. Comments are not saved yet.",
+        })
+    }
+  }
 
   return (
     <div className="grid md:grid-cols-2 max-h-[80vh]">
@@ -83,9 +102,9 @@ export function AlertDetailsDialog({ alert, onOpenChange }: AlertDetailsDialogPr
                   <AvatarFallback>{alert.isAnonymous ? <VenetianMask /> : alert.user.name.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <div className="flex-1">
-                    <CardTitle className="text-base font-bold mb-1">
+                    <CardHeader className="text-base font-bold mb-1 p-0">
                         {alert.isAnonymous ? 'Anonymous Resident' : alert.user.name}
-                    </CardTitle>
+                    </CardHeader>
                     <div className="flex items-center gap-2 text-xs text-muted-foreground">
                         <Clock className="h-3 w-3" />
                         <span>{alert.timestamp}</span>
@@ -152,12 +171,12 @@ export function AlertDetailsDialog({ alert, onOpenChange }: AlertDetailsDialogPr
         <div className="p-6 border-t bg-background">
           <div className="flex items-start gap-4">
             <Avatar className="h-9 w-9">
-              <AvatarImage src="https://i.pravatar.cc/150?u=a042581f4e29026707d" />
-              <AvatarFallback>You</AvatarFallback>
+              <AvatarImage src={currentUser?.avatarUrl} />
+              <AvatarFallback>{currentUser ? currentUser.name.charAt(0) : '?'}</AvatarFallback>
             </Avatar>
             <div className="relative flex-1">
               <Textarea placeholder="Write a comment..." className="pr-12" />
-              <Button size="icon" className="absolute top-1/2 right-2 -translate-y-1/2 glossy-button">
+              <Button size="icon" className="absolute top-1/2 right-2 -translate-y-1/2 glossy-button" onClick={handleComment}>
                 <Send className="h-4 w-4" />
                 <span className="sr-only">Post comment</span>
               </Button>

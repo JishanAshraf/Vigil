@@ -2,19 +2,18 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ShieldCheck, Stethoscope, UserCircle, Menu, Flag, LifeBuoy, LogOut, Search, Bell, Home } from 'lucide-react';
+import { ShieldCheck, Stethoscope, UserCircle, Menu, Flag, LifeBuoy, LogOut, Search, Bell, Home, LogIn } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Logo } from '@/components/logo';
 import { ThemeToggle } from './theme-toggle';
 import { useState } from 'react';
 import { Button } from './ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from './ui/sheet';
+import { useAuth } from '@/contexts/AuthContext';
 
 const desktopNavItems = [
   { href: '/', label: 'Watch', icon: ShieldCheck },
   { href: '/health', label: 'Health', icon: Stethoscope },
-  { href: '/profile', label: 'Profile', icon: UserCircle },
-  { href: '/search', label: 'Search', icon: Search },
 ];
 
 const mobileNavItems = [
@@ -29,6 +28,7 @@ const mobileNavItems = [
 export function MainHeader() {
   const pathname = usePathname();
   const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const { user, logout } = useAuth();
 
   return (
     <>
@@ -55,7 +55,7 @@ export function MainHeader() {
                 <Link
                   href="/report-issue"
                   onClick={() => setIsSheetOpen(false)}
-                  className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                  className={cn("flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary", !user && "pointer-events-none opacity-50")}
                 >
                   <Flag className="h-5 w-5" />
                   Report an Issue
@@ -71,12 +71,19 @@ export function MainHeader() {
               </nav>
             </div>
             <div className="mt-auto p-6">
-              <Button asChild variant="ghost" className="w-full glossy-button text-destructive hover:text-destructive justify-start">
+              {user ? (
+                <Button variant="ghost" onClick={() => logout()} className="w-full glossy-button text-destructive hover:text-destructive justify-start">
+                    <LogOut className="mr-2 h-5 w-5" />
+                    Log out
+                </Button>
+              ) : (
+                <Button asChild variant="ghost" className="w-full glossy-button justify-start">
                   <Link href="/auth">
-                      <LogOut className="mr-2 h-5 w-5" />
-                      Log out
+                    <LogIn className="mr-2 h-5 w-5" />
+                    Log In / Sign Up
                   </Link>
-              </Button>
+                </Button>
+              )}
             </div>
           </SheetContent>
         </Sheet>
@@ -99,7 +106,7 @@ export function MainHeader() {
                 if (item.isCentral) {
                   return (
                     <div key={item.href} className="flex justify-center -mt-8">
-                       <Button asChild size="icon" className="glossy-button bg-primary hover:bg-primary/90 rounded-full h-16 w-16 shadow-lg border-4 border-background">
+                       <Button asChild size="icon" className={cn("glossy-button bg-primary hover:bg-primary/90 rounded-full h-16 w-16 shadow-lg border-4 border-background", !user && "bg-muted pointer-events-none")}>
                         <Link href={item.href}>
                             <item.icon className="h-7 w-7 text-primary-foreground" />
                         </Link>
@@ -136,11 +143,38 @@ export function MainHeader() {
                     <span>{item.label}</span>
                 </Link>
             ))}
+            {user && (
+                 <Link
+                    key="desktop-profile"
+                    href="/profile"
+                    className={cn(
+                        'group glossy-button flex items-center gap-3 rounded-lg px-3 py-2 transition-all duration-300',
+                        pathname === "/profile" ? 'bg-primary/10 text-primary font-semibold' : 'text-muted-foreground hover:bg-primary/10 hover:text-primary'
+                    )}
+                >
+                    <UserCircle className="h-5 w-5" />
+                    <span>Profile</span>
+                </Link>
+            )}
+             <Link
+                key="desktop-search"
+                href="/search"
+                className={cn(
+                    'group glossy-button flex items-center gap-3 rounded-lg px-3 py-2 transition-all duration-300',
+                    pathname === "/search" ? 'bg-primary/10 text-primary font-semibold' : 'text-muted-foreground hover:bg-primary/10 hover:text-primary'
+                )}
+            >
+                <Search className="h-5 w-5" />
+                <span>Search</span>
+            </Link>
         </nav>
         <div className="mt-auto flex flex-col gap-2">
             <Link
                 href="/report-issue"
-                className="group glossy-button flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all duration-300 hover:bg-primary/10 hover:text-primary"
+                className={cn(
+                  "group glossy-button flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all duration-300 hover:bg-primary/10 hover:text-primary",
+                  !user && "pointer-events-none opacity-50"
+                )}
               >
                 <Flag className="h-5 w-5" />
                 Report an Issue
@@ -152,12 +186,19 @@ export function MainHeader() {
                 <LifeBuoy className="h-5 w-5" />
                 Help & Support
             </Link>
-            <Button asChild variant="ghost" className="glossy-button justify-start mt-4 text-destructive hover:text-destructive">
-                <Link href="/auth">
+            {user ? (
+                 <Button variant="ghost" onClick={() => logout()} className="glossy-button justify-start mt-4 text-destructive hover:text-destructive">
                     <LogOut className="mr-2 h-5 w-5" />
                     Log out
-                </Link>
-            </Button>
+                </Button>
+            ) : (
+                 <Button asChild variant="ghost" className="glossy-button justify-start mt-4">
+                  <Link href="/auth">
+                    <LogIn className="mr-2 h-5 w-5" />
+                    Log In / Sign Up
+                  </Link>
+                </Button>
+            )}
         </div>
       </aside>
     </>

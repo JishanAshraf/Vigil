@@ -1,8 +1,9 @@
 'use client';
 
 import Image from 'next/image';
-import { AlertCircle, Bell, CheckCircle, HelpCircle, Clock, MapPin, VenetianMask, MessageSquare, Trash2, AlertTriangle } from 'lucide-react';
+import { AlertCircle, Bell, CheckCircle, HelpCircle, Clock, MapPin, VenetianMask, MessageSquare, Trash2, AlertTriangle, UserX } from 'lucide-react';
 import React, { useState } from 'react';
+import Link from 'next/link';
 
 import type { Alert } from '@/lib/types';
 import { cn } from '@/lib/utils';
@@ -12,10 +13,11 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { AlertDetailsDialog } from './alert-details-dialog';
-import { useAlerts, mockLoggedInUser } from '@/contexts/AlertsContext';
+import { useAlerts } from '@/contexts/AlertsContext';
 import { Button } from './ui/button';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from './ui/alert-dialog';
 import { ScrollArea } from './ui/scroll-area';
+import { useToast } from '@/hooks/use-toast';
 
 type AlertCardProps = {
   alert: Alert;
@@ -31,9 +33,11 @@ export function AlertCard({ alert }: AlertCardProps) {
   const status = statusConfig[alert.status] || { icon: HelpCircle, className: 'bg-gray-500/20 text-gray-400 border-gray-500/30', label: 'Unknown' };
   const [isDetailsDialogOpen, setDetailsDialogOpen] = useState(false);
   const [reportersDialogOpen, setReportersDialogOpen] = useState(false);
-  const { deleteAlert, toggleReport } = useAlerts();
-  const isOwner = mockLoggedInUser.id === alert.user.id;
-  const isReported = alert.reporters.some(reporter => reporter.id === mockLoggedInUser.id);
+  const { deleteAlert, toggleReport, currentUser } = useAlerts();
+  const { toast } = useToast();
+
+  const isOwner = currentUser?.id === alert.user.id;
+  const isReported = currentUser ? alert.reporters.some(reporter => reporter.id === currentUser.id) : false;
 
   const handleDelete = () => {
     deleteAlert(alert.id);
@@ -41,6 +45,15 @@ export function AlertCard({ alert }: AlertCardProps) {
   
   const handleReportToggle = (e: React.MouseEvent) => {
     e.stopPropagation();
+    if (!currentUser) {
+        toast({
+            variant: "destructive",
+            title: "Authentication Required",
+            description: "You must be logged in to report an issue.",
+            action: <Button asChild variant="secondary"><Link href="/login">Login</Link></Button>
+        })
+        return;
+    }
     toggleReport(alert.id);
   };
 
@@ -59,7 +72,7 @@ export function AlertCard({ alert }: AlertCardProps) {
             <CardHeader className="flex-row items-start gap-4 space-y-0 p-4">
               <Avatar>
                 <AvatarImage src={!alert.isAnonymous ? alert.user.avatarUrl : ''} />
-                <AvatarFallback>{alert.isAnonymous ? <VenetianMask /> : alert.user.name.charAt(0)}</AvatarFallback>
+                <AvatarFallback>{alert.isAnonymous ? <VenetianMask /> : (alert.user.name ? alert.user.name.charAt(0) : <UserX />)}</AvatarFallback>
               </Avatar>
               <div className="flex-1">
                 <CardTitle className="text-base font-bold">

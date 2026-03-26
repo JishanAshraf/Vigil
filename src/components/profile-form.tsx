@@ -19,6 +19,7 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Camera } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 const profileSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
@@ -37,6 +38,7 @@ interface ProfileFormProps {
 export function ProfileForm({ profileData }: ProfileFormProps) {
   const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { login } = useAuth();
   const [avatarPreview, setAvatarPreview] = useState<string | undefined>(profileData.avatarUrl);
 
   const form = useForm<ProfileData>({
@@ -64,7 +66,7 @@ export function ProfileForm({ profileData }: ProfileFormProps) {
 
 
   function onSubmit(values: z.infer<typeof profileSchema>) {
-    localStorage.setItem('dummy-user-profile', JSON.stringify(values));
+    login(values);
     toast({
       title: "Profile Updated",
       description: "Your information has been saved successfully.",

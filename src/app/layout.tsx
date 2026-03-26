@@ -6,6 +6,7 @@ import { ThemeProvider } from '@/components/theme-provider';
 import { Inter, Playfair_Display } from 'next/font/google';
 import { cn } from '@/lib/utils';
 import { AlertsProvider } from '@/contexts/AlertsContext';
+import { AuthProvider } from '@/contexts/AuthContext';
 import { FirebaseClientProvider } from '@/firebase/client-provider';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
@@ -26,10 +27,12 @@ export default function RootLayout({
           disableTransitionOnChange={false}
         >
           <FirebaseClientProvider>
-            <AlertsProvider>
-              {children}
-              <Toaster />
-            </AlertsProvider>
+            <AuthProvider>
+              <AlertsProvider>
+                {children}
+                <Toaster />
+              </AlertsProvider>
+            </AuthProvider>
           </FirebaseClientProvider>
         </ThemeProvider>
       </body>
