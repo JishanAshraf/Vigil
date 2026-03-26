@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { onAuthStateChanged, User as FirebaseUser, signOut } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { auth, firestore } from '@/firebase';
+import { useToast } from '@/hooks/use-toast';
 
 export interface UserProfile {
   uid: string;
@@ -29,27 +30,58 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [firebaseUser, setFirebaseUser] = useState<FirebaseUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
+  const { toast } = useToast();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (fbUser) => {
       setFirebaseUser(fbUser);
       if (fbUser) {
-        const userDocRef = doc(firestore, "users", fbUser.uid);
-        const userDoc = await getDoc(userDocRef);
-        if (userDoc.exists()) {
-          const userData = userDoc.data();
-          setUser({ 
-            uid: fbUser.uid, 
-            email: fbUser.email!, 
-            name: userData.name,
-            phone: userData.phone,
-            postalCode: userData.postalCode,
-            avatarUrl: userData.avatarUrl
-          });
-        } else {
-          // This can happen if the user is authenticated but the Firestore document was not created.
-          // In this case, we treat them as logged out from the app's perspective.
-          setUser(null);
+        try {
+          const userDocRef = doc(firestore, "users", fbUser.uid);
+          const userDoc = await getDoc(userDocRef);
+          
+          if (userDoc.exists()) {
+            const userData = userDoc.data();
+            setUser({ 
+              uid: fbUser.uid, 
+              email: fbUser.email!, 
+              name: userData.name,
+              phone: userData.phone,
+              postalCode: userData.postalCode,
+              avatarUrl: userData.avatarUrl
+            });
+          } else {
+            setUser(null);
+            toast({
+                variant: "destructive",
+                title: "User Profile Not Found",
+                description: "Your account exists, but we couldn't find your profile data. This can happen if signup was interrupted.",
+            });
+          }
+        } catch (error: any) {
+            console.error("Firestore Error:", error);
+            if (error.code === 'failed-precondition' || (error.message && error.message.includes('firestore service is not available'))) {
+                 toast({
+                    variant: "destructive",
+                    title: "Action Required: Enable Firestore Database",
+                    description: "Go to your Firebase project -> Build -> Firestore Database and click 'Create database'.",
+                    duration: 15000,
+                });
+            } else if (error.message && error.message.includes('offline')) {
+                 toast({
+                    variant: "destructive",
+                    title: "Network Error",
+                    description: "Could not connect to the database. Please check your internet connection.",
+                    duration: 10000,
+                });
+            } else {
+                toast({
+                    variant: "destructive",
+                    title: "Database Error",
+                    description: `Could not retrieve your profile: ${error.message}`,
+                });
+            }
+            setUser(null);
         }
       } else {
         setUser(null);
@@ -58,7 +90,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [toast]);
 
   const logout = async () => {
     await signOut(auth);
