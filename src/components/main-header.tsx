@@ -44,14 +44,16 @@ export function MainHeader() {
              <SheetTitle className="sr-only">Sidebar Menu</SheetTitle>
             <div className="p-6">
               <nav className="mt-8 flex flex-col gap-2">
-                 <Link
-                  href="/profile"
-                  onClick={() => setIsSheetOpen(false)}
-                  className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-                >
-                  <UserCircle className="h-5 w-5" />
-                  Profile
-                </Link>
+                 {!isLoading && user && (
+                    <Link
+                    href="/profile"
+                    onClick={() => setIsSheetOpen(false)}
+                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                    >
+                    <UserCircle className="h-5 w-5" />
+                    Profile
+                    </Link>
+                 )}
                 <Link
                   href="/report-issue"
                   onClick={() => setIsSheetOpen(false)}
@@ -71,18 +73,20 @@ export function MainHeader() {
               </nav>
             </div>
             <div className="mt-auto p-6">
-                {user ? (
-                    <Button variant="ghost" onClick={() => logout()} className="w-full glossy-button text-destructive hover:text-destructive justify-start">
-                        <LogOut className="mr-2 h-5 w-5" />
-                        Log out
-                    </Button>
-                ) : (
-                    <Button asChild variant="ghost" className="w-full glossy-button justify-start">
-                    <Link href="/auth">
-                        <LogIn className="mr-2 h-5 w-5" />
-                        Log In / Sign Up
-                    </Link>
-                    </Button>
+                {!isLoading && (
+                    user ? (
+                        <Button variant="ghost" onClick={() => {logout(); setIsSheetOpen(false);}} className="w-full glossy-button text-destructive hover:text-destructive justify-start">
+                            <LogOut className="mr-2 h-5 w-5" />
+                            Log out
+                        </Button>
+                    ) : (
+                        <Button asChild variant="ghost" className="w-full glossy-button justify-start">
+                        <Link href="/auth" onClick={() => setIsSheetOpen(false)}>
+                            <LogIn className="mr-2 h-5 w-5" />
+                            Log In / Sign Up
+                        </Link>
+                        </Button>
+                    )
                 )}
             </div>
           </SheetContent>
@@ -143,7 +147,7 @@ export function MainHeader() {
                     <span>{item.label}</span>
                 </Link>
             ))}
-            {user && (
+            {!isLoading && user && (
                  <Link
                     key="desktop-profile"
                     href="/profile"
@@ -186,19 +190,21 @@ export function MainHeader() {
                 <LifeBuoy className="h-5 w-5" />
                 Help & Support
             </Link>
-             {user ? (
-                 <Button variant="ghost" onClick={() => logout()} className="glossy-button justify-start mt-4 text-destructive hover:text-destructive">
-                    <LogOut className="mr-2 h-5 w-5" />
-                    Log out
-                </Button>
-            ) : (
-                 <Button asChild variant="ghost" className="glossy-button justify-start mt-4">
-                  <Link href="/auth">
-                    <LogIn className="mr-2 h-5 w-5" />
-                    Log In / Sign Up
-                  </Link>
-                </Button>
-            )}
+             {!isLoading && (
+                user ? (
+                    <Button variant="ghost" onClick={() => logout()} className="glossy-button justify-start mt-4 text-destructive hover:text-destructive">
+                        <LogOut className="mr-2 h-5 w-5" />
+                        Log out
+                    </Button>
+                ) : (
+                    <Button asChild variant="ghost" className="glossy-button justify-start mt-4">
+                    <Link href="/auth">
+                        <LogIn className="mr-2 h-5 w-5" />
+                        Log In / Sign Up
+                    </Link>
+                    </Button>
+                )
+             )}
         </div>
       </aside>
     </>
