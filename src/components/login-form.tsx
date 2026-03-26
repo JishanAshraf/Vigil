@@ -34,11 +34,27 @@ export function LoginForm() {
         });
         router.push('/');
     } catch (error: any) {
-        toast({
-            variant: "destructive",
-            title: "Login Failed",
-            description: error.message || "Invalid email or password.",
-        });
+        if (error.code === 'auth/configuration-not-found') {
+             toast({
+                variant: "destructive",
+                title: "Action Required: Enable Email Sign-In",
+                description: "Email/Password sign-in is not enabled in your Firebase project. Please enable it in the Firebase Console.",
+                duration: 10000,
+            });
+        } else if (error.code === 'auth/invalid-credential') {
+             toast({
+                variant: "destructive",
+                title: "Login Failed",
+                description: "The email or password you entered is incorrect. Please try again.",
+            });
+        }
+        else {
+            toast({
+                variant: "destructive",
+                title: "Login Failed",
+                description: error.message || "An unexpected error occurred.",
+            });
+        }
     } finally {
         setIsSubmitting(false);
     }
@@ -84,10 +100,11 @@ export function LoginForm() {
                   type="password"
                   placeholder="**********"
                   required
+                  className="pl-10"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
-                <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground hidden"/>
+                <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground"/>
               </div>
           </div>
           <div className="flex items-center justify-between text-sm">

@@ -58,11 +58,28 @@ export function SignUpForm() {
       router.push('/');
 
     } catch (error: any) {
-       toast({
-        variant: "destructive",
-        title: "Sign Up Failed",
-        description: error.message || "An unexpected error occurred.",
-      });
+       if (error.code === 'auth/configuration-not-found') {
+         toast({
+            variant: "destructive",
+            title: "Action Required: Enable Email Sign-In",
+            description: "Email/Password sign-in must be enabled in your Firebase project. Please go to the Firebase Console -> Authentication -> Sign-in method and enable the 'Email/Password' provider.",
+            duration: 10000,
+        });
+       } else if (error.code === 'auth/email-already-in-use') {
+         toast({
+            variant: "destructive",
+            title: "Sign Up Failed",
+            description: "An account with this email address already exists.",
+            action: <Button asChild variant="secondary"><Link href="/login">Login</Link></Button>
+         });
+       }
+       else {
+         toast({
+            variant: "destructive",
+            title: "Sign Up Failed",
+            description: error.message || "An unexpected error occurred.",
+          });
+       }
     }
   };
 
