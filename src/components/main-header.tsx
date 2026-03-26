@@ -10,6 +10,7 @@ import { useState } from 'react';
 import { Button } from './ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from './ui/sheet';
 import { useAuth } from '@/contexts/AuthContext';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const desktopNavItems = [
   { href: '/', label: 'Watch', icon: ShieldCheck },
@@ -28,7 +29,7 @@ const mobileNavItems = [
 export function MainHeader() {
   const pathname = usePathname();
   const [isSheetOpen, setIsSheetOpen] = useState(false);
-  const { user, logout } = useAuth();
+  const { user, logout, isLoading } = useAuth();
 
   return (
     <>
@@ -55,7 +56,7 @@ export function MainHeader() {
                 <Link
                   href="/report-issue"
                   onClick={() => setIsSheetOpen(false)}
-                  className={cn("flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary", !user && "pointer-events-none opacity-50")}
+                  className={cn("flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary", (isLoading || !user) && "pointer-events-none opacity-50")}
                 >
                   <Flag className="h-5 w-5" />
                   Report an Issue
@@ -71,7 +72,9 @@ export function MainHeader() {
               </nav>
             </div>
             <div className="mt-auto p-6">
-              {user ? (
+              {isLoading ? (
+                <Skeleton className="h-10 w-full" />
+              ) : user ? (
                 <Button variant="ghost" onClick={() => logout()} className="w-full glossy-button text-destructive hover:text-destructive justify-start">
                     <LogOut className="mr-2 h-5 w-5" />
                     Log out
@@ -106,7 +109,7 @@ export function MainHeader() {
                 if (item.isCentral) {
                   return (
                     <div key={item.href} className="flex justify-center -mt-8">
-                       <Button asChild size="icon" className={cn("glossy-button bg-primary hover:bg-primary/90 rounded-full h-16 w-16 shadow-lg border-4 border-background", !user && "bg-muted pointer-events-none")}>
+                       <Button asChild size="icon" className={cn("glossy-button bg-primary hover:bg-primary/90 rounded-full h-16 w-16 shadow-lg border-4 border-background", (isLoading || !user) && "bg-muted pointer-events-none")}>
                         <Link href={item.href}>
                             <item.icon className="h-7 w-7 text-primary-foreground" />
                         </Link>
@@ -143,7 +146,9 @@ export function MainHeader() {
                     <span>{item.label}</span>
                 </Link>
             ))}
-            {user && (
+            {isLoading ? (
+              <Skeleton className="h-10 rounded-lg" />
+            ) : user && (
                  <Link
                     key="desktop-profile"
                     href="/profile"
@@ -173,7 +178,7 @@ export function MainHeader() {
                 href="/report-issue"
                 className={cn(
                   "group glossy-button flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all duration-300 hover:bg-primary/10 hover:text-primary",
-                  !user && "pointer-events-none opacity-50"
+                  (isLoading || !user) && "pointer-events-none opacity-50"
                 )}
               >
                 <Flag className="h-5 w-5" />
@@ -186,7 +191,9 @@ export function MainHeader() {
                 <LifeBuoy className="h-5 w-5" />
                 Help & Support
             </Link>
-            {user ? (
+            {isLoading ? (
+              <Skeleton className="h-10 mt-4 rounded-lg" />
+            ) : user ? (
                  <Button variant="ghost" onClick={() => logout()} className="glossy-button justify-start mt-4 text-destructive hover:text-destructive">
                     <LogOut className="mr-2 h-5 w-5" />
                     Log out
