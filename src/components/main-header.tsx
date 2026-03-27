@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ShieldCheck, Stethoscope, UserCircle, Menu, Flag, LifeBuoy, LogOut, Search, Bell, Home, LogIn } from 'lucide-react';
+import { ShieldCheck, Stethoscope, UserCircle, Menu, Flag, LifeBuoy, LogOut, Search, Bell, Home, LogIn, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Logo } from '@/components/logo';
 import { ThemeToggle } from './theme-toggle';
@@ -28,7 +28,7 @@ const mobileNavItems = [
 export function MainHeader() {
   const pathname = usePathname();
   const [isSheetOpen, setIsSheetOpen] = useState(false);
-  const { user, logout, isLoading } = useAuth();
+  const { user, logout, isLoading, firebaseUser } = useAuth();
 
   return (
     <>
@@ -73,21 +73,24 @@ export function MainHeader() {
               </nav>
             </div>
             <div className="mt-auto p-6">
-                {!isLoading && (
-                    user ? (
-                        <Button variant="ghost" onClick={() => {logout(); setIsSheetOpen(false);}} className="w-full glossy-button text-destructive hover:text-destructive justify-start">
-                            <LogOut className="mr-2 h-5 w-5" />
-                            Log out
-                        </Button>
-                    ) : (
-                        <Button asChild variant="ghost" className="w-full glossy-button justify-start">
-                        <Link href="/auth" onClick={() => setIsSheetOpen(false)}>
-                            <LogIn className="mr-2 h-5 w-5" />
-                            Log In / Sign Up
-                        </Link>
-                        </Button>
-                    )
-                )}
+              {isLoading ? (
+                  <Button variant="ghost" disabled className="w-full justify-start">
+                      <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                      Authenticating...
+                  </Button>
+              ) : firebaseUser ? (
+                  <Button variant="ghost" onClick={() => {logout(); setIsSheetOpen(false);}} className="w-full glossy-button text-destructive hover:text-destructive justify-start">
+                      <LogOut className="mr-2 h-5 w-5" />
+                      Log out
+                  </Button>
+              ) : (
+                  <Button asChild variant="ghost" className="w-full glossy-button justify-start">
+                  <Link href="/auth" onClick={() => setIsSheetOpen(false)}>
+                      <LogIn className="mr-2 h-5 w-5" />
+                      Log In / Sign Up
+                  </Link>
+                  </Button>
+              )}
             </div>
           </SheetContent>
         </Sheet>
@@ -190,21 +193,24 @@ export function MainHeader() {
                 <LifeBuoy className="h-5 w-5" />
                 Help & Support
             </Link>
-             {!isLoading && (
-                user ? (
-                    <Button variant="ghost" onClick={() => logout()} className="glossy-button justify-start mt-4 text-destructive hover:text-destructive">
-                        <LogOut className="mr-2 h-5 w-5" />
-                        Log out
-                    </Button>
-                ) : (
-                    <Button asChild variant="ghost" className="glossy-button justify-start mt-4">
-                    <Link href="/auth">
-                        <LogIn className="mr-2 h-5 w-5" />
-                        Log In / Sign Up
-                    </Link>
-                    </Button>
-                )
-             )}
+             {isLoading ? (
+                  <Button variant="ghost" disabled className="justify-start mt-4">
+                      <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                      Authenticating...
+                  </Button>
+              ) : firebaseUser ? (
+                  <Button variant="ghost" onClick={() => logout()} className="glossy-button justify-start mt-4 text-destructive hover:text-destructive">
+                      <LogOut className="mr-2 h-5 w-5" />
+                      Log out
+                  </Button>
+              ) : (
+                  <Button asChild variant="ghost" className="glossy-button justify-start mt-4">
+                  <Link href="/auth">
+                      <LogIn className="mr-2 h-5 w-5" />
+                      Log In / Sign Up
+                  </Link>
+                  </Button>
+              )}
         </div>
       </aside>
     </>
