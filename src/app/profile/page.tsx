@@ -49,7 +49,7 @@ export default function ProfilePage() {
     );
   }
 
-  if (!firebaseUser) {
+  if (!firebaseUser || !user) {
     return (
        <>
         <MainHeader />
@@ -73,38 +73,6 @@ export default function ProfilePage() {
         </main>
       </>
     )
-  }
-  
-  if (!user) {
-    return (
-      <>
-        <MainHeader />
-        <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8 md:pl-64 pb-28 md:pb-8">
-          <div className="mx-auto w-full max-w-4xl space-y-8">
-            <Card>
-              <CardHeader>
-                <Skeleton className="h-8 w-48" />
-                <Skeleton className="h-4 w-72" />
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-8">
-                  <div className="flex items-center gap-6">
-                    <Skeleton className="h-24 w-24 rounded-full" />
-                    <div className="flex-1 space-y-2">
-                       <Skeleton className="h-6 w-1/4" />
-                       <Skeleton className="h-10 w-full" />
-                    </div>
-                  </div>
-                  <Skeleton className="h-10 w-full" />
-                  <Skeleton className="h-10 w-full" />
-                  <Skeleton className="h-10 w-full" />
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </main>
-      </>
-    );
   }
 
   return (

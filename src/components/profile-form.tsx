@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { useEffect, useRef, useState } from 'react';
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import { firestore } from "@/firebase";
 
 
@@ -76,12 +76,13 @@ export function ProfileForm({ profileData }: ProfileFormProps) {
 
     try {
         const userDocRef = doc(firestore, "users", user.uid);
-        await updateDoc(userDocRef, {
+        await setDoc(userDocRef, {
             name: values.name,
+            email: values.email,
             phone: values.phone,
             postalCode: values.postalCode,
             avatarUrl: values.avatarUrl,
-        });
+        }, { merge: true });
         toast({
             title: "Profile Updated",
             description: "Your information has been saved successfully.",

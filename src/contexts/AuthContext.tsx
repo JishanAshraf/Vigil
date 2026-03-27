@@ -45,17 +45,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             setUser({ 
               uid: fbUser.uid, 
               email: fbUser.email!, 
-              name: userData.name,
+              name: userData.name || fbUser.displayName || 'New User',
               phone: userData.phone,
               postalCode: userData.postalCode,
               avatarUrl: userData.avatarUrl
             });
           } else {
-            setUser(null);
-            toast({
-                variant: "destructive",
-                title: "User Profile Not Found",
-                description: "Your account exists, but we couldn't find your profile data. This can happen if signup was interrupted.",
+            // If firestore doc doesn't exist, create a default profile object.
+            // The profile page will allow the user to fill in the details.
+            setUser({
+              uid: fbUser.uid,
+              name: fbUser.displayName || 'New User',
+              email: fbUser.email!,
+              phone: fbUser.phoneNumber || '',
+              postalCode: '',
+              avatarUrl: fbUser.photoURL || '',
             });
           }
         } catch (error: any) {
@@ -77,7 +81,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                     description: `Could not retrieve your profile: ${error.message}`,
                 });
             }
-            setUser(null);
+            // Fallback to a default user object to avoid breaking the UI
+            setUser({
+              uid: fbUser.uid,
+              name: fbUser.displayName || 'New User',
+              email: fbUser.email!,
+              phone: fbUser.phoneNumber || '',
+              postalCode: '',
+              avatarUrl: fbUser.photoURL || '',
+            });
         }
       } else {
         setUser(null);
