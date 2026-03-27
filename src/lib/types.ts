@@ -9,6 +9,7 @@ export type Comment = {
   user: User;
   timestamp: string;
   text: string;
+  createdAt?: any;
 };
 
 export type Alert = {
@@ -23,4 +24,5 @@ export type Alert = {
   status: 'Reported' | 'Authorities Notified' | 'Resolved';
   comments: Comment[];
   reporters: User[];
+  createdAt?: any;
 };
