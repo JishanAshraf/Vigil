@@ -12,6 +12,7 @@ export type Doctor = {
   name: string;
   specialty: string;
   phone: string;
+  city: string;
 };
 
 export const mockVendors: Vendor[] = [
@@ -32,8 +33,14 @@ export const mockVendors: Vendor[] = [
 ];
 
 export const mockDoctors: Doctor[] = [
-  { id: 'doc-1', name: 'Dr. Priya Sharma', specialty: 'General Physician', phone: '+919876543231' },
-  { id: 'doc-2', name: 'Dr. Rohan Gupta', specialty: 'Cardiologist', phone: '+919876543232' },
-  { id: 'doc-3', name: 'Dr. Ananya Reddy', specialty: 'Dermatologist', phone: '+919876543233' },
-  { id: 'doc-4', name: 'Dr. Vikram Singh', specialty: 'Pediatrician', phone: '+919876543234' },
+  { id: 'doc-1', name: 'Dr. Priya Sharma', specialty: 'General Physician', phone: '+919876543231', city: 'Bhopal' },
+  { id: 'doc-2', name: 'Dr. Rohan Gupta', specialty: 'Cardiologist', phone: '+919876543232', city: 'Indore' },
+  { id: 'doc-3', name: 'Dr. Ananya Reddy', specialty: 'Dermatologist', phone: '+919876543233', city: 'Bhopal' },
+  { id: 'doc-4', name: 'Dr. Vikram Singh', specialty: 'Pediatrician', phone: '+919876543234', city: 'Indore' },
+  { id: 'doc-5', name: 'Dr. Sunita Patel', specialty: 'General Physician', phone: '+919876543235', city: 'Gwalior' },
+  { id: 'doc-6', name: 'Dr. Arjun Mehta', specialty: 'Orthopedic Surgeon', phone: '+919876543236', city: 'Jabalpur' },
+  { id: 'doc-7', name: 'Dr. Kavita Joshi', specialty: 'Dermatologist', phone: '+919876543237', city: 'Indore' },
+  { id: 'doc-8', name: 'Dr. Sameer Khan', specialty: 'Cardiologist', phone: '+919876543238', city: 'Bhopal' },
+  { id: 'doc-9', name: 'Dr. Meera Iyer', specialty: 'Pediatrician', phone: '+919876543239', city: 'Ujjain' },
+  { id: 'doc-10', name: 'Dr. Raj Kumar', specialty: 'General Physician', phone: '+919876543240', city: 'Jabalpur' },
 ];
