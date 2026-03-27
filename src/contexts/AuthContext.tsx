@@ -60,19 +60,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           }
         } catch (error: any) {
             console.error("Firestore Error:", error);
-            if (error.code === 'failed-precondition' || (error.message && error.message.includes('firestore service is not available'))) {
+            // This error often means Firestore has not been enabled in the Firebase Console.
+            if (error.code === 'failed-precondition' || 
+                (error.message && error.message.includes('firestore service is not available')) ||
+                (error.message && error.message.includes('client is offline'))) {
                  toast({
                     variant: "destructive",
                     title: "Action Required: Enable Firestore Database",
-                    description: "Go to your Firebase project -> Build -> Firestore Database and click 'Create database'.",
+                    description: "Go to your Firebase project -> Build -> Firestore Database and click 'Create database'. This is a required step for new projects.",
                     duration: 15000,
-                });
-            } else if (error.message && error.message.includes('offline')) {
-                 toast({
-                    variant: "destructive",
-                    title: "Network Error",
-                    description: "Could not connect to the database. Please check your internet connection.",
-                    duration: 10000,
                 });
             } else {
                 toast({
