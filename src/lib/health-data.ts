@@ -21,8 +21,8 @@ export const mockVendors: Vendor[] = [
 ];
 
 export const mockDoctors: Doctor[] = [
-  { id: 'doc-1', name: 'Dr. Emily Carter', specialty: 'General Physician', avatarUrl: 'https://i.pravatar.cc/150?u=doc1', phone: '+919876543221' },
-  { id: 'doc-2', name: 'Dr. Ben Jacobs', specialty: 'Cardiologist', avatarUrl: 'https://i.pravatar.cc/150?u=doc2', phone: '+919876543222' },
-  { id: 'doc-3', name: 'Dr. Olivia Chen', specialty: 'Dermatologist', avatarUrl: 'https://i.pravatar.cc/150?u=doc3', phone: '+919876543223' },
-  { id: 'doc-4', name: 'Dr. Samuel Rodriguez', specialty: 'Pediatrician', avatarUrl: 'https://i.pravatar.cc/150?u=doc4', phone: '+919876543224' },
+  { id: 'doc-1', name: 'Dr. Priya Sharma', specialty: 'General Physician', avatarUrl: 'https://i.pravatar.cc/150?u=doc1', phone: '+919876543221' },
+  { id: 'doc-2', name: 'Dr. Rohan Gupta', specialty: 'Cardiologist', avatarUrl: 'https://i.pravatar.cc/150?u=doc2', phone: '+919876543222' },
+  { id: 'doc-3', name: 'Dr. Ananya Reddy', specialty: 'Dermatologist', avatarUrl: 'https://i.pravatar.cc/150?u=doc3', phone: '+919876543223' },
+  { id: 'doc-4', name: 'Dr. Vikram Singh', specialty: 'Pediatrician', avatarUrl: 'https://i.pravatar.cc/150?u=doc4', phone: '+919876543224' },
 ];
