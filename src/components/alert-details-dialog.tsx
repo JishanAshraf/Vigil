@@ -1,3 +1,4 @@
+
 'use client';
 
 import type { Alert } from '@/lib/types';
@@ -26,6 +27,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useToast } from '@/hooks/use-toast';
 import Link from 'next/link';
+import { useState } from 'react';
 
 interface AlertDetailsDialogProps {
   alert: Alert;
@@ -33,7 +35,8 @@ interface AlertDetailsDialogProps {
 }
 
 export function AlertDetailsDialog({ alert, onOpenChange }: AlertDetailsDialogProps) {
-  const { deleteAlert, currentUser } = useAlerts();
+  const { deleteAlert, currentUser, addComment } = useAlerts();
+  const [commentText, setCommentText] = useState('');
   const isOwner = currentUser?.id === alert.user.id;
   const { toast } = useToast();
 
@@ -50,12 +53,16 @@ export function AlertDetailsDialog({ alert, onOpenChange }: AlertDetailsDialogPr
             description: "You must be logged in to comment.",
             action: <Button asChild variant="secondary"><Link href="/login">Login</Link></Button>
         })
-    } else {
-        toast({
-            title: "Comment Posted! (Dummy)",
-            description: "This is a demo. Comments are not saved yet.",
-        })
+        return;
     }
+    if (!commentText.trim()) return;
+
+    addComment(alert.id, commentText);
+    setCommentText('');
+    toast({
+        title: "Comment Posted!",
+        description: "Your comment has been added.",
+    });
   }
 
   return (
@@ -175,7 +182,12 @@ export function AlertDetailsDialog({ alert, onOpenChange }: AlertDetailsDialogPr
               <AvatarFallback>{currentUser ? currentUser.name.charAt(0) : '?'}</AvatarFallback>
             </Avatar>
             <div className="relative flex-1">
-              <Textarea placeholder="Write a comment..." className="pr-12" />
+              <Textarea 
+                placeholder="Write a comment..." 
+                className="pr-12"
+                value={commentText}
+                onChange={(e) => setCommentText(e.target.value)}
+              />
               <Button size="icon" className="absolute top-1/2 right-2 -translate-y-1/2 glossy-button" onClick={handleComment}>
                 <Send className="h-4 w-4" />
                 <span className="sr-only">Post comment</span>

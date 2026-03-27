@@ -1,9 +1,16 @@
+
 'use client';
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
-import type { Alert, User } from '@/lib/types';
-import { mockAlerts } from '@/lib/mock-data';
+import React, { createContext, useContext, ReactNode, useMemo } from 'react';
+import { addDoc, collection, serverTimestamp, query, orderBy, doc, deleteDoc as fbDeleteDoc, runTransaction, updateDoc, arrayUnion } from 'firebase/firestore';
+import { formatDistanceToNow } from 'date-fns';
+
+import type { Alert, User, Comment } from '@/lib/types';
 import { useAuth } from './AuthContext';
+import { firestore } from '@/firebase';
+import { useCollection } from '@/firebase/firestore/use-collection';
+import { errorEmitter } from '@/firebase/error-emitter';
+import { FirestorePermissionError } from '@/firebase/errors';
 
 interface AlertsContextType {
   alerts: Alert[];
@@ -12,13 +19,31 @@ interface AlertsContextType {
   deleteAlert: (alertId: string) => void;
   toggleReport: (alertId: string) => void;
   currentUser: User | null;
+  addComment: (alertId: string, text: string) => void;
 }
 
 const AlertsContext = createContext<AlertsContextType | undefined>(undefined);
 
 export const AlertsProvider = ({ children }: { children: ReactNode }) => {
-  const [alerts, setAlerts] = useState<Alert[]>(mockAlerts);
   const { user: authUser } = useAuth();
+  
+  const alertsQuery = useMemo(() => {
+    return query(collection(firestore, 'alerts'), orderBy('timestamp', 'desc'));
+  }, []);
+
+  const { data: rawAlerts } = useCollection<Omit<Alert, 'timestamp'> & { timestamp: any }>(alertsQuery);
+
+  const alerts = useMemo(() => {
+    if (!rawAlerts) return [];
+    return rawAlerts.map(alert => ({
+        ...alert,
+        timestamp: alert.timestamp ? formatDistanceToNow(alert.timestamp.toDate(), { addSuffix: true }) : 'just now',
+        comments: alert.comments.map(comment => ({
+            ...comment,
+            timestamp: comment.timestamp ? formatDistanceToNow(new Date(comment.timestamp), {addSuffix: true}) : 'just now'
+        }))
+    }));
+  }, [rawAlerts]);
 
   const currentUser: User | null = authUser ? { id: authUser.uid, name: authUser.name, avatarUrl: authUser.avatarUrl } : null;
 
@@ -27,38 +52,89 @@ export const AlertsProvider = ({ children }: { children: ReactNode }) => {
         console.error("User must be logged in to add an alert.");
         return;
     }
-    const newAlert: Alert = {
+
+    const alertData = {
       ...newAlertData,
-      id: `alert-${Date.now()}`,
       user: currentUser,
-      timestamp: 'Just now',
+      timestamp: serverTimestamp(),
       comments: [],
       status: 'Reported',
       reporters: [],
     };
-    setAlerts(prevAlerts => [newAlert, ...prevAlerts]);
+    
+    addDoc(collection(firestore, 'alerts'), alertData).catch(async (serverError) => {
+      const permissionError = new FirestorePermissionError({
+        path: 'alerts',
+        operation: 'create',
+        requestResourceData: alertData,
+      });
+      errorEmitter.emit('permission-error', permissionError);
+    });
   };
 
   const deleteAlert = (alertId: string) => {
-    setAlerts(prevAlerts => prevAlerts.filter(alert => alert.id !== alertId));
+    const alertDocRef = doc(firestore, "alerts", alertId);
+    fbDeleteDoc(alertDocRef).catch(async (serverError) => {
+        const permissionError = new FirestorePermissionError({
+          path: alertDocRef.path,
+          operation: 'delete',
+        });
+        errorEmitter.emit('permission-error', permissionError);
+    });
   };
   
   const toggleReport = (alertId: string) => {
     if (!currentUser) return;
-    setAlerts(prevAlerts =>
-      prevAlerts.map(alert => {
-        if (alert.id === alertId) {
-          const isReported = alert.reporters.some(reporter => reporter.id === currentUser.id);
-          if (isReported) {
-            return { ...alert, reporters: alert.reporters.filter(reporter => reporter.id !== currentUser.id) };
-          } else {
-            return { ...alert, reporters: [...alert.reporters, currentUser] };
-          }
-        }
-        return alert;
-      })
-    );
+    const alertDocRef = doc(firestore, 'alerts', alertId);
+
+    runTransaction(firestore, async (transaction) => {
+      const alertDoc = await transaction.get(alertDocRef);
+      if (!alertDoc.exists()) {
+        throw "Document does not exist!";
+      }
+
+      const currentReporters = alertDoc.data().reporters as User[];
+      const isReported = currentReporters.some(reporter => reporter.id === currentUser.id);
+
+      let newReporters: User[];
+      if (isReported) {
+        newReporters = currentReporters.filter(reporter => reporter.id !== currentUser.id);
+      } else {
+        const reporterData: User = { id: currentUser.id, name: currentUser.name, avatarUrl: currentUser.avatarUrl };
+        newReporters = [...currentReporters, reporterData];
+      }
+      transaction.update(alertDocRef, { reporters: newReporters });
+    }).catch(async (serverError) => {
+        const permissionError = new FirestorePermissionError({
+          path: alertDocRef.path,
+          operation: 'update',
+          requestResourceData: { reporters: '...' }
+        });
+        errorEmitter.emit('permission-error', permissionError);
+    });
   };
+
+  const addComment = (alertId: string, text: string) => {
+    if (!currentUser) return;
+
+    const newComment: Omit<Comment, 'timestamp'> & { timestamp: string } = {
+        id: `comment-${Date.now()}`,
+        user: currentUser,
+        timestamp: new Date().toISOString(),
+        text: text,
+    };
+    
+    const alertDocRef = doc(firestore, 'alerts', alertId);
+    
+    updateDoc(alertDocRef, { comments: arrayUnion(newComment) }).catch(async (serverError) => {
+        const permissionError = new FirestorePermissionError({
+          path: alertDocRef.path,
+          operation: 'update',
+          requestResourceData: { comments: '...' },
+        });
+        errorEmitter.emit('permission-error', permissionError);
+    });
+  }
 
 
   const getUserAlerts = (userId: string) => {
@@ -66,7 +142,7 @@ export const AlertsProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AlertsContext.Provider value={{ alerts, addAlert, getUserAlerts, deleteAlert, toggleReport, currentUser }}>
+    <AlertsContext.Provider value={{ alerts, addAlert, getUserAlerts, deleteAlert, toggleReport, currentUser, addComment }}>
       {children}
     </AlertsContext.Provider>
   );
