@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect, useMemo } from 'react';
 import type { Alert, User, Comment } from '@/lib/types';
 import { useAuth } from './AuthContext';
 import { useToast } from '@/hooks/use-toast';
@@ -30,14 +30,14 @@ export const AlertsProvider = ({ children }: { children: ReactNode }) => {
   const { user: authUser } = useAuth();
   const { toast } = useToast();
 
-  const alertsCollectionRef = collection(firestore, 'alerts');
-  const alertsQuery = query(alertsCollectionRef, orderBy('createdAt', 'desc'));
+  const alertsQuery = useMemo(() => query(collection(firestore, 'alerts'), orderBy('createdAt', 'desc')), []);
   const { data: serverAlerts } = useCollection<Alert>(alertsQuery);
 
   const currentUser: User | null = authUser ? { id: authUser.uid, name: authUser.name, avatarUrl: authUser.avatarUrl } : null;
 
   useEffect(() => {
     const seedDatabase = async () => {
+      const alertsCollectionRef = collection(firestore, 'alerts');
       const snapshot = await getDocs(alertsCollectionRef);
 
       if (snapshot.empty) {
@@ -100,6 +100,7 @@ export const AlertsProvider = ({ children }: { children: ReactNode }) => {
       timestamp: 'just now',
     };
     try {
+        const alertsCollectionRef = collection(firestore, 'alerts');
         await addDoc(alertsCollectionRef, newAlert);
     } catch (e) {
         console.error("Error adding alert: ", e);
