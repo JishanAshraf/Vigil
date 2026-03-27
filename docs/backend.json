@@ -25,58 +25,6 @@
         }
       },
       "required": ["name"]
-    },
-    "UserReference": {
-      "title": "User Reference",
-      "description": "A lightweight reference to a user.",
-      "type": "object",
-      "properties": {
-        "id": { "type": "string" },
-        "name": { "type": "string" },
-        "avatarUrl": { "type": "string" }
-      },
-      "required": ["id", "name"]
-    },
-    "Image": {
-      "title": "Image",
-      "type": "object",
-      "properties": {
-        "url": { "type": "string" },
-        "hint": { "type": "string" }
-      },
-      "required": ["url"]
-    },
-    "Comment": {
-      "title": "Comment",
-      "description": "A comment on an alert.",
-      "type": "object",
-      "properties": {
-        "id": { "type": "string" },
-        "user": { "$ref": "#/entities/UserReference" },
-        "timestamp": { "type": "string" },
-        "text": { "type": "string" },
-        "createdAt": { "type": "string", "format": "date-time" }
-      },
-      "required": ["id", "user", "timestamp", "text"]
-    },
-    "Alert": {
-      "title": "Alert",
-      "description": "Represents a community-reported issue.",
-      "type": "object",
-      "properties": {
-        "user": { "$ref": "#/entities/UserReference" },
-        "isAnonymous": { "type": "boolean" },
-        "timestamp": { "type": "string" },
-        "createdAt": { "type": "string", "format": "date-time" },
-        "category": { "type": "string" },
-        "images": { "type": "array", "items": { "$ref": "#/entities/Image" } },
-        "description": { "type": "string" },
-        "location": { "type": "string" },
-        "status": { "type": "string", "enum": ["Reported", "Authorities Notified", "Resolved"] },
-        "comments": { "type": "array", "items": { "$ref": "#/entities/Comment" } },
-        "reporters": { "type": "array", "items": { "$ref": "#/entities/UserReference" } }
-      },
-      "required": ["user", "isAnonymous", "timestamp", "category", "description", "location", "status", "createdAt"]
     }
   },
   "auth": {
@@ -88,12 +36,6 @@
         "$ref": "#/entities/UserProfile"
       },
       "description": "Stores user profile information."
-    },
-    "/alerts/{alertId}": {
-      "schema": {
-        "$ref": "#/entities/Alert"
-      },
-      "description": "Stores community alerts."
     }
   }
 }

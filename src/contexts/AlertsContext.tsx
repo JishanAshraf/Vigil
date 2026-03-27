@@ -1,17 +1,12 @@
 'use client';
 
-import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import React, { createContext, useContext, useState, ReactNode } from 'react';
 import type { Alert, User, Comment } from '@/lib/types';
 import { useAuth } from './AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { mockAlerts } from '@/lib/mock-data';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { collection, query, orderBy, addDoc, serverTimestamp, doc, deleteDoc, updateDoc, arrayUnion, arrayRemove, getDocs, writeBatch } from 'firebase/firestore';
-import { firestore } from '@/firebase';
-import { useCollection } from '@/firebase/firestore/use-collection';
-import { formatDistanceToNow } from 'date-fns';
-
 
 interface AlertsContextType {
   alerts: Alert[];
@@ -26,61 +21,13 @@ interface AlertsContextType {
 const AlertsContext = createContext<AlertsContextType | undefined>(undefined);
 
 export const AlertsProvider = ({ children }: { children: ReactNode }) => {
-  const [alerts, setAlerts] = useState<Alert[]>([]);
+  const [alerts, setAlerts] = useState<Alert[]>(mockAlerts);
   const { user: authUser } = useAuth();
   const { toast } = useToast();
 
-  const alertsQuery = query(collection(firestore, 'alerts'), orderBy('createdAt', 'desc'));
-  const { data: serverAlerts } = useCollection<Alert>(alertsQuery);
-
   const currentUser: User | null = authUser ? { id: authUser.uid, name: authUser.name, avatarUrl: authUser.avatarUrl } : null;
 
-  useEffect(() => {
-    const seedDatabase = async () => {
-      const alertsCollectionRef = collection(firestore, 'alerts');
-      const snapshot = await getDocs(alertsCollectionRef);
-
-      if (snapshot.empty) {
-        console.log('No alerts found. Seeding database with mock data...');
-        const batch = writeBatch(firestore);
-        
-        mockAlerts.forEach((alert, index) => {
-          const { id, ...alertData } = alert;
-          const alertDocRef = doc(collection(firestore, 'alerts'));
-
-          const createdAt = new Date(Date.now() - index * 3 * 24 * 60 * 60 * 1000); 
-
-          const commentsWithDate = alertData.comments.map((comment, commentIndex) => ({
-            ...comment,
-            createdAt: new Date(createdAt.getTime() + commentIndex * 60000)
-          }));
-
-          batch.set(alertDocRef, { ...alertData, comments: commentsWithDate, createdAt });
-        });
-
-        await batch.commit();
-        console.log('Database seeded successfully.');
-      }
-    };
-
-    seedDatabase().catch(console.error);
-  }, []);
-
-  useEffect(() => {
-    if (serverAlerts) {
-      const processedAlerts = serverAlerts.map(alert => ({
-        ...alert,
-        timestamp: alert.createdAt ? formatDistanceToNow(alert.createdAt.toDate(), { addSuffix: true }) : 'some time ago',
-        comments: alert.comments.map(c => ({
-          ...c,
-          timestamp: c.createdAt ? formatDistanceToNow(c.createdAt.toDate(), { addSuffix: true }) : 'some time ago'
-        })).sort((a,b) => a.createdAt.toMillis() - b.createdAt.toMillis())
-      }));
-      setAlerts(processedAlerts);
-    }
-  }, [serverAlerts]);
-
-  const addAlert = async (newAlertData: Omit<Alert, 'id' | 'user' | 'timestamp' | 'comments' | 'status' | 'reporters'>) => {
+  const addAlert = (newAlertData: Omit<Alert, 'id' | 'user' | 'timestamp' | 'comments' | 'status' | 'reporters'>) => {
     if (!currentUser) {
         toast({
             variant: "destructive",
@@ -90,33 +37,23 @@ export const AlertsProvider = ({ children }: { children: ReactNode }) => {
         })
         return;
     }
-    const newAlert = {
+    const newAlert: Alert = {
+      id: `alert-${Date.now()}`,
       ...newAlertData,
       user: currentUser,
+      timestamp: 'just now',
       comments: [],
       reporters: [],
       status: 'Reported',
-      createdAt: serverTimestamp(),
-      timestamp: 'just now',
     };
-    try {
-        const alertsCollectionRef = collection(firestore, 'alerts');
-        await addDoc(alertsCollectionRef, newAlert);
-    } catch (e) {
-        console.error("Error adding alert: ", e);
-    }
+    setAlerts(prevAlerts => [newAlert, ...prevAlerts]);
   };
 
-  const deleteAlert = async (alertId: string) => {
-    const alertDocRef = doc(firestore, 'alerts', alertId);
-    try {
-        await deleteDoc(alertDocRef);
-    } catch(e) {
-        console.error("Error deleting alert: ", e);
-    }
+  const deleteAlert = (alertId: string) => {
+    setAlerts(prevAlerts => prevAlerts.filter(alert => alert.id !== alertId));
   };
   
-  const toggleReport = async (alertId: string) => {
+  const toggleReport = (alertId: string) => {
     if (!currentUser) {
         toast({
             variant: "destructive",
@@ -127,28 +64,23 @@ export const AlertsProvider = ({ children }: { children: ReactNode }) => {
         return;
     }
     
-    const alertRef = doc(firestore, 'alerts', alertId);
-    const alert = alerts.find(a => a.id === alertId);
-    if (!alert) return;
-
-    const isReported = alert.reporters.some(r => r.id === currentUser.id);
-    
-    try {
-        if (isReported) {
-            const reporterToRemove = alert.reporters.find(r => r.id === currentUser.id);
-            if (reporterToRemove) {
-              await updateDoc(alertRef, { reporters: arrayRemove(reporterToRemove) });
+    setAlerts(prevAlerts => 
+        prevAlerts.map(alert => {
+            if (alert.id === alertId) {
+                const isReported = alert.reporters.some(r => r.id === currentUser.id);
+                if (isReported) {
+                    return { ...alert, reporters: alert.reporters.filter(r => r.id !== currentUser.id) };
+                } else {
+                    const reporterData: User = { id: currentUser.id, name: currentUser.name, avatarUrl: currentUser.avatarUrl };
+                    return { ...alert, reporters: [...alert.reporters, reporterData] };
+                }
             }
-        } else {
-            const reporterData: User = { id: currentUser.id, name: currentUser.name, avatarUrl: currentUser.avatarUrl };
-            await updateDoc(alertRef, { reporters: arrayUnion(reporterData) });
-        }
-    } catch(e) {
-        console.error("Error toggling report: ", e);
-    }
+            return alert;
+        })
+    );
   };
 
-  const addComment = async (alertId: string, text: string) => {
+  const addComment = (alertId: string, text: string) => {
     if (!currentUser) {
         toast({
             variant: "destructive",
@@ -159,20 +91,21 @@ export const AlertsProvider = ({ children }: { children: ReactNode }) => {
         return;
     }
 
-    const newComment = {
+    const newComment: Comment = {
         id: `comment-${Date.now()}`,
         user: currentUser,
         text: text,
         timestamp: 'just now',
-        createdAt: serverTimestamp(),
     };
     
-    const alertRef = doc(firestore, 'alerts', alertId);
-    try {
-        await updateDoc(alertRef, { comments: arrayUnion(newComment) });
-    } catch (e) {
-        console.error("Error adding comment: ", e);
-    }
+    setAlerts(prevAlerts => 
+        prevAlerts.map(alert => {
+            if (alert.id === alertId) {
+                return { ...alert, comments: [...alert.comments, newComment] };
+            }
+            return alert;
+        })
+    );
   }
 
   const getUserAlerts = (userId: string) => {
