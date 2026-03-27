@@ -6,6 +6,8 @@ import { onAuthStateChanged, User as FirebaseUser, signOut } from 'firebase/auth
 import { doc, getDoc } from 'firebase/firestore';
 import { auth, firestore } from '@/firebase';
 import { useToast } from '@/hooks/use-toast';
+import { errorEmitter } from '@/firebase/error-emitter';
+import { FirestorePermissionError } from '@/firebase/errors';
 
 export interface UserProfile {
   uid: string;
@@ -36,10 +38,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const unsubscribe = onAuthStateChanged(auth, async (fbUser) => {
       setFirebaseUser(fbUser);
       if (fbUser) {
-        try {
-          const userDocRef = doc(firestore, "users", fbUser.uid);
-          const userDoc = await getDoc(userDocRef);
-          
+        const userDocRef = doc(firestore, "users", fbUser.uid);
+        getDoc(userDocRef).then(userDoc => {
           if (userDoc.exists()) {
             const userData = userDoc.data();
             setUser({ 
@@ -62,10 +62,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
               avatarUrl: fbUser.photoURL || '',
             });
           }
-        } catch (error: any) {
-            console.error("Firestore Error:", error);
-            // This error often means Firestore has not been enabled in the Firebase Console.
-            if (error.code === 'failed-precondition' || 
+        }).catch(async (error: any) => {
+            if (error.code === 'permission-denied') {
+                const permissionError = new FirestorePermissionError({
+                    path: userDocRef.path,
+                    operation: 'get',
+                });
+                errorEmitter.emit('permission-error', permissionError);
+            } else if (error.code === 'failed-precondition' || 
                 (error.message && error.message.includes('firestore service is not available')) ||
                 (error.message && error.message.includes('client is offline'))) {
                  toast({
@@ -90,7 +94,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
               postalCode: '',
               avatarUrl: fbUser.photoURL || '',
             });
-        }
+        });
       } else {
         setUser(null);
       }

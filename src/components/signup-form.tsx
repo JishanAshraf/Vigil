@@ -15,6 +15,8 @@ import { useRouter } from "next/navigation";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { auth, firestore } from "@/firebase";
+import { errorEmitter } from "@/firebase/error-emitter";
+import { FirestorePermissionError } from "@/firebase/errors";
 
 
 const formSchema = z.object({
@@ -41,14 +43,25 @@ export function SignUpForm() {
       const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
       const user = userCredential.user;
 
-      // Create a user profile document in Firestore
-      await setDoc(doc(firestore, "users", user.uid), {
+      const profileData = {
         name: values.name,
         email: values.email,
         phone: "",
         postalCode: "",
         avatarUrl: "",
-      });
+      };
+      const userDocRef = doc(firestore, "users", user.uid);
+
+      // Create a user profile document in Firestore
+      setDoc(userDocRef, profileData)
+        .catch(async (serverError) => {
+            const permissionError = new FirestorePermissionError({
+              path: userDocRef.path,
+              operation: 'create',
+              requestResourceData: profileData,
+            });
+            errorEmitter.emit('permission-error', permissionError);
+        });
       
       toast({
         title: "Account Created!",

@@ -23,6 +23,8 @@ import { useToast } from "@/hooks/use-toast";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Camera } from "lucide-react";
 import { useAuth, UserProfile } from "@/contexts/AuthContext";
+import { errorEmitter } from "@/firebase/error-emitter";
+import { FirestorePermissionError } from "@/firebase/errors";
 
 const profileSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
@@ -74,26 +76,29 @@ export function ProfileForm({ profileData }: ProfileFormProps) {
         return;
     }
 
-    try {
-        const userDocRef = doc(firestore, "users", user.uid);
-        await setDoc(userDocRef, {
-            name: values.name,
-            email: values.email,
-            phone: values.phone,
-            postalCode: values.postalCode,
-            avatarUrl: values.avatarUrl,
-        }, { merge: true });
-        toast({
-            title: "Profile Updated",
-            description: "Your information has been saved successfully.",
+    const userDocRef = doc(firestore, "users", user.uid);
+    const updatedData = {
+        name: values.name,
+        email: values.email,
+        phone: values.phone,
+        postalCode: values.postalCode,
+        avatarUrl: values.avatarUrl,
+    };
+    
+    setDoc(userDocRef, updatedData, { merge: true })
+        .catch(async (serverError) => {
+            const permissionError = new FirestorePermissionError({
+              path: userDocRef.path,
+              operation: 'update',
+              requestResourceData: updatedData,
+            });
+            errorEmitter.emit('permission-error', permissionError);
         });
-    } catch (error: any) {
-        toast({
-            variant: "destructive",
-            title: "Update Failed",
-            description: error.message || "Could not update profile.",
-        });
-    }
+
+    toast({
+        title: "Profile Updated",
+        description: "Your information has been saved successfully.",
+    });
   }
 
   return (

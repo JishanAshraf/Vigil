@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils';
 import { AlertsProvider } from '@/contexts/AlertsContext';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { FirebaseClientProvider } from '@/firebase/client-provider';
+import { FirebaseErrorListener } from '@/components/FirebaseErrorListener';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 const headlineFont = Playfair_Display({ subsets: ['latin'], variable: '--font-headline', weight: '400' });
@@ -29,6 +30,7 @@ export default function RootLayout({
           <FirebaseClientProvider>
             <AuthProvider>
               <AlertsProvider>
+                <FirebaseErrorListener />
                 {children}
                 <Toaster />
               </AlertsProvider>
