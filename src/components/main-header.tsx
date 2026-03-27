@@ -57,7 +57,7 @@ export function MainHeader() {
                 <Link
                   href="/report-issue"
                   onClick={() => setIsSheetOpen(false)}
-                  className={cn("flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary", (isLoading || !user) && "pointer-events-none opacity-50")}
+                  className={cn("flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary", (isLoading || !firebaseUser) && "pointer-events-none opacity-50")}
                 >
                   <Flag className="h-5 w-5" />
                   Report an Issue
@@ -113,7 +113,7 @@ export function MainHeader() {
                 if (item.isCentral) {
                   return (
                     <div key={item.href} className="flex justify-center -mt-8">
-                       <Button asChild size="icon" className={cn("glossy-button bg-primary hover:bg-primary/90 rounded-full h-16 w-16 shadow-lg border-4 border-background", (isLoading || !user) && "bg-muted pointer-events-none")}>
+                       <Button asChild size="icon" className={cn("glossy-button bg-primary hover:bg-primary/90 rounded-full h-16 w-16 shadow-lg border-4 border-background", (isLoading || !firebaseUser) && "bg-muted pointer-events-none")}>
                         <Link href={item.href}>
                             <item.icon className="h-7 w-7 text-primary-foreground" />
                         </Link>
@@ -180,7 +180,7 @@ export function MainHeader() {
                 href="/report-issue"
                 className={cn(
                   "group glossy-button flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all duration-300 hover:bg-primary/10 hover:text-primary",
-                  (isLoading || !user) && "pointer-events-none opacity-50"
+                  (isLoading || !firebaseUser) && "pointer-events-none opacity-50"
                 )}
               >
                 <Flag className="h-5 w-5" />

@@ -10,7 +10,7 @@ import Link from 'next/link';
 
 
 export default function ReportIssuePage() {
-  const { user, isLoading } = useAuth();
+  const { firebaseUser, isLoading } = useAuth();
 
   if(isLoading) {
     return (
@@ -37,7 +37,7 @@ export default function ReportIssuePage() {
     )
   }
 
-  if(!user) {
+  if(!firebaseUser) {
      return (
        <>
         <MainHeader />
