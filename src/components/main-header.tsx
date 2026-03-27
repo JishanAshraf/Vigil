@@ -28,7 +28,7 @@ const mobileNavItems = [
 export function MainHeader() {
   const pathname = usePathname();
   const [isSheetOpen, setIsSheetOpen] = useState(false);
-  const { user, logout, isLoading, firebaseUser } = useAuth();
+  const { logout, isLoading, firebaseUser } = useAuth();
 
   return (
     <>
@@ -44,7 +44,7 @@ export function MainHeader() {
              <SheetTitle className="sr-only">Sidebar Menu</SheetTitle>
             <div className="p-6">
               <nav className="mt-8 flex flex-col gap-2">
-                 {!isLoading && user && (
+                 {!isLoading && firebaseUser && (
                     <Link
                     href="/profile"
                     onClick={() => setIsSheetOpen(false)}
@@ -150,7 +150,7 @@ export function MainHeader() {
                     <span>{item.label}</span>
                 </Link>
             ))}
-            {!isLoading && user && (
+            {!isLoading && firebaseUser && (
                  <Link
                     key="desktop-profile"
                     href="/profile"
