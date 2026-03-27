@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, ReactNode, useEffect, useMemo } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import type { Alert, User, Comment } from '@/lib/types';
 import { useAuth } from './AuthContext';
 import { useToast } from '@/hooks/use-toast';
@@ -30,7 +30,7 @@ export const AlertsProvider = ({ children }: { children: ReactNode }) => {
   const { user: authUser } = useAuth();
   const { toast } = useToast();
 
-  const alertsQuery = useMemo(() => query(collection(firestore, 'alerts'), orderBy('createdAt', 'desc')), []);
+  const alertsQuery = query(collection(firestore, 'alerts'), orderBy('createdAt', 'desc'));
   const { data: serverAlerts } = useCollection<Alert>(alertsQuery);
 
   const currentUser: User | null = authUser ? { id: authUser.uid, name: authUser.name, avatarUrl: authUser.avatarUrl } : null;
