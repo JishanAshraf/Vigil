@@ -1,16 +1,12 @@
-
 'use client';
 
-import React, { createContext, useContext, ReactNode, useMemo } from 'react';
-import { addDoc, collection, serverTimestamp, query, orderBy, doc, deleteDoc as fbDeleteDoc, runTransaction, updateDoc, arrayUnion } from 'firebase/firestore';
-import { formatDistanceToNow } from 'date-fns';
-
+import React, { createContext, useContext, useState, ReactNode } from 'react';
 import type { Alert, User, Comment } from '@/lib/types';
 import { useAuth } from './AuthContext';
-import { firestore } from '@/firebase';
-import { useCollection } from '@/firebase/firestore/use-collection';
-import { errorEmitter } from '@/firebase/error-emitter';
-import { FirestorePermissionError } from '@/firebase/errors';
+import { useToast } from '@/hooks/use-toast';
+import { mockAlerts } from '@/lib/mock-data';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 
 interface AlertsContextType {
   alerts: Alert[];
@@ -25,117 +21,90 @@ interface AlertsContextType {
 const AlertsContext = createContext<AlertsContextType | undefined>(undefined);
 
 export const AlertsProvider = ({ children }: { children: ReactNode }) => {
+  const [alerts, setAlerts] = useState<Alert[]>(mockAlerts);
   const { user: authUser } = useAuth();
-  
-  const alertsQuery = useMemo(() => {
-    return query(collection(firestore, 'alerts'), orderBy('timestamp', 'desc'));
-  }, []);
-
-  const { data: rawAlerts } = useCollection<Omit<Alert, 'timestamp'> & { timestamp: any }>(alertsQuery);
-
-  const alerts = useMemo(() => {
-    if (!rawAlerts) return [];
-    return rawAlerts.map(alert => ({
-        ...alert,
-        timestamp: alert.timestamp ? formatDistanceToNow(alert.timestamp.toDate(), { addSuffix: true }) : 'just now',
-        comments: alert.comments.map(comment => ({
-            ...comment,
-            timestamp: comment.timestamp ? formatDistanceToNow(new Date(comment.timestamp), {addSuffix: true}) : 'just now'
-        }))
-    }));
-  }, [rawAlerts]);
+  const { toast } = useToast();
 
   const currentUser: User | null = authUser ? { id: authUser.uid, name: authUser.name, avatarUrl: authUser.avatarUrl } : null;
 
   const addAlert = (newAlertData: Omit<Alert, 'id' | 'user' | 'timestamp' | 'comments' | 'status' | 'reporters'>) => {
     if (!currentUser) {
-        console.error("User must be logged in to add an alert.");
+        toast({
+            variant: "destructive",
+            title: "Authentication Required",
+            description: "You must be logged in to add an alert.",
+            action: <Button asChild variant="secondary"><Link href="/login">Login</Link></Button>
+        })
         return;
     }
-
-    const alertData = {
+    const newAlert: Alert = {
+      id: `alert-${Date.now()}`,
       ...newAlertData,
       user: currentUser,
-      timestamp: serverTimestamp(),
+      timestamp: 'just now',
       comments: [],
       status: 'Reported',
       reporters: [],
     };
-    
-    addDoc(collection(firestore, 'alerts'), alertData).catch(async (serverError) => {
-      const permissionError = new FirestorePermissionError({
-        path: 'alerts',
-        operation: 'create',
-        requestResourceData: alertData,
-      });
-      errorEmitter.emit('permission-error', permissionError);
-    });
+    setAlerts(prevAlerts => [newAlert, ...prevAlerts]);
   };
 
   const deleteAlert = (alertId: string) => {
-    const alertDocRef = doc(firestore, "alerts", alertId);
-    fbDeleteDoc(alertDocRef).catch(async (serverError) => {
-        const permissionError = new FirestorePermissionError({
-          path: alertDocRef.path,
-          operation: 'delete',
-        });
-        errorEmitter.emit('permission-error', permissionError);
-    });
+    setAlerts(prevAlerts => prevAlerts.filter(alert => alert.id !== alertId));
   };
   
   const toggleReport = (alertId: string) => {
-    if (!currentUser) return;
-    const alertDocRef = doc(firestore, 'alerts', alertId);
-
-    runTransaction(firestore, async (transaction) => {
-      const alertDoc = await transaction.get(alertDocRef);
-      if (!alertDoc.exists()) {
-        throw "Document does not exist!";
-      }
-
-      const currentReporters = alertDoc.data().reporters as User[];
-      const isReported = currentReporters.some(reporter => reporter.id === currentUser.id);
-
-      let newReporters: User[];
-      if (isReported) {
-        newReporters = currentReporters.filter(reporter => reporter.id !== currentUser.id);
-      } else {
-        const reporterData: User = { id: currentUser.id, name: currentUser.name, avatarUrl: currentUser.avatarUrl };
-        newReporters = [...currentReporters, reporterData];
-      }
-      transaction.update(alertDocRef, { reporters: newReporters });
-    }).catch(async (serverError) => {
-        const permissionError = new FirestorePermissionError({
-          path: alertDocRef.path,
-          operation: 'update',
-          requestResourceData: { reporters: '...' }
-        });
-        errorEmitter.emit('permission-error', permissionError);
-    });
+    if (!currentUser) {
+        toast({
+            variant: "destructive",
+            title: "Authentication Required",
+            description: "You must be logged in to report an issue.",
+            action: <Button asChild variant="secondary"><Link href="/login">Login</Link></Button>
+        })
+        return;
+    }
+    
+    setAlerts(prevAlerts => prevAlerts.map(alert => {
+        if (alert.id === alertId) {
+            const isReported = alert.reporters.some(reporter => reporter.id === currentUser.id);
+            let newReporters: User[];
+            if (isReported) {
+                newReporters = alert.reporters.filter(reporter => reporter.id !== currentUser.id);
+            } else {
+                 const reporterData: User = { id: currentUser.id, name: currentUser.name, avatarUrl: currentUser.avatarUrl };
+                newReporters = [...alert.reporters, reporterData];
+            }
+            return { ...alert, reporters: newReporters };
+        }
+        return alert;
+    }));
   };
 
   const addComment = (alertId: string, text: string) => {
-    if (!currentUser) return;
+    if (!currentUser) {
+        toast({
+            variant: "destructive",
+            title: "Authentication Required",
+            description: "You must be logged in to comment.",
+            action: <Button asChild variant="secondary"><Link href="/login">Login</Link></Button>
+        })
+        return;
+    }
 
-    const newComment: Omit<Comment, 'timestamp'> & { timestamp: string } = {
+    const newComment: Comment = {
         id: `comment-${Date.now()}`,
         user: currentUser,
-        timestamp: new Date().toISOString(),
+        timestamp: 'just now',
         text: text,
     };
     
-    const alertDocRef = doc(firestore, 'alerts', alertId);
-    
-    updateDoc(alertDocRef, { comments: arrayUnion(newComment) }).catch(async (serverError) => {
-        const permissionError = new FirestorePermissionError({
-          path: alertDocRef.path,
-          operation: 'update',
-          requestResourceData: { comments: '...' },
-        });
-        errorEmitter.emit('permission-error', permissionError);
-    });
+    setAlerts(prevAlerts => prevAlerts.map(alert => {
+        if (alert.id === alertId) {
+            return { ...alert, comments: [...alert.comments, newComment] };
+        }
+        return alert;
+    }));
   }
-
 
   const getUserAlerts = (userId: string) => {
     return alerts.filter(alert => alert.user.id === userId && !alert.isAnonymous);

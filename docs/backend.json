@@ -25,76 +25,6 @@
         }
       },
       "required": ["name"]
-    },
-    "Alert": {
-      "title": "Alert",
-      "description": "Represents a community-reported issue.",
-      "type": "object",
-      "properties": {
-        "user": {
-          "type": "object",
-          "properties": {
-            "id": { "type": "string" },
-            "name": { "type": "string" },
-            "avatarUrl": { "type": "string" }
-          },
-          "required": ["id", "name"]
-        },
-        "isAnonymous": { "type": "boolean" },
-        "timestamp": { "type": "string", "format": "date-time" },
-        "category": { "type": "string" },
-        "images": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "url": { "type": "string" },
-              "hint": { "type": "string" }
-            },
-            "required": ["url"]
-          }
-        },
-        "description": { "type": "string" },
-        "location": { "type": "string" },
-        "status": {
-          "type": "string",
-          "enum": ["Reported", "Authorities Notified", "Resolved"]
-        },
-        "comments": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "id": { "type": "string" },
-              "user": {
-                "type": "object",
-                "properties": {
-                  "id": { "type": "string" },
-                  "name": { "type": "string" },
-                  "avatarUrl": { "type": "string" }
-                },
-                "required": ["id", "name"]
-              },
-              "timestamp": { "type": "string" },
-              "text": { "type": "string" }
-            },
-            "required": ["id", "user", "timestamp", "text"]
-          }
-        },
-        "reporters": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "id": { "type": "string" },
-                    "name": { "type": "string" },
-                    "avatarUrl": { "type": "string" }
-                },
-                "required": ["id", "name"]
-            }
-        }
-      },
-      "required": ["user", "isAnonymous", "timestamp", "category", "description", "location", "status", "comments", "reporters"]
     }
   },
   "auth": {
@@ -106,12 +36,6 @@
         "$ref": "#/entities/UserProfile"
       },
       "description": "Stores user profile information."
-    },
-    "/alerts/{alertId}": {
-      "schema": {
-        "$ref": "#/entities/Alert"
-      },
-      "description": "Stores community-reported alerts."
     }
   }
 }
