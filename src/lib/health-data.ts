@@ -4,20 +4,23 @@ export type Vendor = {
   name: string;
   address: string;
   phone: string;
+  city: string;
 };
 
 export type Doctor = {
   id: string;
   name: string;
   specialty: string;
-  avatarUrl?: string;
   phone: string;
 };
 
 export const mockVendors: Vendor[] = [
-  { id: 'vendor-1', name: 'City Pharmacy', address: '123 Main St, Downtown', phone: '+919876543211' },
-  { id: 'vendor-2', name: 'Wellness Drugstore', address: '456 Oak Ave, Suburbia', phone: '+919876543212' },
-  { id: 'vendor-3', name: 'HealthFirst Meds', address: '789 Pine Ln, Uptown', phone: '+919876543213' },
+  { id: 'vendor-1', name: 'Apollo Pharmacy', address: '123 Arera Colony', phone: '+919876543211', city: 'Bhopal' },
+  { id: 'vendor-2', name: 'Wellness Forever', address: '456 MP Nagar', phone: '+919876543212', city: 'Bhopal' },
+  { id: 'vendor-3', name: 'Indore Medicos', address: '789 Vijay Nagar', phone: '+919876543213', city: 'Indore' },
+  { id: 'vendor-4', name: 'HealthFirst Medicals', address: '101 MG Road', phone: '+919876543214', city: 'Indore' },
+  { id: 'vendor-5', name: 'Gwalior Pharma', address: '212 Lashkar', phone: '+919876543215', city: 'Gwalior' },
+  { id: 'vendor-6', name: 'Jabalpur Health Store', address: '333 Civic Center', phone: '+919876543216', city: 'Jabalpur' },
 ];
 
 export const mockDoctors: Doctor[] = [

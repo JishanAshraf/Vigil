@@ -2,10 +2,9 @@
 import { SymptomChecker } from "@/components/symptom-checker";
 import { MainHeader } from "@/components/main-header";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { PrescriptionUploadForm } from "@/components/prescription-upload-form";
-import { NearbyVendors } from "@/components/nearby-vendors";
 import { DoctorList } from "@/components/doctor-list";
 import { BriefcaseMedical, Pill, Stethoscope } from "lucide-react";
+import { OrderMedicinesTab } from "@/components/order-medicines-tab";
 
 
 export default function HealthPage() {
@@ -32,10 +31,7 @@ export default function HealthPage() {
                         <SymptomChecker />
                     </TabsContent>
                     <TabsContent value="order" className="mt-6">
-                        <div className="space-y-8">
-                            <PrescriptionUploadForm />
-                            <NearbyVendors />
-                        </div>
+                        <OrderMedicinesTab />
                     </TabsContent>
                     <TabsContent value="doctor" className="mt-6">
                         <DoctorList />
