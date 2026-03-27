@@ -43,4 +43,21 @@ export const mockDoctors: Doctor[] = [
   { id: 'doc-8', name: 'Dr. Sameer Khan', specialty: 'Cardiologist', phone: '+919876543238', city: 'Bhopal' },
   { id: 'doc-9', name: 'Dr. Meera Iyer', specialty: 'Pediatrician', phone: '+919876543239', city: 'Ujjain' },
   { id: 'doc-10', name: 'Dr. Raj Kumar', specialty: 'General Physician', phone: '+919876543240', city: 'Jabalpur' },
+  
+  // Adding more doctors to cover all city/specialty combinations
+  { id: 'doc-11', name: 'Dr. Aarav Singh', specialty: 'Pediatrician', phone: '+919876543241', city: 'Bhopal' },
+  { id: 'doc-12', name: 'Dr. Ishaan Mishra', specialty: 'Orthopedic Surgeon', phone: '+919876543242', city: 'Bhopal' },
+  { id: 'doc-13', name: 'Dr. Diya Verma', specialty: 'General Physician', phone: '+919876543243', city: 'Indore' },
+  { id: 'doc-14', name: 'Dr. Kabir Yadav', specialty: 'Orthopedic Surgeon', phone: '+919876543244', city: 'Indore' },
+  { id: 'doc-15', name: 'Dr. Shanaya Kumar', specialty: 'Cardiologist', phone: '+919876543245', city: 'Gwalior' },
+  { id: 'doc-16', name: 'Dr. Advik Sharma', specialty: 'Dermatologist', phone: '+919876543246', city: 'Gwalior' },
+  { id: 'doc-17', name: 'Dr. Myra Gupta', specialty: 'Pediatrician', phone: '+919876543247', city: 'Gwalior' },
+  { id: 'doc-18', name: 'Dr. Reyansh Patil', specialty: 'Orthopedic Surgeon', phone: '+919876543248', city: 'Gwalior' },
+  { id: 'doc-19', name: 'Dr. Anika Singh', specialty: 'Cardiologist', phone: '+919876543249', city: 'Jabalpur' },
+  { id: 'doc-20', name: 'Dr. Vihaan Reddy', specialty: 'Dermatologist', phone: '+919876543250', city: 'Jabalpur' },
+  { id: 'doc-21', name: 'Dr. Zara Khan', specialty: 'Pediatrician', phone: '+919876543251', city: 'Jabalpur' },
+  { id: 'doc-22', name: 'Dr. Sai Joshi', specialty: 'General Physician', phone: '+919876543252', city: 'Ujjain' },
+  { id: 'doc-23', name: 'Dr. Vivaan Mehta', specialty: 'Cardiologist', phone: '+919876543253', city: 'Ujjain' },
+  { id: 'doc-24', name: 'Dr. Kiara Iyer', specialty: 'Dermatologist', phone: '+919876543254', city: 'Ujjain' },
+  { id: 'doc-25', name: 'Dr. Ayaan Kumar', specialty: 'Orthopedic Surgeon', phone: '+919876543255', city: 'Ujjain' },
 ];
