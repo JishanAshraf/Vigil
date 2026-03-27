@@ -39,16 +39,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setFirebaseUser(fbUser);
       if (fbUser) {
         const userDocRef = doc(firestore, "users", fbUser.uid);
-        getDoc(userDocRef).then(userDoc => {
+        try {
+          const userDoc = await getDoc(userDocRef);
           if (userDoc.exists()) {
             const userData = userDoc.data();
-            setUser({ 
-              uid: fbUser.uid, 
-              email: fbUser.email!, 
+            setUser({
+              uid: fbUser.uid,
+              email: fbUser.email!,
               name: userData.name || fbUser.displayName || 'New User',
               phone: userData.phone,
               postalCode: userData.postalCode,
-              avatarUrl: userData.avatarUrl
+              avatarUrl: userData.avatarUrl,
             });
           } else {
             // If firestore doc doesn't exist, create a default profile object.
@@ -62,43 +63,48 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
               avatarUrl: fbUser.photoURL || '',
             });
           }
-        }).catch(async (error: any) => {
-            if (error.code === 'permission-denied') {
-                const permissionError = new FirestorePermissionError({
-                    path: userDocRef.path,
-                    operation: 'get',
-                });
-                errorEmitter.emit('permission-error', permissionError);
-            } else if (error.code === 'failed-precondition' || 
-                (error.message && error.message.includes('firestore service is not available')) ||
-                (error.message && error.message.includes('client is offline'))) {
-                 toast({
-                    variant: "destructive",
-                    title: "Action Required: Enable Firestore Database",
-                    description: "Go to your Firebase project -> Build -> Firestore Database and click 'Create database'. This is a required step for new projects.",
-                    duration: 15000,
-                });
-            } else {
-                toast({
-                    variant: "destructive",
-                    title: "Database Error",
-                    description: `Could not retrieve your profile: ${error.message}`,
-                });
-            }
-            // Fallback to a default user object to avoid breaking the UI
-            setUser({
-              uid: fbUser.uid,
-              name: fbUser.displayName || 'New User',
-              email: fbUser.email!,
-              phone: fbUser.phoneNumber || '',
-              postalCode: '',
-              avatarUrl: fbUser.photoURL || '',
+        } catch (error: any) {
+          if (error.code === 'permission-denied') {
+            const permissionError = new FirestorePermissionError({
+              path: userDocRef.path,
+              operation: 'get',
             });
-        });
+            errorEmitter.emit('permission-error', permissionError);
+          } else if (
+            error.code === 'failed-precondition' ||
+            (error.message && error.message.includes('firestore service is not available')) ||
+            (error.message && error.message.includes('client is offline'))
+          ) {
+            toast({
+              variant: 'destructive',
+              title: 'Action Required: Enable Firestore Database',
+              description:
+                "Go to your Firebase project -> Build -> Firestore Database and click 'Create database'. This is a required step for new projects.",
+              duration: 15000,
+            });
+          } else {
+            toast({
+              variant: 'destructive',
+              title: 'Database Error',
+              description: `Could not retrieve your profile: ${error.message}`,
+            });
+          }
+          // Fallback to a default user object to avoid breaking the UI
+          setUser({
+            uid: fbUser.uid,
+            name: fbUser.displayName || 'New User',
+            email: fbUser.email!,
+            phone: fbUser.phoneNumber || '',
+            postalCode: '',
+            avatarUrl: fbUser.photoURL || '',
+          });
+        } finally {
+          setIsLoading(false);
+        }
       } else {
         setUser(null);
+        setIsLoading(false);
       }
-      setIsLoading(false);
     });
 
     return () => unsubscribe();
