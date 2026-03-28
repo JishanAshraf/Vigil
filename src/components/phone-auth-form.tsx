@@ -55,7 +55,16 @@ export function PhoneAuthForm() {
         toast({ title: "OTP Sent!", description: "Please enter the OTP you received." });
     } catch (error: any) {
         console.error(error);
-        toast({ variant: "destructive", title: "Failed to send OTP", description: "Could not send verification code. Please check your phone number and try again." });
+        if (error.code === 'auth/operation-not-allowed') {
+            toast({
+                variant: "destructive",
+                title: "Action Required: Enable Phone Sign-In",
+                description: "Phone number sign-in is not enabled in your Firebase project. Please enable it in the Firebase Console.",
+                duration: 10000,
+            });
+        } else {
+            toast({ variant: "destructive", title: "Failed to send OTP", description: "Could not send verification code. Please check your phone number and try again." });
+        }
     } finally {
         setIsSubmitting(false);
     }
