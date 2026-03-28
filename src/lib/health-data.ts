@@ -5,6 +5,7 @@ export type Vendor = {
   address: string;
   phone: string;
   city: string;
+  colony: string;
 };
 
 export type Doctor = {
@@ -16,20 +17,20 @@ export type Doctor = {
 };
 
 export const mockVendors: Vendor[] = [
-  { id: 'vendor-1', name: 'Apollo Pharmacy', address: '123 Arera Colony', phone: '+919876543211', city: 'Bhopal' },
-  { id: 'vendor-2', name: 'Wellness Forever', address: '456 MP Nagar', phone: '+919876543212', city: 'Bhopal' },
-  { id: 'vendor-7', name: 'Frank Ross Pharmacy', address: '789 Kolar Road', phone: '+919876543217', city: 'Bhopal' },
-  { id: 'vendor-8', name: 'City Medical Store', address: '101 Berasia Road', phone: '+919876543218', city: 'Bhopal' },
-  { id: 'vendor-3', name: 'Indore Medicos', address: '789 Vijay Nagar', phone: '+919876543213', city: 'Indore' },
-  { id: 'vendor-4', name: 'HealthFirst Medicals', address: '101 MG Road', phone: '+919876543214', city: 'Indore' },
-  { id: 'vendor-9', name: 'Shreeji Medicos', address: '45 Palace Colony', phone: '+919876543219', city: 'Indore' },
-  { id: 'vendor-10', name: 'Get Well Pharmacy', address: '56 Annapurna Road', phone: '+919876543220', city: 'Indore' },
-  { id: 'vendor-5', name: 'Gwalior Pharma', address: '212 Lashkar', phone: '+919876543215', city: 'Gwalior' },
-  { id: 'vendor-11', name: 'Lashkar Medicos', address: '55 City Center', phone: '+919876543225', city: 'Gwalior' },
-  { id: 'vendor-6', name: 'Jabalpur Health Store', address: '333 Civic Center', phone: '+919876543216', city: 'Jabalpur' },
-  { id: 'vendor-12', name: 'Narmada Pharmacy', address: '77 Russel Chowk', phone: '+919876543226', city: 'Jabalpur' },
-  { id: 'vendor-13', name: 'Mahakal Medicals', address: '88 Mahakal Marg', phone: '+919876543227', city: 'Ujjain' },
-  { id: 'vendor-14', name: 'Ujjain Pharma', address: '99 Freeganj', phone: '+919876543228', city: 'Ujjain' },
+  { id: 'vendor-1', name: 'Apollo Pharmacy', address: '123 Arera Colony', phone: '+919876543211', city: 'Bhopal', colony: 'Arera Colony' },
+  { id: 'vendor-2', name: 'Wellness Forever', address: '456 MP Nagar', phone: '+919876543212', city: 'Bhopal', colony: 'MP Nagar' },
+  { id: 'vendor-7', name: 'Frank Ross Pharmacy', address: '789 Kolar Road', phone: '+919876543217', city: 'Bhopal', colony: 'Kolar Road' },
+  { id: 'vendor-8', name: 'City Medical Store', address: '101 Berasia Road', phone: '+919876543218', city: 'Bhopal', colony: 'Berasia Road' },
+  { id: 'vendor-3', name: 'Indore Medicos', address: '789 Vijay Nagar', phone: '+919876543213', city: 'Indore', colony: 'Vijay Nagar' },
+  { id: 'vendor-4', name: 'HealthFirst Medicals', address: '101 MG Road', phone: '+919876543214', city: 'Indore', colony: 'MG Road' },
+  { id: 'vendor-9', name: 'Shreeji Medicos', address: '45 Palace Colony', phone: '+919876543219', city: 'Indore', colony: 'Palace Colony' },
+  { id: 'vendor-10', name: 'Get Well Pharmacy', address: '56 Annapurna Road', phone: '+919876543220', city: 'Indore', colony: 'Annapurna Road' },
+  { id: 'vendor-5', name: 'Gwalior Pharma', address: '212 Lashkar', phone: '+919876543215', city: 'Gwalior', colony: 'Lashkar' },
+  { id: 'vendor-11', name: 'Lashkar Medicos', address: '55 City Center', phone: '+919876543225', city: 'Gwalior', colony: 'City Center' },
+  { id: 'vendor-6', name: 'Jabalpur Health Store', address: '333 Civic Center', phone: '+919876543216', city: 'Jabalpur', colony: 'Civic Center' },
+  { id: 'vendor-12', name: 'Narmada Pharmacy', address: '77 Russel Chowk', phone: '+919876543226', city: 'Jabalpur', colony: 'Russel Chowk' },
+  { id: 'vendor-13', name: 'Mahakal Medicals', address: '88 Mahakal Marg', phone: '+919876543227', city: 'Ujjain', colony: 'Mahakal Marg' },
+  { id: 'vendor-14', name: 'Ujjain Pharma', address: '99 Freeganj', phone: '+919876543228', city: 'Ujjain', colony: 'Freeganj' },
 ];
 
 export const mockDoctors: Doctor[] = [
