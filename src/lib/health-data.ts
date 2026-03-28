@@ -14,6 +14,7 @@ export type Doctor = {
   specialty: string;
   phone: string;
   city: string;
+  colony: string;
 };
 
 export const mockVendors: Vendor[] = [
@@ -34,62 +35,63 @@ export const mockVendors: Vendor[] = [
 ];
 
 export const mockDoctors: Doctor[] = [
-  { id: 'doc-1', name: 'Dr. Priya Sharma', specialty: 'General Physician', phone: '+919876543231', city: 'Bhopal' },
-  { id: 'doc-2', name: 'Dr. Rohan Gupta', specialty: 'Cardiologist', phone: '+919876543232', city: 'Indore' },
-  { id: 'doc-3', name: 'Dr. Ananya Reddy', specialty: 'Dermatologist', phone: '+919876543233', city: 'Bhopal' },
-  { id: 'doc-4', name: 'Dr. Vikram Singh', specialty: 'Pediatrician', phone: '+919876543234', city: 'Indore' },
-  { id: 'doc-5', name: 'Dr. Sunita Patel', specialty: 'General Physician', phone: '+919876543235', city: 'Gwalior' },
-  { id: 'doc-6', name: 'Dr. Arjun Mehta', specialty: 'Orthopedic Surgeon', phone: '+919876543236', city: 'Jabalpur' },
-  { id: 'doc-7', name: 'Dr. Kavita Joshi', specialty: 'Dermatologist', phone: '+919876543237', city: 'Indore' },
-  { id: 'doc-8', name: 'Dr. Sameer Khan', specialty: 'Cardiologist', phone: '+919876543238', city: 'Bhopal' },
-  { id: 'doc-9', name: 'Dr. Meera Iyer', specialty: 'Pediatrician', phone: '+919876543239', city: 'Ujjain' },
-  { id: 'doc-10', name: 'Dr. Raj Kumar', specialty: 'General Physician', phone: '+919876543240', city: 'Jabalpur' },
-  
-  // Adding more doctors to cover all city/specialty combinations
-  { id: 'doc-11', name: 'Dr. Aarav Singh', specialty: 'Pediatrician', phone: '+919876543241', city: 'Bhopal' },
-  { id: 'doc-12', name: 'Dr. Ishaan Mishra', specialty: 'Orthopedic Surgeon', phone: '+919876543242', city: 'Bhopal' },
-  { id: 'doc-13', name: 'Dr. Diya Verma', specialty: 'General Physician', phone: '+919876543243', city: 'Indore' },
-  { id: 'doc-14', name: 'Dr. Kabir Yadav', specialty: 'Orthopedic Surgeon', phone: '+919876543244', city: 'Indore' },
-  { id: 'doc-15', name: 'Dr. Shanaya Kumar', specialty: 'Cardiologist', phone: '+919876543245', city: 'Gwalior' },
-  { id: 'doc-16', name: 'Dr. Advik Sharma', specialty: 'Dermatologist', phone: '+919876543246', city: 'Gwalior' },
-  { id: 'doc-17', name: 'Dr. Myra Gupta', specialty: 'Pediatrician', phone: '+919876543247', city: 'Gwalior' },
-  { id: 'doc-18', name: 'Dr. Reyansh Patil', specialty: 'Orthopedic Surgeon', phone: '+919876543248', city: 'Gwalior' },
-  { id: 'doc-19', name: 'Dr. Anika Singh', specialty: 'Cardiologist', phone: '+919876543249', city: 'Jabalpur' },
-  { id: 'doc-20', name: 'Dr. Vihaan Reddy', specialty: 'Dermatologist', phone: '+919876543250', city: 'Jabalpur' },
-  { id: 'doc-21', name: 'Dr. Zara Khan', specialty: 'Pediatrician', phone: '+919876543251', city: 'Jabalpur' },
-  { id: 'doc-22', name: 'Dr. Sai Joshi', specialty: 'General Physician', phone: '+919876543252', city: 'Ujjain' },
-  { id: 'doc-23', name: 'Dr. Vivaan Mehta', specialty: 'Cardiologist', phone: '+919876543253', city: 'Ujjain' },
-  { id: 'doc-24', name: 'Dr. Kiara Iyer', specialty: 'Dermatologist', phone: '+919876543254', city: 'Ujjain' },
-  { id: 'doc-25', name: 'Dr. Ayaan Kumar', specialty: 'Orthopedic Surgeon', phone: '+919876543255', city: 'Ujjain' },
-  
-    // Adding more doctors to ensure multiple options
-  { id: 'doc-26', name: 'Dr. Aditi Singh', specialty: 'General Physician', phone: '+919876543256', city: 'Bhopal' },
-  { id: 'doc-27', name: 'Dr. Rajesh Verma', specialty: 'Cardiologist', phone: '+919876543257', city: 'Bhopal' },
-  { id: 'doc-28', name: 'Dr. Neha Jain', specialty: 'Dermatologist', phone: '+919876543258', city: 'Bhopal' },
-  { id: 'doc-29', name: 'Dr. Alok Tiwari', specialty: 'Pediatrician', phone: '+919876543259', city: 'Bhopal' },
-  { id: 'doc-30', name: 'Dr. Pooja Rao', specialty: 'Orthopedic Surgeon', phone: '+919876543260', city: 'Bhopal' },
+  // Bhopal
+  { id: 'doc-1', name: 'Dr. Priya Sharma', specialty: 'General Physician', phone: '+919876543231', city: 'Bhopal', colony: 'Arera Colony' },
+  { id: 'doc-3', name: 'Dr. Ananya Reddy', specialty: 'Dermatologist', phone: '+919876543233', city: 'Bhopal', colony: 'MP Nagar' },
+  { id: 'doc-8', name: 'Dr. Sameer Khan', specialty: 'Cardiologist', phone: '+919876543238', city: 'Bhopal', colony: 'Kolar Road' },
+  { id: 'doc-11', name: 'Dr. Aarav Singh', specialty: 'Pediatrician', phone: '+919876543241', city: 'Bhopal', colony: 'Arera Colony' },
+  { id: 'doc-12', name: 'Dr. Ishaan Mishra', specialty: 'Orthopedic Surgeon', phone: '+919876543242', city: 'Bhopal', colony: 'MP Nagar' },
+  { id: 'doc-26', name: 'Dr. Aditi Singh', specialty: 'General Physician', phone: '+919876543256', city: 'Bhopal', colony: 'Kolar Road' },
+  { id: 'doc-27', name: 'Dr. Rajesh Verma', specialty: 'Cardiologist', phone: '+919876543257', city: 'Bhopal', colony: 'Arera Colony' },
+  { id: 'doc-28', name: 'Dr. Neha Jain', specialty: 'Dermatologist', phone: '+919876543258', city: 'Bhopal', colony: 'MP Nagar' },
+  { id: 'doc-29', name: 'Dr. Alok Tiwari', specialty: 'Pediatrician', phone: '+919876543259', city: 'Bhopal', colony: 'Kolar Road' },
+  { id: 'doc-30', name: 'Dr. Pooja Rao', specialty: 'Orthopedic Surgeon', phone: '+919876543260', city: 'Bhopal', colony: 'Arera Colony' },
 
-  { id: 'doc-31', name: 'Dr. Sanjay Kumar', specialty: 'General Physician', phone: '+919876543261', city: 'Indore' },
-  { id: 'doc-32', name: 'Dr. Meenakshi Iyer', specialty: 'Cardiologist', phone: '+919876543262', city: 'Indore' },
-  { id: 'doc-33', name: 'Dr. Ashok Menon', specialty: 'Dermatologist', phone: '+919876543263', city: 'Indore' },
-  { id: 'doc-34', name: 'Dr. Sneha Desai', specialty: 'Pediatrician', phone: '+919876543264', city: 'Indore' },
-  { id: 'doc-35', name: 'Dr. Rahul Nair', specialty: 'Orthopedic Surgeon', phone: '+919876543265', city: 'Indore' },
+  // Indore
+  { id: 'doc-2', name: 'Dr. Rohan Gupta', specialty: 'Cardiologist', phone: '+919876543232', city: 'Indore', colony: 'Vijay Nagar' },
+  { id: 'doc-4', name: 'Dr. Vikram Singh', specialty: 'Pediatrician', phone: '+919876543234', city: 'Indore', colony: 'MG Road' },
+  { id: 'doc-7', name: 'Dr. Kavita Joshi', specialty: 'Dermatologist', phone: '+919876543237', city: 'Indore', colony: 'Palace Colony' },
+  { id: 'doc-13', name: 'Dr. Diya Verma', specialty: 'General Physician', phone: '+919876543243', city: 'Indore', colony: 'Vijay Nagar' },
+  { id: 'doc-14', name: 'Dr. Kabir Yadav', specialty: 'Orthopedic Surgeon', phone: '+919876543244', city: 'Indore', colony: 'MG Road' },
+  { id: 'doc-31', name: 'Dr. Sanjay Kumar', specialty: 'General Physician', phone: '+919876543261', city: 'Indore', colony: 'Palace Colony' },
+  { id: 'doc-32', name: 'Dr. Meenakshi Iyer', specialty: 'Cardiologist', phone: '+919876543262', city: 'Indore', colony: 'Vijay Nagar' },
+  { id: 'doc-33', name: 'Dr. Ashok Menon', specialty: 'Dermatologist', phone: '+919876543263', city: 'Indore', colony: 'MG Road' },
+  { id: 'doc-34', name: 'Dr. Sneha Desai', specialty: 'Pediatrician', phone: '+919876543264', city: 'Indore', colony: 'Palace Colony' },
+  { id: 'doc-35', name: 'Dr. Rahul Nair', specialty: 'Orthopedic Surgeon', phone: '+919876543265', city: 'Indore', colony: 'Vijay Nagar' },
 
-  { id: 'doc-36', name: 'Dr. Ritu Sharma', specialty: 'General Physician', phone: '+919876543266', city: 'Gwalior' },
-  { id: 'doc-37', name: 'Dr. Manish Sisodia', specialty: 'Cardiologist', phone: '+919876543267', city: 'Gwalior' },
-  { id: 'doc-38', name: 'Dr. Preeti Agarwal', specialty: 'Dermatologist', phone: '+919876543268', city: 'Gwalior' },
-  { id: 'doc-39', name: 'Dr. Girish Pandey', specialty: 'Pediatrician', phone: '+919876543269', city: 'Gwalior' },
-  { id: 'doc-40', name: 'Dr. Bhavna Soni', specialty: 'Orthopedic Surgeon', phone: '+919876543270', city: 'Gwalior' },
+  // Gwalior
+  { id: 'doc-5', name: 'Dr. Sunita Patel', specialty: 'General Physician', phone: '+919876543235', city: 'Gwalior', colony: 'Lashkar' },
+  { id: 'doc-15', name: 'Dr. Shanaya Kumar', specialty: 'Cardiologist', phone: '+919876543245', city: 'Gwalior', colony: 'City Center' },
+  { id: 'doc-16', name: 'Dr. Advik Sharma', specialty: 'Dermatologist', phone: '+919876543246', city: 'Gwalior', colony: 'Lashkar' },
+  { id: 'doc-17', name: 'Dr. Myra Gupta', specialty: 'Pediatrician', phone: '+919876543247', city: 'Gwalior', colony: 'City Center' },
+  { id: 'doc-18', name: 'Dr. Reyansh Patil', specialty: 'Orthopedic Surgeon', phone: '+919876543248', city: 'Gwalior', colony: 'Lashkar' },
+  { id: 'doc-36', name: 'Dr. Ritu Sharma', specialty: 'General Physician', phone: '+919876543266', city: 'Gwalior', colony: 'City Center' },
+  { id: 'doc-37', name: 'Dr. Manish Sisodia', specialty: 'Cardiologist', phone: '+919876543267', city: 'Gwalior', colony: 'Lashkar' },
+  { id: 'doc-38', name: 'Dr. Preeti Agarwal', specialty: 'Dermatologist', phone: '+919876543268', city: 'Gwalior', colony: 'City Center' },
+  { id: 'doc-39', name: 'Dr. Girish Pandey', specialty: 'Pediatrician', phone: '+919876543269', city: 'Gwalior', colony: 'Lashkar' },
+  { id: 'doc-40', name: 'Dr. Bhavna Soni', specialty: 'Orthopedic Surgeon', phone: '+919876543270', city: 'Gwalior', colony: 'City Center' },
 
-  { id: 'doc-41', name: 'Dr. Deepak Dubey', specialty: 'General Physician', phone: '+919876543271', city: 'Jabalpur' },
-  { id: 'doc-42', name: 'Dr. Swati Mishra', specialty: 'Cardiologist', phone: '+919876543272', city: 'Jabalpur' },
-  { id: 'doc-43', name: 'Dr. Harish Patel', specialty: 'Dermatologist', phone: '+919876543273', city: 'Jabalpur' },
-  { id: 'doc-44', name: 'Dr. Geeta Choudhary', specialty: 'Pediatrician', phone: '+919876543274', city: 'Jabalpur' },
-  { id: 'doc-45', name: 'Dr. Anand Shrivastava', specialty: 'Orthopedic Surgeon', phone: '+919876543275', city: 'Jabalpur' },
+  // Jabalpur
+  { id: 'doc-6', name: 'Dr. Arjun Mehta', specialty: 'Orthopedic Surgeon', phone: '+919876543236', city: 'Jabalpur', colony: 'Civic Center' },
+  { id: 'doc-10', name: 'Dr. Raj Kumar', specialty: 'General Physician', phone: '+919876543240', city: 'Jabalpur', colony: 'Russel Chowk' },
+  { id: 'doc-19', name: 'Dr. Anika Singh', specialty: 'Cardiologist', phone: '+919876543249', city: 'Jabalpur', colony: 'Civic Center' },
+  { id: 'doc-20', name: 'Dr. Vihaan Reddy', specialty: 'Dermatologist', phone: '+919876543250', city: 'Jabalpur', colony: 'Russel Chowk' },
+  { id: 'doc-21', name: 'Dr. Zara Khan', specialty: 'Pediatrician', phone: '+919876543251', city: 'Jabalpur', colony: 'Civic Center' },
+  { id: 'doc-41', name: 'Dr. Deepak Dubey', specialty: 'General Physician', phone: '+919876543271', city: 'Jabalpur', colony: 'Russel Chowk' },
+  { id: 'doc-42', name: 'Dr. Swati Mishra', specialty: 'Cardiologist', phone: '+919876543272', city: 'Jabalpur', colony: 'Civic Center' },
+  { id: 'doc-43', name: 'Dr. Harish Patel', specialty: 'Dermatologist', phone: '+919876543273', city: 'Jabalpur', colony: 'Russel Chowk' },
+  { id: 'doc-44', name: 'Dr. Geeta Choudhary', specialty: 'Pediatrician', phone: '+919876543274', city: 'Jabalpur', colony: 'Civic Center' },
+  { id: 'doc-45', name: 'Dr. Anand Shrivastava', specialty: 'Orthopedic Surgeon', phone: '+919876543275', city: 'Jabalpur', colony: 'Russel Chowk' },
 
-  { id: 'doc-46', name: 'Dr. Nitin Joshi', specialty: 'General Physician', phone: '+919876543276', city: 'Ujjain' },
-  { id: 'doc-47', name: 'Dr. Sarika Maheshwari', specialty: 'Cardiologist', phone: '+919876543277', city: 'Ujjain' },
-  { id: 'doc-48', name: 'Dr. Pankaj Rathore', specialty: 'Dermatologist', phone: '+919876543278', city: 'Ujjain' },
-  { id: 'doc-49', name: 'Dr. Vandana Malviya', specialty: 'Pediatrician', phone: '+919876543279', city: 'Ujjain' },
-  { id: 'doc-50', name: 'Dr. Yogesh Yadav', specialty: 'Orthopedic Surgeon', phone: '+919876543280', city: 'Ujjain' },
+  // Ujjain
+  { id: 'doc-9', name: 'Dr. Meera Iyer', specialty: 'Pediatrician', phone: '+919876543239', city: 'Ujjain', colony: 'Mahakal Marg' },
+  { id: 'doc-22', name: 'Dr. Sai Joshi', specialty: 'General Physician', phone: '+919876543252', city: 'Ujjain', colony: 'Freeganj' },
+  { id: 'doc-23', name: 'Dr. Vivaan Mehta', specialty: 'Cardiologist', phone: '+919876543253', city: 'Ujjain', colony: 'Mahakal Marg' },
+  { id: 'doc-24', name: 'Dr. Kiara Iyer', specialty: 'Dermatologist', phone: '+919876543254', city: 'Ujjain', colony: 'Freeganj' },
+  { id: 'doc-25', name: 'Dr. Ayaan Kumar', specialty: 'Orthopedic Surgeon', phone: '+919876543255', city: 'Ujjain', colony: 'Mahakal Marg' },
+  { id: 'doc-46', name: 'Dr. Nitin Joshi', specialty: 'General Physician', phone: '+919876543276', city: 'Ujjain', colony: 'Freeganj' },
+  { id: 'doc-47', name: 'Dr. Sarika Maheshwari', specialty: 'Cardiologist', phone: '+919876543277', city: 'Ujjain', colony: 'Mahakal Marg' },
+  { id: 'doc-48', name: 'Dr. Pankaj Rathore', specialty: 'Dermatologist', phone: '+919876543278', city: 'Ujjain', colony: 'Freeganj' },
+  { id: 'doc-49', name: 'Dr. Vandana Malviya', specialty: 'Pediatrician', phone: '+919876543279', city: 'Ujjain', colony: 'Mahakal Marg' },
+  { id: 'doc-50', name: 'Dr. Yogesh Yadav', specialty: 'Orthopedic Surgeon', phone: '+919876543280', city: 'Ujjain', colony: 'Freeganj' },
 ];

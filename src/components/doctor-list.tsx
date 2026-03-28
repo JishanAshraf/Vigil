@@ -22,14 +22,29 @@ export function DoctorList() {
 
     const [selectedCity, setSelectedCity] = useState<string>('all');
     const [selectedSpecialty, setSelectedSpecialty] = useState<string>('all');
+    const [selectedColony, setSelectedColony] = useState<string>('all');
+
+    const colonies = useMemo(() => {
+        if (selectedCity === 'all') {
+            return [];
+        }
+        const cityDoctors = mockDoctors.filter(doctor => doctor.city === selectedCity);
+        return [...new Set(cityDoctors.map(doctor => doctor.colony))];
+    }, [selectedCity]);
+
+    const handleCityChange = (city: string) => {
+        setSelectedCity(city);
+        setSelectedColony('all');
+    };
 
     const filteredDoctors = useMemo(() => {
         return mockDoctors.filter(doctor => {
             const cityMatch = selectedCity === 'all' || doctor.city === selectedCity;
             const specialtyMatch = selectedSpecialty === 'all' || doctor.specialty === selectedSpecialty;
-            return cityMatch && specialtyMatch;
+            const colonyMatch = selectedCity === 'all' || selectedColony === 'all' || doctor.colony === selectedColony;
+            return cityMatch && specialtyMatch && colonyMatch;
         });
-    }, [selectedCity, selectedSpecialty]);
+    }, [selectedCity, selectedSpecialty, selectedColony]);
 
     const handleBookAppointment = () => {
         if (!selectedDoctor || !selectedTime) {
@@ -67,8 +82,8 @@ export function DoctorList() {
                 <CardDescription>Find and book appointments with healthcare professionals.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <Select onValueChange={setSelectedCity} value={selectedCity}>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <Select onValueChange={handleCityChange} value={selectedCity}>
                         <SelectTrigger className="w-full">
                             <SelectValue placeholder="Select City" />
                         </SelectTrigger>
@@ -76,6 +91,17 @@ export function DoctorList() {
                             <SelectItem value="all">All Cities</SelectItem>
                             {cities.map(city => (
                                 <SelectItem key={city} value={city}>{city}</SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                     <Select onValueChange={setSelectedColony} value={selectedColony} disabled={selectedCity === 'all'}>
+                        <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Select Colony" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="all">All Colonies</SelectItem>
+                            {colonies.map(colony => (
+                                <SelectItem key={colony} value={colony}>{colony}</SelectItem>
                             ))}
                         </SelectContent>
                     </Select>
@@ -102,7 +128,7 @@ export function DoctorList() {
                                     </Avatar>
                                     <div>
                                         <p className="font-semibold">{doctor.name}</p>
-                                        <p className="text-sm text-muted-foreground">{doctor.specialty} - {doctor.city}</p>
+                                        <p className="text-sm text-muted-foreground">{doctor.specialty} - {doctor.colony}, {doctor.city}</p>
                                     </div>
                                 </div>
                                 <Button 
