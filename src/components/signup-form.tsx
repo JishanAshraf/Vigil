@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useForm } from "react-hook-form";
@@ -7,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from 'next/link';
-import { Mail, KeyRound, User, Loader2 } from "lucide-react";
+import { Mail, KeyRound, User, Loader2, Phone } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "./ui/card";
 import { useToast } from '@/hooks/use-toast';
 import { Form, FormControl, FormField, FormItem, FormMessage } from "./ui/form";
@@ -100,7 +101,7 @@ export function SignUpForm() {
     <Card className="w-full max-w-sm">
       <CardHeader className="text-center">
         <CardTitle className="text-2xl">Create an Account</CardTitle>
-        <CardDescription>Enter your details to sign up.</CardDescription>
+        <CardDescription>Enter your details to sign up with email.</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -166,6 +167,19 @@ export function SignUpForm() {
         <div className="mt-4 text-center text-sm text-muted-foreground">
           Already have an account? <Link href="/login" className="underline font-semibold text-primary hover:text-primary/80">Login</Link>
         </div>
+
+        <div className="relative flex py-5 items-center">
+            <div className="flex-grow border-t border-muted-foreground/50"></div>
+            <span className="flex-shrink mx-4 text-muted-foreground text-xs">OR</span>
+            <div className="flex-grow border-t border-muted-foreground/50"></div>
+        </div>
+
+        <Button asChild variant="outline" className="w-full">
+            <Link href="/phone-login">
+                <Phone className="mr-2 h-4 w-4" />
+                Continue with Phone
+            </Link>
+        </Button>
       </CardContent>
     </Card>
   );

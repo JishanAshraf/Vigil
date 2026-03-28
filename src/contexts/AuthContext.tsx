@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
@@ -45,19 +46,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             const userData = userDoc.data();
             setUser({
               uid: fbUser.uid,
-              email: fbUser.email!,
+              email: userData.email || fbUser.email || '',
               name: userData.name || fbUser.displayName || 'New User',
-              phone: userData.phone,
+              phone: userData.phone || fbUser.phoneNumber || '',
               postalCode: userData.postalCode,
               avatarUrl: userData.avatarUrl,
             });
           } else {
             // If firestore doc doesn't exist, create a default profile object.
-            // The profile page will allow the user to fill in the details.
+            // This happens for new signups (especially phone auth).
             setUser({
               uid: fbUser.uid,
               name: fbUser.displayName || 'New User',
-              email: fbUser.email!,
+              email: fbUser.email || '',
               phone: fbUser.phoneNumber || '',
               postalCode: '',
               avatarUrl: fbUser.photoURL || '',
@@ -93,7 +94,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           setUser({
             uid: fbUser.uid,
             name: fbUser.displayName || 'New User',
-            email: fbUser.email!,
+            email: fbUser.email || '',
             phone: fbUser.phoneNumber || '',
             postalCode: '',
             avatarUrl: fbUser.photoURL || '',

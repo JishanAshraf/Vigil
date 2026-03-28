@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -8,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import Link from 'next/link';
 import { Checkbox } from "./ui/checkbox";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import { Mail, KeyRound, Loader2 } from "lucide-react";
+import { Mail, KeyRound, Loader2, Phone } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { signInWithEmailAndPassword } from "firebase/auth";
@@ -131,6 +132,19 @@ export function LoginForm() {
               Don&apos;t have an account? <Link href="/signup" className="underline font-semibold text-primary hover:text-primary/80">Sign Up</Link>
             </div>
         </form>
+
+        <div className="relative flex py-5 items-center">
+            <div className="flex-grow border-t border-muted-foreground/50"></div>
+            <span className="flex-shrink mx-4 text-muted-foreground text-xs">OR</span>
+            <div className="flex-grow border-t border-muted-foreground/50"></div>
+        </div>
+
+        <Button asChild variant="outline" className="w-full glossy-button">
+          <Link href="/phone-login">
+              <Phone className="mr-2 h-4 w-4"/>
+              Continue with Phone
+          </Link>
+        </Button>
       </CardContent>
     </Card>
   );
