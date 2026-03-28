@@ -46,6 +46,13 @@ export const mockDoctors: Doctor[] = [
   { id: 'doc-28', name: 'Dr. Neha Jain', specialty: 'Dermatologist', phone: '+919876543258', city: 'Bhopal', colony: 'MP Nagar' },
   { id: 'doc-29', name: 'Dr. Alok Tiwari', specialty: 'Pediatrician', phone: '+919876543259', city: 'Bhopal', colony: 'Kolar Road' },
   { id: 'doc-30', name: 'Dr. Pooja Rao', specialty: 'Orthopedic Surgeon', phone: '+919876543260', city: 'Bhopal', colony: 'Arera Colony' },
+  { id: 'doc-51', name: 'Dr. Rakesh Singh', specialty: 'General Physician', phone: '+919876543301', city: 'Bhopal', colony: 'Berasia Road' },
+  { id: 'doc-52', name: 'Dr. Sneha Verma', specialty: 'Cardiologist', phone: '+919876543302', city: 'Bhopal', colony: 'Berasia Road' },
+  { id: 'doc-53', name: 'Dr. Ankit Jain', specialty: 'Dermatologist', phone: '+919876543303', city: 'Bhopal', colony: 'Berasia Road' },
+  { id: 'doc-54', name: 'Dr. Priya Mehta', specialty: 'Pediatrician', phone: '+919876543304', city: 'Bhopal', colony: 'Berasia Road' },
+  { id: 'doc-55', name: 'Dr. Sameer Gupta', specialty: 'Orthopedic Surgeon', phone: '+919876543305', city: 'Bhopal', colony: 'Berasia Road' },
+  { id: 'doc-61', name: 'Dr. Ravi Sharma', specialty: 'General Physician', phone: '+919876543311', city: 'Bhopal', colony: 'MP Nagar' },
+  { id: 'doc-62', name: 'Dr. Kriti Sanon', specialty: 'Dermatologist', phone: '+919876543312', city: 'Bhopal', colony: 'Kolar Road' },
 
   // Indore
   { id: 'doc-2', name: 'Dr. Rohan Gupta', specialty: 'Cardiologist', phone: '+919876543232', city: 'Indore', colony: 'Vijay Nagar' },
@@ -58,6 +65,13 @@ export const mockDoctors: Doctor[] = [
   { id: 'doc-33', name: 'Dr. Ashok Menon', specialty: 'Dermatologist', phone: '+919876543263', city: 'Indore', colony: 'MG Road' },
   { id: 'doc-34', name: 'Dr. Sneha Desai', specialty: 'Pediatrician', phone: '+919876543264', city: 'Indore', colony: 'Palace Colony' },
   { id: 'doc-35', name: 'Dr. Rahul Nair', specialty: 'Orthopedic Surgeon', phone: '+919876543265', city: 'Indore', colony: 'Vijay Nagar' },
+  { id: 'doc-56', name: 'Dr. Mohan Kumar', specialty: 'General Physician', phone: '+919876543306', city: 'Indore', colony: 'Annapurna Road' },
+  { id: 'doc-57', name: 'Dr. Sunita Sharma', specialty: 'Cardiologist', phone: '+919876543307', city: 'Indore', colony: 'Annapurna Road' },
+  { id: 'doc-58', name: 'Dr. Vikram Patel', specialty: 'Dermatologist', phone: '+919876543308', city: 'Indore', colony: 'Annapurna Road' },
+  { id: 'doc-59', name: 'Dr. Aarti Singh', specialty: 'Pediatrician', phone: '+919876543309', city: 'Indore', colony: 'Annapurna Road' },
+  { id: 'doc-60', name: 'Dr. Rajendra Yadav', specialty: 'Orthopedic Surgeon', phone: '+919876543310', city: 'Indore', colony: 'Annapurna Road' },
+  { id: 'doc-63', name: 'Dr. Arjun Kapoor', specialty: 'General Physician', phone: '+919876543313', city: 'Indore', colony: 'MG Road' },
+  { id: 'doc-64', name: 'Dr. Anjali Mehta', specialty: 'Pediatrician', phone: '+919876543314', city: 'Indore', colony: 'Vijay Nagar' },
 
   // Gwalior
   { id: 'doc-5', name: 'Dr. Sunita Patel', specialty: 'General Physician', phone: '+919876543235', city: 'Gwalior', colony: 'Lashkar' },
@@ -70,6 +84,8 @@ export const mockDoctors: Doctor[] = [
   { id: 'doc-38', name: 'Dr. Preeti Agarwal', specialty: 'Dermatologist', phone: '+919876543268', city: 'Gwalior', colony: 'City Center' },
   { id: 'doc-39', name: 'Dr. Girish Pandey', specialty: 'Pediatrician', phone: '+919876543269', city: 'Gwalior', colony: 'Lashkar' },
   { id: 'doc-40', name: 'Dr. Bhavna Soni', specialty: 'Orthopedic Surgeon', phone: '+919876543270', city: 'Gwalior', colony: 'City Center' },
+  { id: 'doc-65', name: 'Dr. Suresh Raina', specialty: 'Cardiologist', phone: '+919876543315', city: 'Gwalior', colony: 'Lashkar' },
+  { id: 'doc-66', name: 'Dr. Geeta Phogat', specialty: 'Orthopedic Surgeon', phone: '+919876543316', city: 'Gwalior', colony: 'City Center' },
 
   // Jabalpur
   { id: 'doc-6', name: 'Dr. Arjun Mehta', specialty: 'Orthopedic Surgeon', phone: '+919876543236', city: 'Jabalpur', colony: 'Civic Center' },
@@ -82,6 +98,8 @@ export const mockDoctors: Doctor[] = [
   { id: 'doc-43', name: 'Dr. Harish Patel', specialty: 'Dermatologist', phone: '+919876543273', city: 'Jabalpur', colony: 'Russel Chowk' },
   { id: 'doc-44', name: 'Dr. Geeta Choudhary', specialty: 'Pediatrician', phone: '+919876543274', city: 'Jabalpur', colony: 'Civic Center' },
   { id: 'doc-45', name: 'Dr. Anand Shrivastava', specialty: 'Orthopedic Surgeon', phone: '+919876543275', city: 'Jabalpur', colony: 'Russel Chowk' },
+  { id: 'doc-67', name: 'Dr. Mohan Lal', specialty: 'General Physician', phone: '+919876543317', city: 'Jabalpur', colony: 'Civic Center' },
+  { id: 'doc-68', name: 'Dr. Suman Kumari', specialty: 'Dermatologist', phone: '+919876543318', city: 'Jabalpur', colony: 'Russel Chowk' },
 
   // Ujjain
   { id: 'doc-9', name: 'Dr. Meera Iyer', specialty: 'Pediatrician', phone: '+919876543239', city: 'Ujjain', colony: 'Mahakal Marg' },
@@ -94,4 +112,6 @@ export const mockDoctors: Doctor[] = [
   { id: 'doc-48', name: 'Dr. Pankaj Rathore', specialty: 'Dermatologist', phone: '+919876543278', city: 'Ujjain', colony: 'Freeganj' },
   { id: 'doc-49', name: 'Dr. Vandana Malviya', specialty: 'Pediatrician', phone: '+919876543279', city: 'Ujjain', colony: 'Mahakal Marg' },
   { id: 'doc-50', name: 'Dr. Yogesh Yadav', specialty: 'Orthopedic Surgeon', phone: '+919876543280', city: 'Ujjain', colony: 'Freeganj' },
+  { id: 'doc-69', name: 'Dr. Brijesh Kumar', specialty: 'General Physician', phone: '+919876543319', city: 'Ujjain', colony: 'Mahakal Marg' },
+  { id: 'doc-70', name: 'Dr. Chandni Sharma', specialty: 'Pediatrician', phone: '+919876543320', city: 'Ujjain', colony: 'Freeganj' },
 ];
