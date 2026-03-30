@@ -171,11 +171,11 @@ export function SignupForm() {
     return (
         <div className="text-center py-8 space-y-4">
             <Hourglass className="w-16 h-16 text-primary mx-auto mb-4 animate-spin" />
-            <h3 className="text-2xl font-bold">Waiting for Verification</h3>
+            <h3 className="text-2xl font-bold">Complete Verification</h3>
             <p className="text-base text-muted-foreground">
-                Your account has been created. A verification link has been sent to <span className="font-bold text-foreground">{email}</span>.
+                A verification link has been sent to <span className="font-bold text-foreground">{email}</span>. Click the link to finish signing up.
             </p>
-            <p className="text-sm text-muted-foreground">Please click the link in your email to continue. This page will update automatically.</p>
+            <p className="text-sm text-muted-foreground">This page will update automatically.</p>
         </div>
     )
   }
