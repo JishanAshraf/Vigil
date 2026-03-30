@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useForm } from "react-hook-form";
@@ -8,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from 'next/link';
-import { Mail, KeyRound, User, Loader2, Phone } from "lucide-react";
+import { Mail, KeyRound, User, Loader2, Phone, CheckCircle2, XCircle } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "./ui/card";
 import { useToast } from '@/hooks/use-toast';
 import { Form, FormControl, FormField, FormItem, FormMessage } from "./ui/form";
@@ -18,13 +17,37 @@ import { doc, setDoc } from "firebase/firestore";
 import { auth, firestore } from "@/firebase";
 import { errorEmitter } from "@/firebase/error-emitter";
 import { FirestorePermissionError } from "@/firebase/errors";
+import { cn } from "@/lib/utils";
 
+const checkPasswordStrength = (password: string) => ({
+    length: password.length >= 8,
+    uppercase: /[A-Z]/.test(password),
+    lowercase: /[a-z]/.test(password),
+    number: /[0-9]/.test(password),
+    special: /[\W_]/.test(password),
+});
 
 const formSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
   email: z.string().email({ message: "Please enter a valid email address." }),
-  password: z.string().min(6, { message: "Password must be at least 6 characters." }),
+  password: z.string().refine(
+    (password) => {
+      const strength = checkPasswordStrength(password);
+      return Object.values(strength).every(Boolean);
+    },
+    {
+      message: "Password does not meet all the strength requirements.",
+    }
+  ),
 });
+
+const PasswordRequirement = ({ label, met }: { label: string, met: boolean }) => (
+    <div className={cn("flex items-center gap-2", met ? "text-green-600" : "text-muted-foreground/80")}>
+        {met ? <CheckCircle2 className="h-3.5 w-3.5" /> : <XCircle className="h-3.5 w-3.5" />}
+        <span>{label}</span>
+    </div>
+);
+
 
 export function SignUpForm() {
   const { toast } = useToast();
@@ -37,7 +60,12 @@ export function SignUpForm() {
       email: "",
       password: "",
     },
+     mode: 'onTouched'
   });
+
+  const password = form.watch("password");
+  const passwordStrength = checkPasswordStrength(password || "");
+  const strengthScore = Object.values(passwordStrength).filter(Boolean).length;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
@@ -151,6 +179,42 @@ export function SignUpForm() {
                      <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                   </div>
                   <FormMessage />
+                  {(form.formState.isDirty || form.formState.isTouched) && password && (
+                    <div className="space-y-2 pt-2">
+                        <div className="flex items-center gap-2">
+                            <div className="flex-1 h-2 rounded-full bg-muted">
+                                <div 
+                                    className={cn(
+                                        "h-2 rounded-full transition-all duration-300",
+                                        strengthScore < 3 && "bg-destructive w-[20%]",
+                                        strengthScore === 3 && "bg-yellow-500 w-[50%]",
+                                        strengthScore === 4 && "bg-yellow-500 w-[75%]",
+                                        strengthScore === 5 && "bg-green-500 w-[100%]"
+                                    )}
+                                />
+                            </div>
+                            <span className={cn(
+                                "text-xs font-medium w-14 text-right",
+                                strengthScore < 3 && "text-destructive",
+                                strengthScore >= 3 && strengthScore < 5 && "text-yellow-500",
+                                strengthScore === 5 && "text-green-500"
+                            )}>
+                                {
+                                    strengthScore < 3 ? 'Weak' :
+                                    strengthScore < 5 ? 'Medium' :
+                                    'Strong'
+                                }
+                            </span>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1 text-xs">
+                            <PasswordRequirement label="At least 8 characters" met={passwordStrength.length} />
+                            <PasswordRequirement label="One uppercase letter" met={passwordStrength.uppercase} />
+                            <PasswordRequirement label="One lowercase letter" met={passwordStrength.lowercase} />
+                            <PasswordRequirement label="One number" met={passwordStrength.number} />
+                            <PasswordRequirement label="One special character" met={passwordStrength.special} />
+                        </div>
+                    </div>
+                  )}
                 </FormItem>
               )}
             />
