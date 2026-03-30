@@ -1,5 +1,5 @@
 
-import { LoginForm } from '@/components/login-form';
+import { EmailAuthForm } from '@/components/email-auth-form';
 import Link from 'next/link';
 import { ChevronLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -18,7 +18,7 @@ export default function LoginPage() {
         </div>
         
         <div className="flex-1 flex flex-col justify-end">
-            <LoginForm />
+            <EmailAuthForm />
         </div>
       </div>
     </>
