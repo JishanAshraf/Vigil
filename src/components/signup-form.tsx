@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Mail, Loader2, KeyRound, User, CheckCircle, XCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, sendEmailVerification, signOut } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { auth, firestore } from "@/firebase";
 import { cn } from "@/lib/utils";
@@ -87,6 +87,8 @@ export function SignupForm() {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
         
+        await sendEmailVerification(user);
+        
         // Create user profile in Firestore
         const userDocRef = doc(firestore, "users", user.uid);
         const userData = {
@@ -107,11 +109,14 @@ export function SignupForm() {
             errorEmitter.emit('permission-error', permissionError);
         });
         
+        await signOut(auth);
+
         toast({
-            title: "Account Created!",
-            description: "Welcome to Vigil! You are now logged in.",
+            title: "Verification Email Sent",
+            description: "Your account has been created. Please check your email to verify your account before logging in.",
+            duration: 10000,
         });
-        router.push('/');
+        router.push('/login');
     } catch (error: any) {
         let description = "An unexpected error occurred. Please try again.";
         if (error.code === 'auth/email-already-in-use') {

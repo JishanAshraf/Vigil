@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Mail, Loader2, KeyRound } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, sendEmailVerification, signOut } from "firebase/auth";
 import { auth } from "@/firebase";
 
 export function LoginForm() {
@@ -22,7 +22,21 @@ export function LoginForm() {
     setIsSubmitting(true);
 
     try {
-        await signInWithEmailAndPassword(auth, email, password);
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+
+        if (!userCredential.user.emailVerified) {
+          await sendEmailVerification(userCredential.user);
+          await signOut(auth);
+          toast({
+            variant: "destructive",
+            title: "Email Not Verified",
+            description: "Please check your inbox to verify your email address. A new verification link has been sent.",
+            duration: 9000,
+          });
+          setIsSubmitting(false);
+          return;
+        }
+
         toast({
             title: "Logged In!",
             description: "Welcome back to Vigil!",
