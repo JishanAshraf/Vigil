@@ -114,4 +114,21 @@ export const mockDoctors: Doctor[] = [
   { id: 'doc-50', name: 'Dr. Yogesh Yadav', specialty: 'Orthopedic Surgeon', phone: '+919876543280', city: 'Ujjain', colony: 'Freeganj' },
   { id: 'doc-69', name: 'Dr. Brijesh Kumar', specialty: 'General Physician', phone: '+919876543319', city: 'Ujjain', colony: 'Mahakal Marg' },
   { id: 'doc-70', name: 'Dr. Chandni Sharma', specialty: 'Pediatrician', phone: '+919876543320', city: 'Ujjain', colony: 'Freeganj' },
+
+  // Missing doctors to ensure at least one for every combination
+  { id: 'doc-71', name: 'Dr. Neha Sharma', specialty: 'Dermatologist', phone: '+919876543321', city: 'Bhopal', colony: 'Arera Colony' },
+  { id: 'doc-72', name: 'Dr. Rohit Prasad', specialty: 'Cardiologist', phone: '+919876543322', city: 'Bhopal', colony: 'MP Nagar' },
+  { id: 'doc-73', name: 'Dr. Ayesha Khan', specialty: 'Pediatrician', phone: '+919876543323', city: 'Bhopal', colony: 'MP Nagar' },
+  { id: 'doc-74', name: 'Dr. Vikram Batra', specialty: 'Orthopedic Surgeon', phone: '+919876543324', city: 'Bhopal', colony: 'Kolar Road' },
+  { id: 'doc-75', name: 'Dr. Sanya Malhotra', specialty: 'Dermatologist', phone: '+919876543325', city: 'Indore', colony: 'Vijay Nagar' },
+  { id: 'doc-76', name: 'Dr. Rahul Verma', specialty: 'Cardiologist', phone: '+919876543326', city: 'Indore', colony: 'MG Road' },
+  { id: 'doc-77', name: 'Dr. Fatima Sheikh', specialty: 'Cardiologist', phone: '+919876543327', city: 'Indore', colony: 'Palace Colony' },
+  { id: 'doc-78', name: 'Dr. Arjun Reddy', specialty: 'Orthopedic Surgeon', phone: '+919876543328', city: 'Indore', colony: 'Palace Colony' },
+  { id: 'doc-79', name: 'Dr. Priya Das', specialty: 'Dermatologist', phone: '+919876543329', city: 'Jabalpur', colony: 'Civic Center' },
+  { id: 'doc-80', name: 'Dr. Karan Gill', specialty: 'Cardiologist', phone: '+919876543330', city: 'Jabalpur', colony: 'Russel Chowk' },
+  { id: 'doc-81', name: 'Dr. Simran Kaur', specialty: 'Pediatrician', phone: '+919876543331', city: 'Jabalpur', colony: 'Russel Chowk' },
+  { id: 'doc-82', name: 'Dr. Zain Imam', specialty: 'Dermatologist', phone: '+919876543332', city: 'Ujjain', colony: 'Mahakal Marg' },
+  { id: 'doc-83', name: 'Dr. Alisha Pawar', specialty: 'Cardiologist', phone: '+919876543333', city: 'Ujjain', colony: 'Freeganj' },
 ];
+
+    
