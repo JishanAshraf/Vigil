@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -6,13 +5,11 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "./ui/card";
 import { Mail, Loader2, KeyRound, User } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { auth, firestore } from "@/firebase";
-import Link from "next/link";
 import { Progress } from "./ui/progress";
 import { cn } from "@/lib/utils";
 import { errorEmitter } from "@/firebase/error-emitter";
@@ -125,86 +122,72 @@ export function SignupForm() {
   }
 
   return (
-    <Card className="w-full max-w-md mx-auto rounded-t-3xl rounded-b-none border-none shadow-2xl overflow-hidden animate-in slide-in-from-bottom-16 duration-500">
-      <CardHeader className="text-center pt-10 pb-4">
-        <CardTitle className="text-3xl font-bold text-primary">Create an Account</CardTitle>
-        <CardDescription className="pt-2">Join the Vigil community.</CardDescription>
-      </CardHeader>
-      <CardContent className="pt-6 pb-12">
-        <form className="space-y-6" onSubmit={handleSignup}>
-            <div className="grid gap-2">
-                <Label htmlFor="name" className="text-xs text-muted-foreground">Full Name</Label>
-                <div className="relative">
-                    <Input
-                        id="name"
-                        type="text"
-                        placeholder="John Doe"
-                        required
-                        className="pl-10"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        disabled={isSubmitting}
-                        autoComplete="name"
-                    />
-                    <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                </div>
+    <form className="space-y-6" onSubmit={handleSignup}>
+        <div className="grid gap-2">
+            <Label htmlFor="name" className="text-xs text-muted-foreground">Full Name</Label>
+            <div className="relative">
+                <Input
+                    id="name"
+                    type="text"
+                    placeholder="John Doe"
+                    required
+                    className="pl-10"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    disabled={isSubmitting}
+                    autoComplete="name"
+                />
+                <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
             </div>
+        </div>
 
-            <div className="grid gap-2">
-                <Label htmlFor="email-signup" className="text-xs text-muted-foreground">Email</Label>
-                <div className="relative">
-                    <Input
-                        id="email-signup"
-                        type="email"
-                        placeholder="your.email@example.com"
-                        required
-                        className="pl-10"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        disabled={isSubmitting}
-                        autoComplete="email"
-                    />
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                </div>
+        <div className="grid gap-2">
+            <Label htmlFor="email-signup" className="text-xs text-muted-foreground">Email</Label>
+            <div className="relative">
+                <Input
+                    id="email-signup"
+                    type="email"
+                    placeholder="your.email@example.com"
+                    required
+                    className="pl-10"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    disabled={isSubmitting}
+                    autoComplete="email"
+                />
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
             </div>
+        </div>
 
-             <div className="grid gap-2">
-                <Label htmlFor="password-signup" className="text-xs text-muted-foreground">Password</Label>
-                <div className="relative">
-                    <Input
-                        id="password-signup"
-                        type="password"
-                        placeholder="••••••••"
-                        required
-                        className="pl-10"
-                        value={password}
-                        onChange={handlePasswordChange}
-                        disabled={isSubmitting}
-                        autoComplete="new-password"
-                    />
-                    <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                </div>
-                {password.length > 0 && <PasswordStrengthIndicator strength={passwordStrength} />}
+         <div className="grid gap-2">
+            <Label htmlFor="password-signup" className="text-xs text-muted-foreground">Password</Label>
+            <div className="relative">
+                <Input
+                    id="password-signup"
+                    type="password"
+                    placeholder="••••••••"
+                    required
+                    className="pl-10"
+                    value={password}
+                    onChange={handlePasswordChange}
+                    disabled={isSubmitting}
+                    autoComplete="new-password"
+                />
+                <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
             </div>
-            
-            <Button type="submit" className="w-full font-bold text-base h-12 rounded-full slide-in-button" disabled={isSubmitting || !email || !password || !name}>
-            {isSubmitting ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                <span>Creating Account...</span>
-              </>
-            ) : (
-                <span>Sign Up</span>
-            )}
-            </Button>
-        </form>
-         <p className="mt-6 text-center text-sm text-muted-foreground">
-            Already have an account?{' '}
-            <Link href="/login" className="font-semibold text-primary hover:underline">
-                Log In
-            </Link>
-        </p>
-      </CardContent>
-    </Card>
+            {password.length > 0 && <PasswordStrengthIndicator strength={passwordStrength} />}
+        </div>
+        
+        <Button type="submit" className="w-full font-bold text-base h-12 rounded-full slide-in-button" disabled={isSubmitting || !email || !password || !name}>
+        {isSubmitting ? (
+          <>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            <span>Creating Account...</span>
+          </>
+        ) : (
+            <span>Sign Up</span>
+        )}
+        </Button>
+    </form>
   );
 }
