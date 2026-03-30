@@ -44,17 +44,18 @@ export function EmailAuthForm() {
       setLinkSent(true);
 
     } catch (error: any) {
-      let description = "An unexpected error occurred. Please try again.";
-      if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
+      let description = `An unexpected error occurred: ${error.message} (Code: ${error.code}).`;
+      if (error.code === 'auth/invalid-credential') {
           description = "Invalid email or password. Please check your credentials and try again.";
-      } else if (error.code === 'auth/configuration-not-found') {
-          description = "Email Link sign-in is not enabled in your Firebase project. Please enable it in the Firebase Console.";
+      } else if (error.code === 'auth/operation-not-allowed') {
+          description = "This login method is not enabled. Please enable 'Email/Password' and 'Email link' sign-in providers in the Firebase Console.";
       }
       
       toast({
           variant: "destructive",
           title: "Verification Failed",
           description: description,
+          duration: 9000,
       });
     } finally {
       setIsSubmitting(false);
