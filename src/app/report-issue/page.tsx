@@ -1,3 +1,4 @@
+
 'use client';
 
 import { ReportIssueForm } from '@/components/report-issue-form';
@@ -54,7 +55,7 @@ export default function ReportIssuePage() {
                         <Link href="/login">Log In</Link>
                     </Button>
                     <Button asChild variant="outline">
-                        <Link href="/signup">Sign Up</Link>
+                        <Link href="/login">Sign Up</Link>
                     </Button>
                 </CardContent>
             </Card>

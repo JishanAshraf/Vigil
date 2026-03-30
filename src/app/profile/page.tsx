@@ -1,3 +1,4 @@
+
 'use client';
 
 import { ProfileForm } from '@/components/profile-form';
@@ -66,7 +67,7 @@ export default function ProfilePage() {
                         <Link href="/login">Log In</Link>
                     </Button>
                     <Button asChild variant="outline">
-                        <Link href="/signup">Sign Up</Link>
+                        <Link href="/login">Sign Up</Link>
                     </Button>
                 </CardContent>
             </Card>
