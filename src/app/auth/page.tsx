@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import Link from 'next/link';
 import Image from 'next/image';
-import { Mail } from "lucide-react";
+import { LogIn, User } from "lucide-react";
 
 export default function AuthPage() {
   return (
@@ -22,11 +22,17 @@ export default function AuthPage() {
       </div>
       
       {/* Buttons */}
-      <div className="flex-1 p-8 flex flex-col max-w-md mx-auto w-full justify-center">
-        <Button asChild className="w-full font-bold text-base mt-2 slide-in-button">
+      <div className="flex-1 p-8 flex flex-col max-w-md mx-auto w-full justify-center gap-4">
+        <Button asChild className="w-full font-bold text-base slide-in-button">
           <Link href="/login">
-            <Mail className="mr-2 h-5 w-5"/>
-            <span>Login or Sign Up with Email</span>
+            <LogIn className="mr-2 h-5 w-5"/>
+            <span>Login with Email</span>
+          </Link>
+        </Button>
+        <Button asChild variant="outline" className="w-full font-bold text-base glossy-button">
+          <Link href="/signup">
+            <User className="mr-2 h-5 w-5"/>
+            <span>Sign Up with Email</span>
           </Link>
         </Button>
       </div>
