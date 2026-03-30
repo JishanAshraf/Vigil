@@ -1,6 +1,6 @@
-
 'use client';
 
+import { useState } from 'react';
 import { ProfileForm } from '@/components/profile-form';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { MainHeader } from '@/components/main-header';
@@ -11,12 +11,39 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { sendEmailVerification } from 'firebase/auth';
+import { useToast } from '@/hooks/use-toast';
+import { MailCheck } from 'lucide-react';
 
 export default function ProfilePage() {
   const { user, isLoading, firebaseUser } = useAuth();
   const { getUserAlerts, currentUser } = useAlerts();
+  const { toast } = useToast();
+  const [isSending, setIsSending] = useState(false);
   
   const userAlerts = currentUser ? getUserAlerts(currentUser.id) : [];
+
+  const handleResendVerification = async () => {
+    if (firebaseUser) {
+      setIsSending(true);
+      try {
+        await sendEmailVerification(firebaseUser);
+        toast({
+          title: "Verification Email Sent",
+          description: "A new verification link has been sent to your inbox. Please check your email.",
+        });
+      } catch (error: any) {
+        toast({
+          variant: "destructive",
+          title: "Failed to Send Email",
+          description: error.message || "An unexpected error occurred.",
+        });
+      } finally {
+        setIsSending(false);
+      }
+    }
+  };
 
   if (isLoading) {
     return (
@@ -67,7 +94,7 @@ export default function ProfilePage() {
                         <Link href="/login">Log In</Link>
                     </Button>
                     <Button asChild variant="outline">
-                        <Link href="/login">Sign Up</Link>
+                        <Link href="/signup">Sign Up</Link>
                     </Button>
                 </CardContent>
             </Card>
@@ -81,6 +108,19 @@ export default function ProfilePage() {
         <MainHeader />
         <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8 md:pl-64 pb-28 md:pb-8">
             <div className="mx-auto w-full max-w-4xl space-y-8">
+              {firebaseUser && !firebaseUser.emailVerified && (
+                  <Alert variant="destructive">
+                    <AlertTitle>Email Not Verified</AlertTitle>
+                    <AlertDescription className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                      <span>Your email address has not been verified. Please check your inbox.</span>
+                      <Button onClick={handleResendVerification} variant="secondary" size="sm" disabled={isSending}>
+                        <MailCheck className="mr-2 h-4 w-4" />
+                        {isSending ? "Sending..." : "Re-send Email"}
+                      </Button>
+                    </AlertDescription>
+                  </Alert>
+              )}
+
               <Card>
                 <CardHeader>
                   <CardTitle>My Profile</CardTitle>
