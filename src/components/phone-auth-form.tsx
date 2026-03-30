@@ -27,15 +27,24 @@ export function PhoneAuthForm() {
   const [otpSent, setOtpSent] = useState(false);
 
   useEffect(() => {
-    if (!window.recaptchaVerifier) {
+    // This check is to prevent creating multiple verifiers.
+    if (!window.recaptchaVerifier?.auth) {
         window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
           'size': 'invisible',
           'callback': () => {
-            // reCAPTCHA solved
+            // reCAPTCHA solved, allow sign-in.
           }
         });
+        window.recaptchaVerifier.render().catch(err => {
+            console.error("reCAPTCHA render error:", err);
+            toast({
+                variant: 'destructive',
+                title: 'Could not initialize sign-in',
+                description: 'Please refresh the page and try again.'
+            })
+        });
     }
-  }, []);
+  }, [toast]);
 
   const handleSendOtp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -53,17 +62,38 @@ export function PhoneAuthForm() {
         setOtpSent(true);
         toast({ title: "OTP Sent!", description: "Please enter the OTP you received." });
     } catch (error: any) {
-        console.error(error);
-        if (error.code === 'auth/operation-not-allowed') {
-            toast({
-                variant: "destructive",
-                title: "Action Required: Enable Phone Sign-In",
-                description: "Phone number sign-in is not enabled in your Firebase project. Please enable it in the Firebase Console.",
-                duration: 10000,
-            });
-        } else {
-            toast({ variant: "destructive", title: "Failed to send OTP", description: "Could not send verification code. Please check your phone number and try again." });
+        console.error("Phone Auth Error:", error);
+        let title = "Failed to send OTP";
+        let description = "An unexpected error occurred. Please try again later.";
+
+        switch (error.code) {
+            case 'auth/operation-not-allowed':
+                title = "Action Required: Enable Phone Sign-In";
+                description = "Phone number sign-in is not enabled in your Firebase project. Please enable it in the Firebase Console.";
+                break;
+            case 'auth/invalid-phone-number':
+                title = "Invalid Phone Number";
+                description = "The phone number you entered is not valid. Please check it and try again.";
+                break;
+            case 'auth/too-many-requests':
+                title = "Too Many Requests";
+                description = "You've requested an OTP too many times. Please wait a while before trying again.";
+                break;
+            case 'auth/captcha-check-failed':
+                title = "Verification Failed";
+                description = "reCAPTCHA verification failed. This can be due to a network issue, ad-blockers, or VPN usage. Please check your connection, disable any ad-blockers, and try again.";
+                break;
+            default:
+                description = "Could not send verification code. Please check your phone number and ensure you have a stable internet connection.";
+                break;
         }
+        
+        toast({
+            variant: "destructive",
+            title: title,
+            description: description,
+            duration: 9000,
+        });
     } finally {
         setIsSubmitting(false);
     }
