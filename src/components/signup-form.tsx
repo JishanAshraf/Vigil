@@ -1,13 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Mail, Loader2, KeyRound, User, CheckCircle, XCircle } from "lucide-react";
+import { Mail, Loader2, KeyRound, User, CheckCircle, XCircle, Hourglass } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { createUserWithEmailAndPassword, sendEmailVerification, signOut } from "firebase/auth";
+import { createUserWithEmailAndPassword, sendEmailVerification, signInWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { auth, firestore } from "@/firebase";
 import { cn } from "@/lib/utils";
@@ -47,12 +47,46 @@ export function SignupForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isWaitingForVerification, setIsWaitingForVerification] = useState(false);
   const [passwordCriteria, setPasswordCriteria] = useState({
     length: false,
     uppercase: false,
     number: false,
     special: false,
   });
+
+  useEffect(() => {
+    if (!isWaitingForVerification) return;
+
+    const intervalId = setInterval(async () => {
+        if (auth.currentUser && !auth.currentUser.emailVerified) {
+            await auth.currentUser.reload();
+        }
+
+        if (auth.currentUser?.emailVerified) {
+            clearInterval(intervalId);
+            setIsWaitingForVerification(false);
+            
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                toast({
+                    title: "Account Verified & Logged In!",
+                    description: "Welcome to Vigil!",
+                });
+                router.push('/');
+            } catch (loginError) {
+                toast({
+                    variant: "destructive",
+                    title: "Login Failed",
+                    description: "Your email has been verified, but we couldn't log you in automatically. Please go to the login page.",
+                });
+                router.push('/login');
+            }
+        }
+    }, 3000);
+
+    return () => clearInterval(intervalId);
+  }, [isWaitingForVerification, email, password, router, toast]);
 
   const checkPasswordStrength = (password: string) => {
     const criteria = {
@@ -82,6 +116,7 @@ export function SignupForm() {
         return;
     }
     setIsSubmitting(true);
+    setIsWaitingForVerification(false);
 
     try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -89,7 +124,6 @@ export function SignupForm() {
         
         await sendEmailVerification(user);
         
-        // Create user profile in Firestore
         const userDocRef = doc(firestore, "users", user.uid);
         const userData = {
             uid: user.uid,
@@ -109,14 +143,13 @@ export function SignupForm() {
             errorEmitter.emit('permission-error', permissionError);
         });
         
-        await signOut(auth);
-
+        setIsWaitingForVerification(true);
         toast({
-            title: "Verification Email Sent",
-            description: "Your account has been created. Please check your email to verify your account before logging in.",
+            title: "Please Verify Your Email",
+            description: "We've sent a verification link to your inbox. This screen will update automatically once you verify.",
             duration: 10000,
         });
-        router.push('/login');
+
     } catch (error: any) {
         let description = "An unexpected error occurred. Please try again.";
         if (error.code === 'auth/email-already-in-use') {
@@ -132,6 +165,19 @@ export function SignupForm() {
     } finally {
         setIsSubmitting(false);
     }
+  }
+
+  if (isWaitingForVerification) {
+    return (
+        <div className="text-center py-8 space-y-4">
+            <Hourglass className="w-16 h-16 text-primary mx-auto mb-4 animate-spin" />
+            <h3 className="text-2xl font-bold">Waiting for Verification</h3>
+            <p className="text-base text-muted-foreground">
+                Your account has been created. A verification link has been sent to <span className="font-bold text-foreground">{email}</span>.
+            </p>
+            <p className="text-sm text-muted-foreground">Please click the link in your email to continue. This page will update automatically.</p>
+        </div>
+    )
   }
 
   return (
@@ -191,7 +237,7 @@ export function SignupForm() {
             {password.length > 0 && <PasswordStrengthIndicator criteria={passwordCriteria} />}
         </div>
         
-        <Button type="submit" className="w-full font-bold text-base h-12 rounded-full slide-in-button" disabled={isSubmitting || !email || !password || !name}>
+        <Button type="submit" className="w-full font-bold text-base h-12 rounded-full slide-in-button" disabled={isSubmitting || !email || !password || !name || !Object.values(passwordCriteria).every(Boolean)}>
         {isSubmitting ? (
           <>
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />

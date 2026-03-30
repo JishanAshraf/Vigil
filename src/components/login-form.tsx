@@ -1,13 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Mail, Loader2, KeyRound } from "lucide-react";
+import { Mail, Loader2, KeyRound, Hourglass } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { signInWithEmailAndPassword, sendEmailVerification, signOut } from "firebase/auth";
+import { signInWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import { auth } from "@/firebase";
 
 export function LoginForm() {
@@ -16,32 +16,56 @@ export function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isWaitingForVerification, setIsWaitingForVerification] = useState(false);
+
+  useEffect(() => {
+    if (!isWaitingForVerification) return;
+
+    const intervalId = setInterval(async () => {
+        // The user object might have been updated in the background
+        if (auth.currentUser && !auth.currentUser.emailVerified) {
+            await auth.currentUser.reload();
+        }
+
+        if (auth.currentUser?.emailVerified) {
+            clearInterval(intervalId);
+            setIsWaitingForVerification(false);
+            toast({
+                title: "Email Verified!",
+                description: "You have been successfully logged in.",
+            });
+            router.push('/');
+        }
+    }, 3000); // Poll every 3 seconds
+
+    return () => clearInterval(intervalId);
+  }, [isWaitingForVerification, router, toast]);
+
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setIsWaitingForVerification(false);
 
     try {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
 
         if (!userCredential.user.emailVerified) {
           await sendEmailVerification(userCredential.user);
-          await signOut(auth);
+          setIsWaitingForVerification(true);
           toast({
-            variant: "destructive",
-            title: "Email Not Verified",
-            description: "Please check your inbox to verify your email address. A new verification link has been sent.",
+            title: "Please Verify Your Email",
+            description: "We've sent a new verification link to your inbox. This screen will update automatically once you verify.",
             duration: 9000,
           });
-          setIsSubmitting(false);
-          return;
+          // Don't sign out, keep the user session to poll for verification
+        } else {
+            toast({
+                title: "Logged In!",
+                description: "Welcome back to Vigil!",
+            });
+            router.push('/');
         }
-
-        toast({
-            title: "Logged In!",
-            description: "Welcome back to Vigil!",
-        });
-        router.push('/');
     } catch (error: any) {
         let description = "An unexpected error occurred. Please try again.";
         if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
@@ -55,6 +79,19 @@ export function LoginForm() {
     } finally {
         setIsSubmitting(false);
     }
+  }
+
+  if (isWaitingForVerification) {
+    return (
+        <div className="text-center py-8 space-y-4">
+            <Hourglass className="w-16 h-16 text-primary mx-auto mb-4 animate-spin" />
+            <h3 className="text-2xl font-bold">Waiting for Verification</h3>
+            <p className="text-base text-muted-foreground">
+                A verification link has been sent to <span className="font-bold text-foreground">{email}</span>.
+            </p>
+            <p className="text-sm text-muted-foreground">Please click the link in your email to continue. This page will update automatically.</p>
+        </div>
+    )
   }
 
   return (
