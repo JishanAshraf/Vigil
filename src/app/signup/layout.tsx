@@ -1,14 +1,14 @@
 
 import React from 'react';
 
-export default function LoginLayout({
+export default function SignupLayout({
     children,
 }: {
     children: React.ReactNode;
 }) {
     return (
         <div className="relative flex flex-col h-screen bg-background">
-             <div 
+            <div 
                 className="absolute inset-0 bg-cover bg-center"
                 style={{ backgroundImage: "url('/auth-background.png')" }}
                 data-ai-hint="community people"
