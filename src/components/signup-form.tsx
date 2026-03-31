@@ -85,6 +85,7 @@ export function SignupForm() {
             phone: '',
             postalCode: '',
             avatarUrl: user.photoURL || `https://i.pravatar.cc/150?u=${user.uid}`,
+            isAnonymous: false,
         };
         
         setDoc(userDocRef, userData).catch(async (serverError) => {

@@ -25,6 +25,7 @@ import { Camera } from "lucide-react";
 import { useAuth, UserProfile } from "@/contexts/AuthContext";
 import { errorEmitter } from "@/firebase/error-emitter";
 import { FirestorePermissionError } from "@/firebase/errors";
+import { Switch } from "./ui/switch";
 
 const profileSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
@@ -32,6 +33,7 @@ const profileSchema = z.object({
   phone: z.string().optional(),
   postalCode: z.string().min(5, { message: "Please enter a valid postal code." }),
   avatarUrl: z.string().optional(),
+  isAnonymous: z.boolean().default(false).optional(),
 });
 
 type ProfileFormData = z.infer<typeof profileSchema>;
@@ -83,6 +85,7 @@ export function ProfileForm({ profileData }: ProfileFormProps) {
         phone: values.phone,
         postalCode: values.postalCode,
         avatarUrl: values.avatarUrl,
+        isAnonymous: values.isAnonymous,
     };
     
     setDoc(userDocRef, updatedData, { merge: true })
@@ -181,6 +184,30 @@ export function ProfileForm({ profileData }: ProfileFormProps) {
             </FormItem>
           )}
         />
+
+        <FormField
+          control={form.control}
+          name="isAnonymous"
+          render={({ field }) => (
+            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+              <div className="space-y-0.5">
+                <FormLabel className="text-base">
+                  Default to Anonymous
+                </FormLabel>
+                <FormDescription>
+                  When enabled, your reports will be anonymous by default.
+                </FormDescription>
+              </div>
+              <FormControl>
+                <Switch
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
 
         <Button type="submit" className="glossy-button" disabled={form.formState.isSubmitting}>
             {form.formState.isSubmitting ? 'Updating...' : 'Update Profile'}

@@ -22,9 +22,18 @@
         "postalCode": {
           "type": "string",
           "description": "The user's postal code."
+        },
+        "avatarUrl": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL for the user's avatar image."
+        },
+        "isAnonymous": {
+          "type": "boolean",
+          "description": "Whether the user prefers to post anonymously by default."
         }
       },
-      "required": ["name"]
+      "required": ["name", "email"]
     }
   },
   "auth": {

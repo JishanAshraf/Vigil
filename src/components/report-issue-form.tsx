@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { MapPin, Image as ImageIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -24,6 +24,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
 import { useAlerts } from "@/contexts/AlertsContext";
+import { useAuth } from "@/contexts/AuthContext";
 
 const issueCategories = [
   "Suspicious Activity",
@@ -49,6 +50,7 @@ export function ReportIssueForm() {
   const { toast } = useToast();
   const router = useRouter();
   const { addAlert } = useAlerts();
+  const { user: authUser } = useAuth();
   const [selectedFileNames, setSelectedFileNames] = useState<string[]>([]);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -58,9 +60,19 @@ export function ReportIssueForm() {
       description: "",
       location: "",
       notifyAuthorities: false,
-      postAnonymously: false,
+      postAnonymously: authUser?.isAnonymous || false,
     },
   });
+  
+  useEffect(() => {
+    if (authUser) {
+      form.reset({
+        ...form.getValues(),
+        postAnonymously: authUser.isAnonymous || false,
+      });
+    }
+  }, [authUser, form]);
+
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     const images = values.images && (values.images as FileList).length > 0

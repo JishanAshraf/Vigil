@@ -4,19 +4,19 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 const findImage = (id: string) => PlaceHolderImages.find(img => img.id === id);
 
 const users: User[] = [
-  { id: 'user-1', name: 'Alice Johnson', avatarUrl: 'https://i.pravatar.cc/150?u=a042581f4e29026704d' },
-  { id: 'user-2', name: 'Bob Williams', avatarUrl: 'https://i.pravatar.cc/150?u=a042581f4e29026705d' },
-  { id: 'user-3', name: 'Charlie Brown', avatarUrl: 'https://i.pravatar.cc/150?u=a042581f4e29026706d' },
-  { id: 'user-4', name: 'Diana Prince', avatarUrl: 'https://i.pravatar.cc/150?u=a042581f4e29026707d' },
-  { id: 'user-5', name: 'Ethan Hunt', avatarUrl: 'https://i.pravatar.cc/150?u=user5' },
-  { id: 'user-6', name: 'Fiona Glenanne', avatarUrl: 'https://i.pravatar.cc/150?u=user6' },
-  { id: 'user-7', name: 'George Costanza', avatarUrl: 'https://i.pravatar.cc/150?u=user7' },
-  { id: 'user-8', name: 'Hannah Montana', avatarUrl: 'https://i.pravatar.cc/150?u=user8' },
-  { id: 'user-9', name: 'Isaac Newton', avatarUrl: 'https://i.pravatar.cc/150?u=user9' },
-  { id: 'user-10', name: 'Julia Child', avatarUrl: 'https://i.pravatar.cc/150?u=user10' },
-  { id: 'user-11', name: 'Kramer', avatarUrl: 'https://i.pravatar.cc/150?u=user11' },
-  { id: 'user-12', name: 'Larry David', avatarUrl: 'https://i.pravatar.cc/150?u=user12' },
-  { id: 'user-13', name: 'Mickey Mouse', avatarUrl: 'https://i.pravatar.cc/150?u=user13' },
+  { id: 'user-1', name: 'Alice Johnson', avatarUrl: 'https://i.pravatar.cc/150?u=a042581f4e29026704d', isAnonymous: false },
+  { id: 'user-2', name: 'Bob Williams', avatarUrl: 'https://i.pravatar.cc/150?u=a042581f4e29026705d', isAnonymous: true },
+  { id: 'user-3', name: 'Charlie Brown', avatarUrl: 'https://i.pravatar.cc/150?u=a042581f4e29026706d', isAnonymous: false },
+  { id: 'user-4', name: 'Diana Prince', avatarUrl: 'https://i.pravatar.cc/150?u=a042581f4e29026707d', isAnonymous: false },
+  { id: 'user-5', name: 'Ethan Hunt', avatarUrl: 'https://i.pravatar.cc/150?u=user5', isAnonymous: false },
+  { id: 'user-6', name: 'Fiona Glenanne', avatarUrl: 'https://i.pravatar.cc/150?u=user6', isAnonymous: false },
+  { id: 'user-7', name: 'George Costanza', avatarUrl: 'https://i.pravatar.cc/150?u=user7', isAnonymous: true },
+  { id: 'user-8', name: 'Hannah Montana', avatarUrl: 'https://i.pravatar.cc/150?u=user8', isAnonymous: false },
+  { id: 'user-9', name: 'Isaac Newton', avatarUrl: 'https://i.pravatar.cc/150?u=user9', isAnonymous: false },
+  { id: 'user-10', name: 'Julia Child', avatarUrl: 'https://i.pravatar.cc/150?u=user10', isAnonymous: false },
+  { id: 'user-11', name: 'Kramer', avatarUrl: 'https://i.pravatar.cc/150?u=user11', isAnonymous: true },
+  { id: 'user-12', name: 'Larry David', avatarUrl: 'https://i.pravatar.cc/150?u=user12', isAnonymous: false },
+  { id: 'user-13', name: 'Mickey Mouse', avatarUrl: 'https://i.pravatar.cc/150?u=user13', isAnonymous: false },
 ];
 
 export const mockAlerts: Alert[] = [

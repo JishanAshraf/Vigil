@@ -16,6 +16,7 @@ export interface UserProfile {
   phone?: string;
   postalCode?: string;
   avatarUrl?: string;
+  isAnonymous?: boolean;
 }
 
 interface AuthContextType {
@@ -57,6 +58,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                 phone: userData.phone || fbUser.phoneNumber || '',
                 postalCode: userData.postalCode,
                 avatarUrl: userData.avatarUrl,
+                isAnonymous: userData.isAnonymous || false,
               });
             } else {
               setUser({
@@ -66,6 +68,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                 phone: fbUser.phoneNumber || '',
                 postalCode: '',
                 avatarUrl: fbUser.photoURL || `https://i.pravatar.cc/150?u=${fbUser.uid}`,
+                isAnonymous: false,
               });
             }
             setIsLoading(false);
@@ -103,6 +106,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
               phone: fbUser.phoneNumber || '',
               postalCode: '',
               avatarUrl: fbUser.photoURL || `https://i.pravatar.cc/150?u=${fbUser.uid}`,
+              isAnonymous: false,
             });
             setIsLoading(false);
           }

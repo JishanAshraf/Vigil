@@ -55,7 +55,7 @@ export const AlertsProvider = ({ children }: { children: ReactNode }) => {
   }, [alerts]);
 
 
-  const currentUser: User | null = authUser ? { id: authUser.uid, name: authUser.name, avatarUrl: authUser.avatarUrl } : null;
+  const currentUser: User | null = authUser ? { id: authUser.uid, name: authUser.name, avatarUrl: authUser.avatarUrl, isAnonymous: authUser.isAnonymous } : null;
 
   const addAlert = (newAlertData: Omit<Alert, 'id' | 'user' | 'timestamp' | 'comments' | 'status' | 'reporters'>) => {
     if (!currentUser) {
