@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import type { Alert, User, Comment } from '@/lib/types';
 import { useAuth } from './AuthContext';
 import { useToast } from '@/hooks/use-toast';
@@ -19,11 +19,41 @@ interface AlertsContextType {
 }
 
 const AlertsContext = createContext<AlertsContextType | undefined>(undefined);
+const ALERTS_STORAGE_KEY = 'vigil-alerts';
 
 export const AlertsProvider = ({ children }: { children: ReactNode }) => {
-  const [alerts, setAlerts] = useState<Alert[]>(mockAlerts);
+  const [alerts, setAlerts] = useState<Alert[]>([]);
   const { user: authUser } = useAuth();
   const { toast } = useToast();
+
+  // Load alerts from localStorage on initial client-side render to avoid hydration errors.
+  useEffect(() => {
+    try {
+      const savedAlerts = localStorage.getItem(ALERTS_STORAGE_KEY);
+      // If we have saved alerts, use them. Otherwise, initialize with mock data.
+      if (savedAlerts) {
+        setAlerts(JSON.parse(savedAlerts));
+      } else {
+        setAlerts(mockAlerts);
+      }
+    } catch (error) {
+      console.error("Error reading from localStorage:", error);
+      setAlerts(mockAlerts); // Fallback to mock data on error
+    }
+  }, []); // Empty dependency array ensures this runs only once on mount.
+
+  // Save alerts to localStorage whenever they change.
+  useEffect(() => {
+    // Only save if alerts is not the initial empty array to avoid overwriting on first render.
+    if (alerts.length > 0) {
+      try {
+        localStorage.setItem(ALERTS_STORAGE_KEY, JSON.stringify(alerts));
+      } catch (error) {
+        console.error("Error writing to localStorage:", error);
+      }
+    }
+  }, [alerts]);
+
 
   const currentUser: User | null = authUser ? { id: authUser.uid, name: authUser.name, avatarUrl: authUser.avatarUrl } : null;
 
