@@ -90,12 +90,19 @@ function ResetPasswordComponent() {
                 description: 'You can now log in with your new password.',
             });
             setTimeout(() => router.push('/login'), 3000);
-        } catch (err) {
-            setError("Failed to reset password. The link may have expired.");
+        } catch (err: any) {
+            let errorMessage = 'An unexpected error occurred. Please try again.';
+            if (err.code === 'auth/expired-action-code' || err.code === 'auth/invalid-action-code') {
+                errorMessage = "This password reset link is invalid or has expired. Please request a new one.";
+            } else if (err.code === 'auth/weak-password') {
+                errorMessage = "The password provided is too weak. Please choose a stronger password that meets all the criteria.";
+            }
+            
+            setError(errorMessage);
             toast({
                 variant: 'destructive',
                 title: 'Reset Failed',
-                description: 'An unexpected error occurred. Please try again.',
+                description: errorMessage,
             });
         } finally {
             setIsSubmitting(false);
