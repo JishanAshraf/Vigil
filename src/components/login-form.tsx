@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Mail, Loader2, KeyRound, Hourglass } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { signInWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
+import { signInWithEmailAndPassword, sendEmailVerification, sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "@/firebase";
 
 export function LoginForm() {
@@ -80,6 +80,39 @@ export function LoginForm() {
         setIsSubmitting(false);
     }
   }
+  
+  const handlePasswordReset = async () => {
+    if (!email) {
+      toast({
+        variant: "destructive",
+        title: "Email Required",
+        description: "Please enter your email address to reset your password.",
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      await sendPasswordResetEmail(auth, email);
+      toast({
+        title: "Password Reset Email Sent",
+        description: "Check your inbox for a link to reset your password. It might be in your spam folder.",
+      });
+    } catch (error: any) {
+      let description = "An unexpected error occurred. Please try again.";
+      if (error.code === 'auth/user-not-found') {
+        description = "No account found with this email address.";
+      }
+      toast({
+        variant: "destructive",
+        title: "Reset Failed",
+        description: description,
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
 
   if (isWaitingForVerification) {
     return (
@@ -115,7 +148,18 @@ export function LoginForm() {
         </div>
 
          <div className="grid gap-2">
-            <Label htmlFor="password" className="text-xs text-muted-foreground">Password</Label>
+            <div className="flex items-center justify-between">
+                <Label htmlFor="password" className="text-xs text-muted-foreground">Password</Label>
+                <Button 
+                    type="button" 
+                    variant="link" 
+                    className="h-auto p-0 text-xs text-primary"
+                    onClick={handlePasswordReset}
+                    disabled={isSubmitting}
+                >
+                    Forgot Password?
+                </Button>
+            </div>
             <div className="relative">
                 <Input
                     id="password"
