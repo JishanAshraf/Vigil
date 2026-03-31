@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Mail, Loader2, KeyRound, User, Hourglass } from "lucide-react";
+import { Mail, Loader2, KeyRound, User, Hourglass, Eye, EyeOff } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { createUserWithEmailAndPassword, sendEmailVerification, signInWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
@@ -20,6 +20,7 @@ export function SignupForm() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [isPasswordValid, setIsPasswordValid] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isWaitingForVerification, setIsWaitingForVerification] = useState(false);
@@ -175,16 +176,25 @@ export function SignupForm() {
             <div className="relative">
                 <Input
                     id="password-signup"
-                    type="password"
+                    type={showPassword ? 'text' : 'password'}
                     placeholder="••••••••"
                     required
-                    className="pl-10"
+                    className="pl-10 pr-10"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     disabled={isSubmitting}
                     autoComplete="new-password"
                 />
                 <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                <button 
+                  type="button" 
+                  className="absolute right-3 top-1/2 -translate-y-1/2"
+                  onClick={() => setShowPassword(!showPassword)}
+                  disabled={isSubmitting}
+                  aria-label="Toggle password visibility"
+                >
+                  {showPassword ? <EyeOff className="h-5 w-5 text-muted-foreground"/> : <Eye className="h-5 w-5 text-muted-foreground"/>}
+                </button>
             </div>
             <PasswordStrengthIndicator password={password} onValidationChange={setIsPasswordValid} />
         </div>

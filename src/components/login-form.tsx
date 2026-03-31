@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Mail, Loader2, KeyRound, Hourglass } from "lucide-react";
+import { Mail, Loader2, KeyRound, Hourglass, Eye, EyeOff } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { signInWithEmailAndPassword, sendEmailVerification, sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "@/firebase";
@@ -15,6 +15,7 @@ export function LoginForm() {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isResetting, setIsResetting] = useState(false);
   const [isWaitingForVerification, setIsWaitingForVerification] = useState(false);
@@ -164,16 +165,25 @@ export function LoginForm() {
             <div className="relative">
                 <Input
                     id="password"
-                    type="password"
+                    type={showPassword ? 'text' : 'password'}
                     placeholder="••••••••"
                     required
-                    className="pl-10"
+                    className="pl-10 pr-10"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     disabled={isSubmitting || isResetting}
                     autoComplete="current-password"
                 />
                 <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                <button 
+                  type="button" 
+                  className="absolute right-3 top-1/2 -translate-y-1/2"
+                  onClick={() => setShowPassword(!showPassword)}
+                  disabled={isSubmitting || isResetting}
+                  aria-label="Toggle password visibility"
+                >
+                  {showPassword ? <EyeOff className="h-5 w-5 text-muted-foreground"/> : <Eye className="h-5 w-5 text-muted-foreground"/>}
+                </button>
             </div>
         </div>
         
