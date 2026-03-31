@@ -1,10 +1,9 @@
-
 'use client';
 
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { onAuthStateChanged, User as FirebaseUser, signOut } from 'firebase/auth';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, onSnapshot } from 'firebase/firestore';
 import { auth, firestore } from '@/firebase';
 import { useToast } from '@/hooks/use-toast';
 import { errorEmitter } from '@/firebase/error-emitter';
@@ -36,79 +35,89 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const { toast } = useToast();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (fbUser) => {
+    let docUnsubscribe: () => void = () => {};
+    
+    const authUnsubscribe = onAuthStateChanged(auth, (fbUser) => {
+      // Clean up previous snapshot listener if it exists
+      docUnsubscribe();
+
       setFirebaseUser(fbUser);
       if (fbUser) {
+        setIsLoading(true);
         const userDocRef = doc(firestore, "users", fbUser.uid);
-        try {
-          const userDoc = await getDoc(userDocRef);
-          if (userDoc.exists()) {
-            const userData = userDoc.data();
-            setUser({
-              uid: fbUser.uid,
-              email: userData.email || fbUser.email || '',
-              name: userData.name || fbUser.displayName || 'New User',
-              phone: userData.phone || fbUser.phoneNumber || '',
-              postalCode: userData.postalCode,
-              avatarUrl: userData.avatarUrl,
-            });
-          } else {
-            // If firestore doc doesn't exist, create a default profile object.
-            // This happens for new signups (especially phone auth).
+        
+        docUnsubscribe = onSnapshot(userDocRef, 
+          (userDoc) => {
+            if (userDoc.exists()) {
+              const userData = userDoc.data();
+              setUser({
+                uid: fbUser.uid,
+                email: userData.email || fbUser.email || '',
+                name: userData.name || fbUser.displayName || 'New User',
+                phone: userData.phone || fbUser.phoneNumber || '',
+                postalCode: userData.postalCode,
+                avatarUrl: userData.avatarUrl,
+              });
+            } else {
+              setUser({
+                uid: fbUser.uid,
+                name: fbUser.displayName || 'New User',
+                email: fbUser.email || '',
+                phone: fbUser.phoneNumber || '',
+                postalCode: '',
+                avatarUrl: fbUser.photoURL || `https://i.pravatar.cc/150?u=${fbUser.uid}`,
+              });
+            }
+            setIsLoading(false);
+          }, 
+          (error) => {
+            if (error.code === 'permission-denied') {
+              const permissionError = new FirestorePermissionError({
+                path: userDocRef.path,
+                operation: 'get',
+              });
+              errorEmitter.emit('permission-error', permissionError);
+            } else if (
+              error.code === 'failed-precondition' ||
+              (error.message && error.message.includes('firestore service is not available')) ||
+              (error.message && error.message.includes('client is offline'))
+            ) {
+              toast({
+                variant: 'destructive',
+                title: 'Action Required: Enable Firestore Database',
+                description: "Go to your Firebase project -> Build -> Firestore Database and click 'Create database'. This is a required step for new projects.",
+                duration: 15000,
+              });
+            } else {
+              toast({
+                variant: 'destructive',
+                title: 'Database Error',
+                description: `Could not retrieve your profile: ${error.message}`,
+              });
+            }
+            // Fallback to a default user object to avoid breaking the UI
             setUser({
               uid: fbUser.uid,
               name: fbUser.displayName || 'New User',
               email: fbUser.email || '',
               phone: fbUser.phoneNumber || '',
               postalCode: '',
-              avatarUrl: fbUser.photoURL || '',
+              avatarUrl: fbUser.photoURL || `https://i.pravatar.cc/150?u=${fbUser.uid}`,
             });
+            setIsLoading(false);
           }
-        } catch (error: any) {
-          if (error.code === 'permission-denied') {
-            const permissionError = new FirestorePermissionError({
-              path: userDocRef.path,
-              operation: 'get',
-            });
-            errorEmitter.emit('permission-error', permissionError);
-          } else if (
-            error.code === 'failed-precondition' ||
-            (error.message && error.message.includes('firestore service is not available')) ||
-            (error.message && error.message.includes('client is offline'))
-          ) {
-            toast({
-              variant: 'destructive',
-              title: 'Action Required: Enable Firestore Database',
-              description:
-                "Go to your Firebase project -> Build -> Firestore Database and click 'Create database'. This is a required step for new projects.",
-              duration: 15000,
-            });
-          } else {
-            toast({
-              variant: 'destructive',
-              title: 'Database Error',
-              description: `Could not retrieve your profile: ${error.message}`,
-            });
-          }
-          // Fallback to a default user object to avoid breaking the UI
-          setUser({
-            uid: fbUser.uid,
-            name: fbUser.displayName || 'New User',
-            email: fbUser.email || '',
-            phone: fbUser.phoneNumber || '',
-            postalCode: '',
-            avatarUrl: fbUser.photoURL || '',
-          });
-        } finally {
-          setIsLoading(false);
-        }
+        );
       } else {
         setUser(null);
+        setFirebaseUser(null);
         setIsLoading(false);
       }
     });
 
-    return () => unsubscribe();
+    return () => {
+      authUnsubscribe();
+      docUnsubscribe();
+    };
   }, [toast]);
 
   const logout = async () => {
