@@ -5,40 +5,15 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Mail, Loader2, KeyRound, User, CheckCircle, XCircle, Hourglass } from "lucide-react";
+import { Mail, Loader2, KeyRound, User, Hourglass } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { createUserWithEmailAndPassword, sendEmailVerification, signInWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { auth, firestore } from "@/firebase";
-import { cn } from "@/lib/utils";
 import { errorEmitter } from "@/firebase/error-emitter";
 import { FirestorePermissionError } from "@/firebase/errors";
-
-const PasswordStrengthIndicator = ({ criteria }: { criteria: { length: boolean; uppercase: boolean; number: boolean; special: boolean } }) => {
-  const criteriaList = [
-    { key: 'length', label: 'At least 8 characters' },
-    { key: 'uppercase', label: 'An uppercase letter (A-Z)' },
-    { key: 'number', label: 'A number (0-9)' },
-    { key: 'special', label: 'A special character (!@#$...)' },
-  ];
-
-  return (
-    <div className="p-4 bg-muted/50 rounded-lg space-y-2 mt-2">
-      {criteriaList.map((item) => (
-        <div key={item.key} className="flex items-center text-xs">
-          {criteria[item.key as keyof typeof criteria] ? (
-            <CheckCircle className="h-4 w-4 text-green-500 mr-2 flex-shrink-0" />
-          ) : (
-            <XCircle className="h-4 w-4 text-muted-foreground mr-2 flex-shrink-0" />
-          )}
-          <span className={cn("text-muted-foreground", criteria[item.key as keyof typeof criteria] && "text-foreground")}>
-            {item.label}
-          </span>
-        </div>
-      ))}
-    </div>
-  );
-};
+import { PasswordStrengthIndicator } from "./password-strength-indicator";
+import type { PasswordCriteria } from "./password-strength-indicator";
 
 export function SignupForm() {
   const { toast } = useToast();
@@ -48,7 +23,7 @@ export function SignupForm() {
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isWaitingForVerification, setIsWaitingForVerification] = useState(false);
-  const [passwordCriteria, setPasswordCriteria] = useState({
+  const [passwordCriteria, setPasswordCriteria] = useState<PasswordCriteria>({
     length: false,
     uppercase: false,
     number: false,
@@ -145,8 +120,8 @@ export function SignupForm() {
         
         setIsWaitingForVerification(true);
         toast({
-            title: "Please Verify Your Email",
-            description: "We've sent a verification link to your inbox. This screen will update automatically once you verify.",
+            title: "Complete Verification",
+            description: "We've sent a verification link to your inbox. Click the link to finish signing up.",
             duration: 10000,
         });
 

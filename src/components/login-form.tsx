@@ -16,6 +16,7 @@ export function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isResetting, setIsResetting] = useState(false);
   const [isWaitingForVerification, setIsWaitingForVerification] = useState(false);
 
   useEffect(() => {
@@ -91,9 +92,13 @@ export function LoginForm() {
       return;
     }
 
-    setIsSubmitting(true);
+    setIsResetting(true);
     try {
-      await sendPasswordResetEmail(auth, email);
+      const actionCodeSettings = {
+        url: `${window.location.origin}/reset-password`,
+        handleCodeInApp: true,
+      };
+      await sendPasswordResetEmail(auth, email, actionCodeSettings);
       toast({
         title: "Password Reset Email Sent",
         description: "Check your inbox for a link to reset your password. It might be in your spam folder.",
@@ -109,7 +114,7 @@ export function LoginForm() {
         description: description,
       });
     } finally {
-      setIsSubmitting(false);
+      setIsResetting(false);
     }
   };
 
@@ -140,7 +145,7 @@ export function LoginForm() {
                     className="pl-10"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || isResetting}
                     autoComplete="email"
                 />
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
@@ -155,9 +160,9 @@ export function LoginForm() {
                     variant="link" 
                     className="h-auto p-0 text-xs text-primary"
                     onClick={handlePasswordReset}
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || isResetting}
                 >
-                    Forgot Password?
+                    {isResetting ? 'Sending...' : 'Forgot Password?'}
                 </Button>
             </div>
             <div className="relative">
@@ -169,14 +174,14 @@ export function LoginForm() {
                     className="pl-10"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || isResetting}
                     autoComplete="current-password"
                 />
                 <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
             </div>
         </div>
         
-        <Button type="submit" className="w-full font-bold text-base h-12 rounded-full slide-in-button" disabled={isSubmitting || !email || !password}>
+        <Button type="submit" className="w-full font-bold text-base h-12 rounded-full slide-in-button" disabled={isSubmitting || isResetting || !email || !password}>
         {isSubmitting ? (
           <>
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
