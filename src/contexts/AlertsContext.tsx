@@ -139,7 +139,7 @@ export const AlertsProvider = ({ children }: { children: ReactNode }) => {
   }
 
   const getUserAlerts = (userId: string) => {
-    return alerts.filter(alert => alert.user.id === userId && !alert.isAnonymous);
+    return alerts.filter(alert => alert.user.id === userId);
   };
 
   return (

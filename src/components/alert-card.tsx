@@ -85,7 +85,7 @@ export function AlertCard({ alert }: AlertCardProps) {
               </div>
               <div className="flex items-center gap-2">
                   <Badge variant="secondary" className="whitespace-nowrap">{alert.category}</Badge>
-                   {isOwner && !alert.isAnonymous && (
+                   {isOwner && (
                       <AlertDialog>
                           <AlertDialogTrigger asChild>
                               <Button

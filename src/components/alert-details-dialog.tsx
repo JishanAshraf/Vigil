@@ -119,7 +119,7 @@ export function AlertDetailsDialog({ alert, onOpenChange }: AlertDetailsDialogPr
                 </div>
                 <div className="flex items-center gap-2">
                     <Badge variant="secondary">{alert.category}</Badge>
-                    {isOwner && !alert.isAnonymous && (
+                    {isOwner && (
                         <AlertDialog>
                             <AlertDialogTrigger asChild>
                                <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive hover:bg-destructive/10 h-8 w-8">
