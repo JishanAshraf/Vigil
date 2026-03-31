@@ -12,8 +12,6 @@ import { doc, setDoc } from "firebase/firestore";
 import { auth, firestore } from "@/firebase";
 import { errorEmitter } from "@/firebase/error-emitter";
 import { FirestorePermissionError } from "@/firebase/errors";
-import { PasswordStrengthIndicator } from "./password-strength-indicator";
-import type { PasswordCriteria } from "./password-strength-indicator";
 
 export function SignupForm() {
   const { toast } = useToast();
@@ -23,12 +21,6 @@ export function SignupForm() {
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isWaitingForVerification, setIsWaitingForVerification] = useState(false);
-  const [passwordCriteria, setPasswordCriteria] = useState<PasswordCriteria>({
-    length: false,
-    uppercase: false,
-    number: false,
-    special: false,
-  });
 
   useEffect(() => {
     if (!isWaitingForVerification) return;
@@ -63,33 +55,8 @@ export function SignupForm() {
     return () => clearInterval(intervalId);
   }, [isWaitingForVerification, email, password, router, toast]);
 
-  const checkPasswordStrength = (password: string) => {
-    const criteria = {
-      length: password.length >= 8,
-      uppercase: /[A-Z]/.test(password),
-      number: /[0-9]/.test(password),
-      special: /[^A-Za-z0-9]/.test(password),
-    };
-    setPasswordCriteria(criteria);
-    return Object.values(criteria).every(Boolean);
-  };
-
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newPassword = e.target.value;
-    setPassword(newPassword);
-    checkPasswordStrength(newPassword);
-  };
-
   const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!checkPasswordStrength(password)) {
-        toast({
-            variant: "destructive",
-            title: "Weak Password",
-            description: "Please ensure your password meets all the required criteria.",
-        });
-        return;
-    }
     setIsSubmitting(true);
     setIsWaitingForVerification(false);
 
@@ -203,16 +170,15 @@ export function SignupForm() {
                     required
                     className="pl-10"
                     value={password}
-                    onChange={handlePasswordChange}
+                    onChange={(e) => setPassword(e.target.value)}
                     disabled={isSubmitting}
                     autoComplete="new-password"
                 />
                 <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
             </div>
-            {password.length > 0 && <PasswordStrengthIndicator criteria={passwordCriteria} />}
         </div>
         
-        <Button type="submit" className="w-full font-bold text-base h-12 rounded-full slide-in-button" disabled={isSubmitting || !email || !password || !name || !Object.values(passwordCriteria).every(Boolean)}>
+        <Button type="submit" className="w-full font-bold text-base h-12 rounded-full slide-in-button" disabled={isSubmitting || !email || !password || !name}>
         {isSubmitting ? (
           <>
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />

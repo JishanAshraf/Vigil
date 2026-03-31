@@ -1,21 +1,10 @@
 import React from 'react';
 
+// This layout is intentionally left blank to revert the custom password reset flow.
 export default function ResetPasswordLayout({
     children,
 }: {
     children: React.ReactNode;
 }) {
-    return (
-        <div className="relative flex flex-col h-screen bg-background">
-             <div 
-                className="absolute inset-0 bg-cover bg-center"
-                style={{ backgroundImage: "url('/auth-background.png')" }}
-                data-ai-hint="community people"
-            />
-            <div className="absolute inset-0 bg-black/30" />
-            <div className="relative z-10 flex flex-col flex-grow h-full items-center justify-center p-4">
-                {children}
-            </div>
-        </div>
-    );
+    return <>{children}</>;
 }

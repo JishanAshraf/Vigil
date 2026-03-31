@@ -94,11 +94,7 @@ export function LoginForm() {
 
     setIsResetting(true);
     try {
-      const actionCodeSettings = {
-        url: `${window.location.origin}/reset-password`,
-        handleCodeInApp: true,
-      };
-      await sendPasswordResetEmail(auth, email, actionCodeSettings);
+      await sendPasswordResetEmail(auth, email);
       toast({
         title: "Password Reset Email Sent",
         description: "Check your inbox for a link to reset your password. It might be in your spam folder.",
