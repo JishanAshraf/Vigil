@@ -12,6 +12,7 @@ import { doc, setDoc } from "firebase/firestore";
 import { auth, firestore } from "@/firebase";
 import { errorEmitter } from "@/firebase/error-emitter";
 import { FirestorePermissionError } from "@/firebase/errors";
+import { PasswordStrengthIndicator } from "./password-strength-indicator";
 
 export function SignupForm() {
   const { toast } = useToast();
@@ -19,6 +20,7 @@ export function SignupForm() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isPasswordValid, setIsPasswordValid] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isWaitingForVerification, setIsWaitingForVerification] = useState(false);
 
@@ -57,6 +59,14 @@ export function SignupForm() {
 
   const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!isPasswordValid) {
+        toast({
+            variant: "destructive",
+            title: "Weak Password",
+            description: "Please ensure your password meets all the criteria.",
+        });
+        return;
+    }
     setIsSubmitting(true);
     setIsWaitingForVerification(false);
 
@@ -97,7 +107,7 @@ export function SignupForm() {
         if (error.code === 'auth/email-already-in-use') {
             description = "This email is already associated with an account. Please log in instead.";
         } else if (error.code === 'auth/weak-password') {
-            description = "The password is too weak. Please choose a stronger password.";
+            description = "The password is too weak. Please choose a stronger password that meets all the criteria.";
         }
         toast({
             variant: "destructive",
@@ -176,9 +186,10 @@ export function SignupForm() {
                 />
                 <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
             </div>
+            <PasswordStrengthIndicator password={password} onValidationChange={setIsPasswordValid} />
         </div>
         
-        <Button type="submit" className="w-full font-bold text-base h-12 rounded-full slide-in-button" disabled={isSubmitting || !email || !password || !name}>
+        <Button type="submit" className="w-full font-bold text-base h-12 rounded-full slide-in-button" disabled={isSubmitting || !email || !password || !name || !isPasswordValid}>
         {isSubmitting ? (
           <>
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
